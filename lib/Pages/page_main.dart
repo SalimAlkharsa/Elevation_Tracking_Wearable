@@ -73,10 +73,8 @@ class _MainPageState extends State<MainPage> {
               Navigator.pushReplacementNamed(context,'/settings');
             },
                 child: Icon(Icons.settings, size: 50)),
-            TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context,'/');
-            },
-                child: Icon(Icons.house, size: 50)),
+            TextButton(onPressed: () {},
+                child: Icon(Icons.house, size: 50, color: Colors.black)),
             TextButton(onPressed: () {
               Navigator.pushReplacementNamed(context,'/metrics');
             },

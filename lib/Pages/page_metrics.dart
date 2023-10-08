@@ -77,10 +77,8 @@ class _MetricsPageState extends State<MetricsPage> {
               Navigator.pushReplacementNamed(context,'/');
             },
                 child: Icon(Icons.house, size: 50)),
-            TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context,'/metrics');
-            },
-                child: Icon(Icons.bar_chart, size: 50)),
+            TextButton(onPressed: () {},
+                child: Icon(Icons.bar_chart, size: 50, color: Colors.black)),
           ],
           mainAxisAlignment: MainAxisAlignment.center,
         ),

@@ -69,10 +69,8 @@ class _SettingsPageState extends State<SettingsPage> {
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: [
-            TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context,'/settings');
-            },
-                child: Icon(Icons.settings, size: 50)),
+            TextButton(onPressed: () {},
+                child: Icon(Icons.settings, size: 50, color: Colors.black)),
             TextButton(onPressed: () {
               Navigator.pushReplacementNamed(context,'/');
             },
