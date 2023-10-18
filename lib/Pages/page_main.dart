@@ -22,6 +22,12 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  void _resetCounter() {
+    setState(() {
+      _counter = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -54,7 +60,7 @@ class _MainPageState extends State<MainPage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             const Text(
               'You have pushed the button this many times:',
@@ -63,6 +69,44 @@ class _MainPageState extends State<MainPage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            Transform.scale(
+              scale: 2.5,
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      CircularProgressIndicator(
+                        value: _counter/10,
+                        color: Colors.green,
+                        strokeWidth: 4.0,
+                      ),
+                      Text("$_counter/10"),
+                    ]
+                  ),
+                  Column(
+                      children: [
+                        CircularProgressIndicator(
+                          value: (10-_counter)/10,
+                          color: Colors.blue,
+                          strokeWidth: 4.0,
+                        ),
+                        Text("$_counter/10"),
+                      ]
+                  ),
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+            ),
+            TextButton(
+                onPressed: () {
+                  _incrementCounter();
+      },
+                child: Text("INCREMENT")),
+            TextButton(
+                onPressed: () {
+                  _resetCounter();
+                },
+                child: Text("RESET")),
           ],
         ),
       ),
