@@ -38,81 +38,101 @@ class _MainPageState extends State<MainPage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text("MAIN PAGE"),
+        title: const Text("MAIN PAGE"),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          verticalDirection: VerticalDirection.up,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
             Transform.scale(
-              scale: 2.5,
+              scale: 4,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(5.0),
                     child: Column(
                       children: [
-                        CircularProgressIndicator(
-                          value: _counter/10,
-                          color: Colors.green[300],
-                          strokeWidth: 4.0,
+                        Transform.scale(
+                          scale: 0.5,
+                          child: const Text("Steps"),
                         ),
-                        Text("$_counter/10"),
+                        Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              const Icon(Icons.directions_run),
+                              CircularProgressIndicator(
+                                value: 1250/2000,
+                                color: Colors.green[300],
+                                strokeWidth: 4.0,
+                              ),
+                            ]
+                        ),
+                        Transform.scale(
+                            scale: 0.4,
+                            child: Column(
+                                children: [
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(color: Colors.black),
+                                      ),
+                                    ),
+                                    child: const Text("1250"),
+                                  ),
+                                  const Text("2000"),
+                                ]
+                            )
+                        ),
                       ]
                     )
                   ),
                   Padding(
-                    padding: EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(5.0),
                     child: Column(
                       children: [
-                        CircularProgressIndicator(
-                          value: (10-_counter)/10,
-                          color: Colors.blue[300],
-                          strokeWidth: 4.0,
+                        Transform.scale(
+                          scale: 0.5,
+                          child: const Text("Floors"),
                         ),
-                        Text("$_counter/10"),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const Icon(Icons.stairs_outlined),
+                            CircularProgressIndicator(
+                              value: 6/20,
+                              color: Colors.blue[300],
+                              strokeWidth: 4.0,
+                            ),
+                          ]
+                        ),
+                        Transform.scale(
+                          scale: 0.4,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(color: Colors.black),
+                                  ),
+                                ),
+                                child: const Text("6"),
+                              ),
+                              const Text("20"),
+                            ]
+                          )
+                        ),
                       ]
                     )
                   ),
                 ],
-                mainAxisAlignment: MainAxisAlignment.center,
               ),
             ),
-            TextButton(
-                onPressed: () {
-                  _incrementCounter();
-      },
-                child: Text("INCREMENT")),
-            TextButton(
-                onPressed: () {
-                  _resetCounter();
-                },
-                child: Text("RESET")),
+            Transform.scale(
+              scale: 2.4,
+              child: const Text("Average heart rate: 189"),
+            ),
           ],
         ),
       ),
@@ -150,7 +170,7 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }

@@ -57,7 +57,7 @@ class _SettingsPageState extends State<SettingsPage> {
               onPressed: () {},
             )
           ),
-          Divider(),
+          const Divider(),
           // A simple switch widget for turning dark mode on and off
           // TODO: Explain handling dark mode
           ListTile(
@@ -71,7 +71,7 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             ),
           ),
-          Divider(),
+          const Divider(),
           // These next four widgets allow you to update the height, weight, and daily goals for the user
           // Their title and subtitle is set relative to what value you are updating
           // When tapped, they open the openTextEntryDialog() function, which allows the user to update the entry
@@ -95,7 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
               //TODO: Update database with new value
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             title: Text("Set Weight (lbs)"),
             subtitle: Text("$userWeight"),
@@ -110,7 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
               //TODO: Update database with new value
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             title: Text("Set Step Daily Goal"),
             subtitle: Text("$stepGoal"),
@@ -125,7 +125,7 @@ class _SettingsPageState extends State<SettingsPage> {
               //TODO: Update database with new value
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             title: Text("Set Floor Daily Goal"),
             subtitle: Text("$floorGoal"),
@@ -140,7 +140,7 @@ class _SettingsPageState extends State<SettingsPage> {
               //TODO: Update database with new value
             },
           ),
-          Divider(),
+          const Divider(),
         ],
       ),
 
@@ -185,16 +185,16 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<String?> openTextEntryDialog() => showDialog<String>(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text("Edit text"),
+      title: const Text("Edit text"),
       content: TextField(
-        decoration: InputDecoration(hintText: "Enter text here."),
+        decoration: const InputDecoration(hintText: "Enter text here."),
         controller: controller,
         onSubmitted: (_) => submitText(),
       ),
       actions: [
         TextButton(
             onPressed: submitText,
-            child: Text("SUBMIT"),
+            child: const Text("SUBMIT"),
         )
       ],
     ),
@@ -209,11 +209,11 @@ class _SettingsPageState extends State<SettingsPage> {
   void errorDoubleDialog() => showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text("Error: Value must be a decimal value"),
+      title: const Text("Error: Value must be a decimal value"),
       actions: [
         TextButton(
           onPressed: close,
-          child: Text("OK"),
+          child: const Text("OK"),
         )
       ],
     ),
@@ -222,11 +222,11 @@ class _SettingsPageState extends State<SettingsPage> {
   void errorIntDialog() => showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text("Error: Value must be an integer"),
+      title: const Text("Error: Value must be an integer"),
       actions: [
         TextButton(
           onPressed: close,
-          child: Text("OK"),
+          child: const Text("OK"),
         )
       ],
     ),
