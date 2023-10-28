@@ -73,25 +73,31 @@ class _MainPageState extends State<MainPage> {
               scale: 2.5,
               child: Row(
                 children: [
-                  Column(
-                    children: [
-                      CircularProgressIndicator(
-                        value: _counter/10,
-                        color: Colors.green,
-                        strokeWidth: 4.0,
-                      ),
-                      Text("$_counter/10"),
-                    ]
-                  ),
-                  Column(
+                  Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Column(
                       children: [
                         CircularProgressIndicator(
-                          value: (10-_counter)/10,
-                          color: Colors.blue,
+                          value: _counter/10,
+                          color: Colors.green[300],
                           strokeWidth: 4.0,
                         ),
                         Text("$_counter/10"),
                       ]
+                    )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Column(
+                      children: [
+                        CircularProgressIndicator(
+                          value: (10-_counter)/10,
+                          color: Colors.blue[300],
+                          strokeWidth: 4.0,
+                        ),
+                        Text("$_counter/10"),
+                      ]
+                    )
                   ),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -110,24 +116,40 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
+      // The bottom navigation bar allows for easy access to the three main pages of the application
       bottomNavigationBar: BottomAppBar(
-        child: Row(
-          children: [
-            TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context,'/settings');
-            },
-                child: Icon(Icons.settings, size: 50)),
-            TextButton(onPressed: () {},
-                child: Icon(Icons.house, size: 50, color: Colors.black)),
-            TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context,'/metrics');
-            },
-                child: Icon(Icons.bar_chart, size: 50)),
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
-        ),
-        padding: EdgeInsets.all(5.0),
+        // This padding makes the icons look cleaner and increase readability for the user
+        padding: const EdgeInsets.all(5.0),
 
+        // The Row widget lines all of the children contained into a row
+        child: Row(
+          // Centers the icons in the navigation bar
+          mainAxisAlignment: MainAxisAlignment.center,
+
+          // Each TextButton calls the Navigator to navigate between the three main pages
+          // The currently active page is given an onPressed value which is blank and are given a different color
+          // This prevents the user from repeatedly pressing the button and causing performance issues
+          // Pages which are not active use pushRaplacementNamed to push the new page onto the navigator stack
+          // The internal names for each page are defined by the developer and can be found in main.dart
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/settings');
+              },
+              child: const Icon(Icons.settings, size: 50),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: Icon(Icons.house, size: 50, color: Colors.blueGrey[800]),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/metrics');
+              },
+              child: const Icon(Icons.bar_chart, size: 50),
+            ),
+          ],
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

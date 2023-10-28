@@ -66,25 +66,42 @@ class _MetricsPageState extends State<MetricsPage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          children: [
-            TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context,'/settings');
-              },
-                child: Icon(Icons.settings, size: 50)),
-            TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context,'/');
-            },
-                child: Icon(Icons.house, size: 50)),
-            TextButton(onPressed: () {},
-                child: Icon(Icons.bar_chart, size: 50, color: Colors.black)),
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
-        ),
-        padding: EdgeInsets.all(5.0),
 
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // The bottom navigation bar allows for easy access to the three main pages of the application
+      bottomNavigationBar: BottomAppBar(
+        // This padding makes the icons look cleaner and increase readability for the user
+        padding: const EdgeInsets.all(5.0),
+
+        // The Row widget lines all of the children contained into a row
+        child: Row(
+          // Centers the icons in the navigation bar
+          mainAxisAlignment: MainAxisAlignment.center,
+
+          // Each TextButton calls the Navigator to navigate between the three main pages
+          // The currently active page is given an onPressed value which is blank and are given a different color
+          // This prevents the user from repeatedly pressing the button and causing performance issues
+          // Pages which are not active use pushRaplacementNamed to push the new page onto the navigator stack
+          // The internal names for each page are defined by the developer and can be found in main.dart
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/settings');
+              },
+              child: const Icon(Icons.settings, size: 50),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+              child: const Icon(Icons.house, size: 50),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: Icon(Icons.bar_chart, size: 50, color: Colors.blueGrey[800]),
+            ),
+          ],
+        ),
+      ),// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
