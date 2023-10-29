@@ -1,5 +1,6 @@
 import 'package:application/Graphs/weekly_bar_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MetricsPage extends StatefulWidget {
   const MetricsPage({super.key});
@@ -20,11 +21,12 @@ class _MetricsPageState extends State<MetricsPage> {
     195
   ];
   DateTime dateNow = DateTime.now();
+  DateFormat dateFormat = DateFormat.MMMEd();
 
   @override
   Widget build(BuildContext context) {
-    DateTime date1 = dateNow;
-    DateTime date2 = date1.add(const Duration(days: 5));
+    String date1 = dateFormat.format(dateNow);
+    String date2 = dateFormat.format(dateNow.subtract(const Duration(days: 6)));
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -39,9 +41,26 @@ class _MetricsPageState extends State<MetricsPage> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("$date1"),
-            Text("$date2"),
+            const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.keyboard_arrow_left),
+                  splashRadius: 15.0,
+                ),
+                Text("$date2 - $date1"),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.keyboard_arrow_right),
+                  splashRadius: 15.0,
+                ),
+              ]
+            ),
+            const Divider(),
             SizedBox(
               height: 200,
               child: WeeklyBarChart(data: dailyAvgHR),
