@@ -20,22 +20,71 @@ class _MetricsPageState extends State<MetricsPage> {
     200,
     195
   ];
-  DateTime dateNow = DateTime.now();
+  DateTime dateSelected = DateTime.now();
+  DateTime dateNextSaturday = DateTime.now();
   DateFormat dateFormat = DateFormat.MMMEd();
+  String nextSaturday = "";
+  String thisSunday = "";
+  bool isInitialized = false;
   int dateCorrection = 0;
+
+  void initializeDate() {
+    if (!isInitialized) {
+      if (dateSelected.weekday == 7) {
+        dateNextSaturday = dateSelected.add(const Duration(days: 6));
+      } else if (dateSelected.weekday == 6) {
+        dateNextSaturday = dateSelected;
+      } else {
+        dateNextSaturday =
+            dateSelected.add(Duration(days: 6 - dateSelected.weekday));
+      }
+      nextSaturday = dateFormat.format(dateNextSaturday);
+      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+      isInitialized = true;
+    }
+  }
+
+  void nextWeek (){
+    setState(() {
+      dateNextSaturday = dateNextSaturday.add(const Duration(days: 7));
+
+      nextSaturday = dateFormat.format(dateNextSaturday);
+      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+
+      dailyAvgHR = [
+        174,
+        178,
+        185,
+        212,
+        174,
+        173,
+        190
+      ];
+    });
+  }
+
+  void lastWeek () {
+    setState(() {
+      dateNextSaturday = dateNextSaturday.subtract(const Duration(days: 7));
+
+      nextSaturday = dateFormat.format(dateNextSaturday);
+      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+
+      dailyAvgHR = [
+        201,
+        209,
+        204,
+        165,
+        167,
+        180,
+        174
+      ];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    DateTime nextSaturdayDate;
-    if (dateNow.weekday == 7) {
-      nextSaturdayDate = dateNow.add(const Duration(days: 6));
-    } else if (dateNow.weekday == 6) {
-      nextSaturdayDate = dateNow;
-    } else {
-      nextSaturdayDate = dateNow.add(Duration(days: 6 - dateNow.weekday));
-    }
-    String nextSaturday = dateFormat.format(nextSaturdayDate);
-    String thisSunday = dateFormat.format(nextSaturdayDate.subtract(const Duration(days: 6)));
+    initializeDate();
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -57,13 +106,13 @@ class _MetricsPageState extends State<MetricsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: lastWeek,
                   icon: const Icon(Icons.keyboard_arrow_left),
                   splashRadius: 15.0,
                 ),
                 Text("$thisSunday - $nextSaturday"),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: nextWeek,
                   icon: const Icon(Icons.keyboard_arrow_right),
                   splashRadius: 15.0,
                 ),
