@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
           verticalDirection: VerticalDirection.up,
           children: <Widget>[
             Transform.scale(
-              scale: 4,
+              scale: 3.2,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -112,7 +112,7 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
             Transform.scale(
-              scale: 2.4,
+              scale: 1.7,
               child: const Text("Average heart rate: 189"),
             ),
           ],

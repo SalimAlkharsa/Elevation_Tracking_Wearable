@@ -22,11 +22,20 @@ class _MetricsPageState extends State<MetricsPage> {
   ];
   DateTime dateNow = DateTime.now();
   DateFormat dateFormat = DateFormat.MMMEd();
+  int dateCorrection = 0;
 
   @override
   Widget build(BuildContext context) {
-    String date1 = dateFormat.format(dateNow);
-    String date2 = dateFormat.format(dateNow.subtract(const Duration(days: 6)));
+    DateTime nextSaturdayDate;
+    if (dateNow.weekday == 7) {
+      nextSaturdayDate = dateNow.add(const Duration(days: 6));
+    } else if (dateNow.weekday == 6) {
+      nextSaturdayDate = dateNow;
+    } else {
+      nextSaturdayDate = dateNow.add(Duration(days: 6 - dateNow.weekday));
+    }
+    String nextSaturday = dateFormat.format(nextSaturdayDate);
+    String thisSunday = dateFormat.format(nextSaturdayDate.subtract(const Duration(days: 6)));
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -52,7 +61,7 @@ class _MetricsPageState extends State<MetricsPage> {
                   icon: const Icon(Icons.keyboard_arrow_left),
                   splashRadius: 15.0,
                 ),
-                Text("$date2 - $date1"),
+                Text("$thisSunday - $nextSaturday"),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.keyboard_arrow_right),
