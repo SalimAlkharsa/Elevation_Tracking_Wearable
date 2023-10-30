@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:application/style.dart' as style;
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -19,6 +19,7 @@ class _MainPageState extends State<MainPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      backgroundColor: style.backgroundColor,
       appBar: AppBar(
         title: const Text("MAIN PAGE"),
       ),
@@ -43,10 +44,10 @@ class _MainPageState extends State<MainPage> {
                         Stack(
                             alignment: Alignment.center,
                             children: [
-                              const Icon(Icons.directions_run),
+                              Icon(Icons.directions_run, color: style.iconColor),
                               CircularProgressIndicator(
                                 value: 1250/2000,
-                                color: Colors.green[300],
+                                color: style.mainColor,
                                 strokeWidth: 4.0,
                               ),
                             ]
@@ -81,10 +82,10 @@ class _MainPageState extends State<MainPage> {
                         Stack(
                           alignment: Alignment.center,
                           children: [
-                            const Icon(Icons.stairs_outlined),
+                            Icon(Icons.stairs_outlined, color: style.iconColor),
                             CircularProgressIndicator(
                               value: 6/20,
-                              color: Colors.blue[300],
+                              color: style.mainColor,
                               strokeWidth: 4.0,
                             ),
                           ]
@@ -138,17 +139,17 @@ class _MainPageState extends State<MainPage> {
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/settings');
               },
-              child: const Icon(Icons.settings, size: 50),
+              child: Icon(Icons.settings, size: 50, color: style.mainColor),
             ),
             TextButton(
               onPressed: () {},
-              child: Icon(Icons.house, size: 50, color: Colors.blueGrey[800]),
+              child: Icon(Icons.house, size: 50, color: style.selectedColor),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/metrics');
               },
-              child: const Icon(Icons.bar_chart, size: 50),
+              child: Icon(Icons.bar_chart, size: 50, color: style.mainColor),
             ),
           ],
         ),

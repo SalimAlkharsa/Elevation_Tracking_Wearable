@@ -1,6 +1,7 @@
 import 'package:application/Graphs/weekly_bar_data.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:application/style.dart' as style;
 
 class WeeklyBarChart extends StatelessWidget {
   const WeeklyBarChart({
@@ -44,13 +45,13 @@ class WeeklyBarChart extends StatelessWidget {
             x: data.x,
             barRods: [BarChartRodData(
               toY: data.y,
-              color: Colors.blueGrey[200],
+              color: style.mainColor,
               width: 40,
               borderRadius: BorderRadius.circular(1),
               backDrawRodData: BackgroundBarChartRodData(
                 show: true,
                 toY: 250,
-                color: Colors.grey[300],
+                color: style.backgroundAccent,
               )
             )],
           )

@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:application/style.dart' as style;
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       // The app bar shows the title of the page the user is currently on
       appBar: AppBar(
-        title: Text("Settings"),
+        title: const Text("Settings"),
       ),
 
       // The list view allows for multiple ListTile widgets, which is the backbone of the settings page
@@ -50,9 +50,9 @@ class _SettingsPageState extends State<SettingsPage> {
         children: <Widget>[
           // TODO: Explain sign out
           ListTile(
-            title: Text("Sign Out"),
+            title: const Text("Sign Out"),
             trailing: IconButton (
-              icon: Icon(Icons.logout),
+              icon: const Icon(Icons.logout),
               // TODO: Implement sign out
               onPressed: () {},
             )
@@ -61,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // A simple switch widget for turning dark mode on and off
           // TODO: Explain handling dark mode
           ListTile(
-            title: Text("Dark Mode"),
+            title: const Text("Dark Mode"),
             trailing: Switch(
               value: _switchValue,
               onChanged: (value) {
@@ -82,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // If the error check passes, the local copy is updated, and so is the entry in the database
           // TODO: Explain database entry
           ListTile(
-            title: Text("Set Height (in)"),
+            title: const Text("Set Height (in)"),
             subtitle: Text("$userHeight"),
             onTap: () async {
               final newHeight = await openTextEntryDialog();
@@ -97,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const Divider(),
           ListTile(
-            title: Text("Set Weight (lbs)"),
+            title: const Text("Set Weight (lbs)"),
             subtitle: Text("$userWeight"),
             onTap: () async {
               final newWeight = await openTextEntryDialog();
@@ -112,7 +112,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const Divider(),
           ListTile(
-            title: Text("Set Step Daily Goal"),
+            title: const Text("Set Step Daily Goal"),
             subtitle: Text("$stepGoal"),
             onTap: () async {
               final newGoal = await openTextEntryDialog();
@@ -127,7 +127,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const Divider(),
           ListTile(
-            title: Text("Set Floor Daily Goal"),
+            title: const Text("Set Floor Daily Goal"),
             subtitle: Text("$floorGoal"),
             onTap: () async {
               final newGoal = await openTextEntryDialog();
@@ -162,19 +162,19 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             TextButton(
               onPressed: () {},
-              child: Icon(Icons.settings, size: 50, color: Colors.blueGrey[800]),
+              child: Icon(Icons.settings, size: 50, color: style.selectedColor),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/');
               },
-              child: const Icon(Icons.house, size: 50),
+              child: Icon(Icons.house, size: 50, color: style.mainColor),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/metrics');
               },
-              child: const Icon(Icons.bar_chart, size: 50),
+              child: Icon(Icons.bar_chart, size: 50, color: style.mainColor),
             ),
           ],
         ),

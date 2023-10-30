@@ -1,6 +1,7 @@
 import 'package:application/Graphs/weekly_bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:application/style.dart' as style;
 
 class MetricsPage extends StatefulWidget {
   const MetricsPage({super.key});
@@ -147,17 +148,17 @@ class _MetricsPageState extends State<MetricsPage> {
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/settings');
               },
-              child: const Icon(Icons.settings, size: 50),
+              child: Icon(Icons.settings, size: 50, color: style.mainColor),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/');
               },
-              child: const Icon(Icons.house, size: 50),
+              child: Icon(Icons.house, size: 50, color: style.mainColor),
             ),
             TextButton(
               onPressed: () {},
-              child: Icon(Icons.bar_chart, size: 50, color: Colors.blueGrey[800]),
+              child: Icon(Icons.bar_chart, size: 50, color: style.selectedColor),
             ),
           ],
         ),
