@@ -37,7 +37,7 @@ class DailyLineChart extends StatelessWidget {
           LineChartBarData(
             spots: dailyLineData.data.map((data) => FlSpot(data.x, data.y)).toList(),
             isCurved: false,
-            dotData: FlDotData(show: true),
+            dotData: FlDotData(show: false),
             color: style.mainColor,
           )
         ]

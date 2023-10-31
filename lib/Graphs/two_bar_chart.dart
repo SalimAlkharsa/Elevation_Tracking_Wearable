@@ -43,7 +43,7 @@ class TwoBarChart extends StatelessWidget {
               barRods: [BarChartRodData(
                   toY: data.y,
                   color: style.mainColor,
-                  width: 40,
+                  width: MediaQuery.of(context).size.width * 0.45,
                   borderRadius: BorderRadius.circular(1),
                   backDrawRodData: BackgroundBarChartRodData(
                     show: true,
