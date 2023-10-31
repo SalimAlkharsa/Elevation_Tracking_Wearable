@@ -93,33 +93,39 @@ class _MetricsPageState extends State<MetricsPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      backgroundColor: style.backgroundColor,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text("METRICS PAGE"),
+        title: const Text("Stats"),
+        backgroundColor: style.mainColor,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Divider(),
+            Divider(
+              color: style.subtextStyle.color,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
                   onPressed: lastWeek,
-                  icon: const Icon(Icons.keyboard_arrow_left),
+                  icon: Icon(Icons.keyboard_arrow_left, color: style.iconColor),
                   splashRadius: 15.0,
                 ),
-                Text("$thisSunday - $nextSaturday"),
+                Text("$thisSunday - $nextSaturday", style: style.textStyle),
                 IconButton(
                   onPressed: nextWeek,
-                  icon: const Icon(Icons.keyboard_arrow_right),
+                  icon: Icon(Icons.keyboard_arrow_right, color: style.iconColor),
                   splashRadius: 15.0,
                 ),
               ]
             ),
-            const Divider(),
+            Divider(
+              color: style.subtextStyle.color,
+            ),
             SizedBox(
               height: 200,
               child: WeeklyBarChart(data: dailyAvgHR),
@@ -132,6 +138,10 @@ class _MetricsPageState extends State<MetricsPage> {
       bottomNavigationBar: BottomAppBar(
         // This padding makes the icons look cleaner and increase readability for the user
         padding: const EdgeInsets.all(5.0),
+
+        // This color specification allows dark mode to function, as the theme settings in main
+        // are only set when the application is initially started
+        color: style.backgroundAccent,
 
         // The Row widget lines all of the children contained into a row
         child: Row(

@@ -21,7 +21,8 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       backgroundColor: style.backgroundColor,
       appBar: AppBar(
-        title: const Text("MAIN PAGE"),
+        title: const Text("Home"),
+        backgroundColor: style.mainColor,
       ),
       body: Center(
         child: Column(
@@ -39,7 +40,7 @@ class _MainPageState extends State<MainPage> {
                       children: [
                         Transform.scale(
                           scale: 0.5,
-                          child: const Text("Steps"),
+                          child: Text("Steps", style: style.textStyle),
                         ),
                         Stack(
                             alignment: Alignment.center,
@@ -57,14 +58,14 @@ class _MainPageState extends State<MainPage> {
                             child: Column(
                                 children: [
                                   Container(
-                                    decoration: const BoxDecoration(
+                                    decoration: BoxDecoration(
                                       border: Border(
-                                        bottom: BorderSide(color: Colors.black),
+                                        bottom: BorderSide(color: style.iconColor),
                                       ),
                                     ),
-                                    child: const Text("1250"),
+                                    child: Text("1250", style: style.textStyle),
                                   ),
-                                  const Text("2000"),
+                                  Text("2000", style: style.textStyle),
                                 ]
                             )
                         ),
@@ -77,7 +78,7 @@ class _MainPageState extends State<MainPage> {
                       children: [
                         Transform.scale(
                           scale: 0.5,
-                          child: const Text("Floors"),
+                          child: Text("Floors", style: style.textStyle),
                         ),
                         Stack(
                           alignment: Alignment.center,
@@ -95,14 +96,14 @@ class _MainPageState extends State<MainPage> {
                           child: Column(
                             children: [
                               Container(
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   border: Border(
-                                    bottom: BorderSide(color: Colors.black),
+                                    bottom: BorderSide(color: style.iconColor),
                                   ),
                                 ),
-                                child: const Text("6"),
+                                child: Text("6", style: style.textStyle),
                               ),
-                              const Text("20"),
+                              Text("20", style: style.textStyle),
                             ]
                           )
                         ),
@@ -114,7 +115,7 @@ class _MainPageState extends State<MainPage> {
             ),
             Transform.scale(
               scale: 1.7,
-              child: const Text("Average heart rate: 189"),
+              child: Text("Average heart rate: 189", style: style.textStyle),
             ),
           ],
         ),
@@ -123,6 +124,10 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomAppBar(
         // This padding makes the icons look cleaner and increase readability for the user
         padding: const EdgeInsets.all(5.0),
+
+        // This color specification allows dark mode to function, as the theme settings in main
+        // are only set when the application is initially started
+        color: style.backgroundAccent,
 
         // The Row widget lines all of the children contained into a row
         child: Row(

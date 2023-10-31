@@ -10,7 +10,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   // Initialize local data
-  bool _switchValue = false;
   double userHeight = 0.0;
   double userWeight = 0.0;
   int stepGoal = 0;
@@ -38,9 +37,12 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: style.backgroundColor,
+
       // The app bar shows the title of the page the user is currently on
       appBar: AppBar(
         title: const Text("Settings"),
+        backgroundColor: style.mainColor,
       ),
 
       // The list view allows for multiple ListTile widgets, which is the backbone of the settings page
@@ -50,28 +52,30 @@ class _SettingsPageState extends State<SettingsPage> {
         children: <Widget>[
           // TODO: Explain sign out
           ListTile(
-            title: const Text("Sign Out"),
+            title: Text("Sign Out", style: style.textStyle),
             trailing: IconButton (
-              icon: const Icon(Icons.logout),
+              icon: Icon(Icons.logout, color: style.iconColor),
               // TODO: Implement sign out
               onPressed: () {},
             )
           ),
-          const Divider(),
+          Divider(
+            color: style.subtextStyle.color,
+          ),
           // A simple switch widget for turning dark mode on and off
           // TODO: Explain handling dark mode
           ListTile(
-            title: const Text("Dark Mode"),
+            title: Text("Dark Mode", style: style.textStyle),
             trailing: Switch(
-              value: _switchValue,
-              onChanged: (value) {
-                setState(() {
-                  _switchValue = value;
-                });
-              },
+              activeColor: style.mainColor,
+              activeTrackColor: style.tooltipColor,
+              value: style.switchValue,
+              onChanged: darkMode,
             ),
           ),
-          const Divider(),
+          Divider(
+            color: style.subtextStyle.color,
+          ),
           // These next four widgets allow you to update the height, weight, and daily goals for the user
           // Their title and subtitle is set relative to what value you are updating
           // When tapped, they open the openTextEntryDialog() function, which allows the user to update the entry
@@ -82,8 +86,8 @@ class _SettingsPageState extends State<SettingsPage> {
           // If the error check passes, the local copy is updated, and so is the entry in the database
           // TODO: Explain database entry
           ListTile(
-            title: const Text("Set Height (in)"),
-            subtitle: Text("$userHeight"),
+            title: Text("Set Height (in)", style: style.textStyle),
+            subtitle: Text("$userHeight", style: style.subtextStyle),
             onTap: () async {
               final newHeight = await openTextEntryDialog();
               if (newHeight == null || newHeight.isEmpty || double.tryParse(newHeight) == null) {
@@ -95,10 +99,12 @@ class _SettingsPageState extends State<SettingsPage> {
               //TODO: Update database with new value
             },
           ),
-          const Divider(),
+          Divider(
+            color: style.subtextStyle.color,
+          ),
           ListTile(
-            title: const Text("Set Weight (lbs)"),
-            subtitle: Text("$userWeight"),
+            title: Text("Set Weight (lbs)", style: style.textStyle),
+            subtitle: Text("$userWeight", style: style.subtextStyle),
             onTap: () async {
               final newWeight = await openTextEntryDialog();
               if (newWeight == null || newWeight.isEmpty || (double.tryParse(newWeight) == null)) {
@@ -110,10 +116,12 @@ class _SettingsPageState extends State<SettingsPage> {
               //TODO: Update database with new value
             },
           ),
-          const Divider(),
+          Divider(
+            color: style.subtextStyle.color,
+          ),
           ListTile(
-            title: const Text("Set Step Daily Goal"),
-            subtitle: Text("$stepGoal"),
+            title: Text("Set Step Daily Goal", style: style.textStyle),
+            subtitle: Text("$stepGoal", style: style.subtextStyle),
             onTap: () async {
               final newGoal = await openTextEntryDialog();
               if (newGoal == null || newGoal.isEmpty || (int.tryParse(newGoal) == null)) {
@@ -125,10 +133,12 @@ class _SettingsPageState extends State<SettingsPage> {
               //TODO: Update database with new value
             },
           ),
-          const Divider(),
+          Divider(
+            color: style.subtextStyle.color,
+          ),
           ListTile(
-            title: const Text("Set Floor Daily Goal"),
-            subtitle: Text("$floorGoal"),
+            title: Text("Set Floor Daily Goal", style: style.textStyle),
+            subtitle: Text("$floorGoal", style: style.subtextStyle),
             onTap: () async {
               final newGoal = await openTextEntryDialog();
               if (newGoal == null || newGoal.isEmpty || (int.tryParse(newGoal) == null)) {
@@ -140,7 +150,9 @@ class _SettingsPageState extends State<SettingsPage> {
               //TODO: Update database with new value
             },
           ),
-          const Divider(),
+          Divider(
+            color: style.subtextStyle.color,
+          ),
         ],
       ),
 
@@ -148,6 +160,10 @@ class _SettingsPageState extends State<SettingsPage> {
       bottomNavigationBar: BottomAppBar(
         // This padding makes the icons look cleaner and increase readability for the user
         padding: const EdgeInsets.all(5.0),
+
+        // This color specification allows dark mode to function, as the theme settings in main
+        // are only set when the application is initially started
+        color: style.backgroundAccent,
 
         // The Row widget lines all of the children contained into a row
         child: Row(
@@ -185,15 +201,23 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<String?> openTextEntryDialog() => showDialog<String>(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text("Edit text"),
+      title: Text("Edit value", style: style.textStyle),
+      backgroundColor: style.backgroundAccent,
       content: TextField(
-        decoration: const InputDecoration(hintText: "Enter text here."),
+        decoration: InputDecoration(
+          hintText: "Enter value here",
+          hintStyle: style.subtextStyle,
+        ),
         controller: controller,
         onSubmitted: (_) => submitText(),
+        style: style.textStyle,
       ),
       actions: [
         TextButton(
             onPressed: submitText,
+            style: TextButton.styleFrom(
+              foregroundColor: style.mainColor,
+            ),
             child: const Text("SUBMIT"),
         )
       ],
@@ -209,10 +233,14 @@ class _SettingsPageState extends State<SettingsPage> {
   void errorDoubleDialog() => showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text("Error: Value must be a decimal value"),
+      backgroundColor: style.backgroundColor,
+      title: Text("Error: Value must be a decimal value", style: style.textStyle),
       actions: [
         TextButton(
           onPressed: close,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
           child: const Text("OK"),
         )
       ],
@@ -222,10 +250,14 @@ class _SettingsPageState extends State<SettingsPage> {
   void errorIntDialog() => showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text("Error: Value must be an integer"),
+      backgroundColor: style.backgroundColor,
+      title: Text("Error: Value must be an integer", style: style.textStyle),
       actions: [
         TextButton(
           onPressed: close,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
           child: const Text("OK"),
         )
       ],
@@ -234,6 +266,40 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void close() {
     Navigator.of(context).pop(context);
+  }
+
+  void darkMode(bool value) {
+    setState(() {
+      style.switchValue = value;
+    });
+
+    if (style.switchValue) {
+      style.mainColor = const Color(0xFF058842);
+      style.selectedColor = const Color(0xFF0D5E32);
+      style.backgroundColor = const Color(0xFF414141);
+      style.backgroundAccent = const Color(0xFF3A3A3A);
+      style.iconColor = const Color(0xFFAFAFAF);
+      style.textStyle = const TextStyle(
+        color: Color(0xFFAFAFAF),
+      );
+      style.subtextStyle = const TextStyle(
+        color: Color(0xFF676767),
+      );
+      style.tooltipColor = const Color(0xFF282828);
+    } else {
+      style.mainColor = const Color(0xFF026C34);
+      style.selectedColor = const Color(0xFF094824);
+      style.backgroundColor = const Color(0xFFEFEFEF);
+      style.backgroundAccent = const Color(0xFFD9D9D9);
+      style.iconColor = const Color(0xFF676767);
+      style.textStyle = const TextStyle(
+        color: Color(0xFF343434),
+      );
+      style.subtextStyle = const TextStyle(
+        color: Color(0xFF969696),
+      );
+      style.tooltipColor = const Color(0xFFBDBDBD);
+    }
   }
 }
 

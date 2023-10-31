@@ -30,6 +30,11 @@ class WeeklyBarChart extends StatelessWidget {
         maxY: 250,
         gridData: FlGridData(show: false),
         borderData: FlBorderData(show: false),
+        barTouchData: BarTouchData(
+          touchTooltipData: BarTouchTooltipData(
+            tooltipBgColor: style.tooltipColor,
+          )
+        ),
         titlesData: FlTitlesData(
           show: true,
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -62,35 +67,36 @@ class WeeklyBarChart extends StatelessWidget {
 }
 
 Widget getBottomTitles (double value, TitleMeta meta) {
-  const style = TextStyle(
+  TextStyle titleStyle = TextStyle(
     fontSize: 12,
+    color: style.textStyle.color
   );
 
   Widget text;
   switch (value.toInt()) {
     case 0:
-      text = const Text("Su", style: style);
+      text = Text("Su", style: titleStyle);
       break;
     case 1:
-      text = const Text("Mo", style: style);
+      text = Text("Mo", style: titleStyle);
       break;
     case 2:
-      text = const Text("Tu", style: style);
+      text = Text("Tu", style: titleStyle);
       break;
     case 3:
-      text = const Text("We", style: style);
+      text = Text("We", style: titleStyle);
       break;
     case 4:
-      text = const Text("Th", style: style);
+      text = Text("Th", style: titleStyle);
       break;
     case 5:
-      text = const Text("Fr", style: style);
+      text = Text("Fr", style: titleStyle);
       break;
     case 6:
-      text = const Text("Sa", style: style);
+      text = Text("Sa", style: titleStyle);
       break;
     default:
-      text = const Text("Default", style: style);
+      text = Text("Default", style: titleStyle);
       break;
   }
   
