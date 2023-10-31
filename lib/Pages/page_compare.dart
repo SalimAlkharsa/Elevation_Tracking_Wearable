@@ -1,17 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:application/style.dart' as style;
 
-class MetricsPage extends StatefulWidget {
-  const MetricsPage({super.key});
+import '../Graphs/two_bar_chart.dart';
+
+class ComparePage extends StatefulWidget {
+  const ComparePage({super.key});
 
   @override
-  State<MetricsPage> createState() => _MetricsPageState();
+  State<ComparePage> createState() => _ComparePageState();
 }
 
-class _MetricsPageState extends State<MetricsPage> {
+class _ComparePageState extends State<ComparePage> {
+
+  List<double> dailyAvgHR = [
+    189,
+    201,
+  ];
+  DateTime dateSelected = DateTime.now();
+  DateTime dateNextSaturday = DateTime.now();
+  DateFormat dateFormat = DateFormat.MMMEd();
+  String nextSaturday = "";
+  String thisSunday = "";
+  bool isInitialized = false;
+  int dateCorrection = 0;
+
+  void initializeDate() {
+    if (!isInitialized) {
+      if (dateSelected.weekday == 7) {
+        dateNextSaturday = dateSelected.add(const Duration(days: 6));
+      } else if (dateSelected.weekday == 6) {
+        dateNextSaturday = dateSelected;
+      } else {
+        dateNextSaturday =
+            dateSelected.add(Duration(days: 6 - dateSelected.weekday));
+      }
+      nextSaturday = dateFormat.format(dateNextSaturday);
+      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+      isInitialized = true;
+    }
+  }
+
+  void nextWeek (){
+    setState(() {
+      dateNextSaturday = dateNextSaturday.add(const Duration(days: 7));
+
+      nextSaturday = dateFormat.format(dateNextSaturday);
+      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+
+      dailyAvgHR = [
+        174,
+        178,
+      ];
+    });
+  }
+
+  void lastWeek () {
+    setState(() {
+      dateNextSaturday = dateNextSaturday.subtract(const Duration(days: 7));
+
+      nextSaturday = dateFormat.format(dateNextSaturday);
+      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+
+      dailyAvgHR = [
+        201,
+        209,
+      ];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    initializeDate();
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -23,30 +83,38 @@ class _MetricsPageState extends State<MetricsPage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text("Stats"),
+        title: const Text("Compare Bar Chart"),
         backgroundColor: style.mainColor,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/weekly');
-              },
-              child: Text("Weekly Chart", style: style.textStyle),
+            Divider(
+              color: style.subtextStyle.color,
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/daily');
-              },
-              child: Text("Daily Chart", style: style.textStyle),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: lastWeek,
+                    icon: Icon(Icons.keyboard_arrow_left, color: style.iconColor),
+                    splashRadius: 15.0,
+                  ),
+                  Text("$thisSunday - $nextSaturday", style: style.textStyle),
+                  IconButton(
+                    onPressed: nextWeek,
+                    icon: Icon(Icons.keyboard_arrow_right, color: style.iconColor),
+                    splashRadius: 15.0,
+                  ),
+                ]
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/compare');
-              },
-              child: Text("Compare Chart", style: style.textStyle),
+            Divider(
+              color: style.subtextStyle.color,
+            ),
+            SizedBox(
+              height: 200,
+              child: TwoBarChart(data: dailyAvgHR),
             ),
           ],
         ),
@@ -85,7 +153,9 @@ class _MetricsPageState extends State<MetricsPage> {
               child: Icon(Icons.house, size: 50, color: style.mainColor),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/metrics');
+              },
               child: Icon(Icons.bar_chart, size: 50, color: style.selectedColor),
             ),
           ],
