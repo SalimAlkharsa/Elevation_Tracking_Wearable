@@ -27,36 +27,25 @@ class _DailyPageState extends State<DailyPage> {
     IndividualPoint(x: 5.6, y: 189),
     IndividualPoint(x: 6, y: 187),
   ];
-  DateTime dateSelected = DateTime.now();
-  DateTime dateNextSaturday = DateTime.now();
-  DateFormat dateFormat = DateFormat.MMMEd();
-  String nextSaturday = "";
-  String thisSunday = "";
-  bool isInitialized = false;
-  int dateCorrection = 0;
+
+  DateTime dateSelected = DateTime.now(); // Initialized to current date
+  DateFormat dateFormat = DateFormat.MMMEd(); // Date formatter for the UI
+  String currentDate = ""; // String form of the date for display
+  bool isInitialized = false; // Tracks whether date has been initialized
 
   void initializeDate() {
     if (!isInitialized) {
-      if (dateSelected.weekday == 7) {
-        dateNextSaturday = dateSelected.add(const Duration(days: 6));
-      } else if (dateSelected.weekday == 6) {
-        dateNextSaturday = dateSelected;
-      } else {
-        dateNextSaturday =
-            dateSelected.add(Duration(days: 6 - dateSelected.weekday));
-      }
-      nextSaturday = dateFormat.format(dateNextSaturday);
-      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+      dateSelected = DateTime.now();
+      currentDate = dateFormat.format(dateSelected);
       isInitialized = true;
     }
   }
 
-  void nextWeek (){
+  void tomorrow (){
     setState(() {
-      dateNextSaturday = dateNextSaturday.add(const Duration(days: 7));
+      dateSelected = dateSelected.add(const Duration(days: 1));
 
-      nextSaturday = dateFormat.format(dateNextSaturday);
-      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+      currentDate = dateFormat.format(dateSelected);
 
       hourlyAvgHR = [
         IndividualPoint(x: 2, y: 189),
@@ -76,12 +65,11 @@ class _DailyPageState extends State<DailyPage> {
     });
   }
 
-  void lastWeek () {
+  void yesterday () {
     setState(() {
-      dateNextSaturday = dateNextSaturday.subtract(const Duration(days: 7));
+      dateSelected = dateSelected.subtract(const Duration(days: 1));
 
-      nextSaturday = dateFormat.format(dateNextSaturday);
-      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+      currentDate = dateFormat.format(dateSelected);
 
       hourlyAvgHR = [
         IndividualPoint(x: 2.5, y: 200),
@@ -129,13 +117,13 @@ class _DailyPageState extends State<DailyPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    onPressed: lastWeek,
+                    onPressed: yesterday,
                     icon: Icon(Icons.keyboard_arrow_left, color: style.iconColor),
                     splashRadius: 15.0,
                   ),
-                  Text("$thisSunday - $nextSaturday", style: style.textStyle),
+                  Text(currentDate, style: style.textStyle),
                   IconButton(
-                    onPressed: nextWeek,
+                    onPressed: tomorrow,
                     icon: Icon(Icons.keyboard_arrow_right, color: style.iconColor),
                     splashRadius: 15.0,
                   ),

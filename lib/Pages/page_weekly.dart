@@ -12,6 +12,7 @@ class WeeklyPage extends StatefulWidget {
 
 class _WeeklyPageState extends State<WeeklyPage> {
 
+  // TODO: Get real data from database
   List<double> dailyAvgHR = [
     189,
     201,
@@ -21,13 +22,14 @@ class _WeeklyPageState extends State<WeeklyPage> {
     200,
     195
   ];
-  DateTime dateSelected = DateTime.now();
-  DateTime dateNextSaturday = DateTime.now();
-  DateFormat dateFormat = DateFormat.MMMEd();
-  String nextSaturday = "";
-  String thisSunday = "";
-  bool isInitialized = false;
-  int dateCorrection = 0;
+
+  DateTime dateSelected = DateTime.now(); // Current date and time
+  DateTime dateNextSaturday = DateTime.now(); // Next saturday from selected date
+  DateFormat dateFormat = DateFormat.MMMEd(); // Date formatter for the UI
+  String nextSaturday = ""; // String form next saturday for display
+  String thisSunday = ""; // String form of this sunday for display
+  bool isInitialized = false; // Tracks whether date has been initialized
+  int dateCorrection = 0; // Number used to calculate when next Saturday is relative to current date
 
   void initializeDate() {
     if (!isInitialized) {
