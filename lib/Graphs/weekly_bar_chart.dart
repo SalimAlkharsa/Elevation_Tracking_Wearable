@@ -13,7 +13,7 @@ class WeeklyBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WeeklyBarData weeklyBarData = WeeklyBarData(
+    TwoBarData weeklyBarData = TwoBarData(
         sun: data[0],
         mon: data[1],
         tue: data[2],
@@ -33,7 +33,7 @@ class WeeklyBarChart extends StatelessWidget {
         barTouchData: BarTouchData(
           touchTooltipData: BarTouchTooltipData(
             tooltipBgColor: style.tooltipColor,
-          )
+          ),
         ),
         titlesData: FlTitlesData(
           show: true,

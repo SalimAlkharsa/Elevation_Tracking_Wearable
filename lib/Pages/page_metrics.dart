@@ -1,3 +1,5 @@
+import 'package:application/Graphs/daily_line_chart.dart';
+import 'package:application/Graphs/individual_point.dart';
 import 'package:application/Graphs/weekly_bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +22,21 @@ class _MetricsPageState extends State<MetricsPage> {
     199,
     200,
     195
+  ];
+  List<IndividualPoint> hourlyAvgHR = [
+    IndividualPoint(x: 3, y: 189),
+    IndividualPoint(x: 3.1, y: 190),
+    IndividualPoint(x: 3.5, y: 199),
+    IndividualPoint(x: 3.9, y: 200),
+    IndividualPoint(x: 4, y: 201),
+    IndividualPoint(x: 4.3, y: 175),
+    IndividualPoint(x: 4.4, y: 176),
+    IndividualPoint(x: 4.5, y: 182),
+    IndividualPoint(x: 4.6, y: 170),
+    IndividualPoint(x: 5.1, y: 188),
+    IndividualPoint(x: 5.5, y: 189),
+    IndividualPoint(x: 5.6, y: 189),
+    IndividualPoint(x: 6, y: 187),
   ];
   DateTime dateSelected = DateTime.now();
   DateTime dateNextSaturday = DateTime.now();
@@ -61,6 +78,21 @@ class _MetricsPageState extends State<MetricsPage> {
         173,
         190
       ];
+      hourlyAvgHR = [
+        IndividualPoint(x: 2, y: 189),
+        IndividualPoint(x: 2.1, y: 190),
+        IndividualPoint(x: 2.5, y: 199),
+        IndividualPoint(x: 2.9, y: 200),
+        IndividualPoint(x: 3, y: 201),
+        IndividualPoint(x: 3.3, y: 175),
+        IndividualPoint(x: 4.4, y: 176),
+        IndividualPoint(x: 4.5, y: 182),
+        IndividualPoint(x: 4.6, y: 170),
+        IndividualPoint(x: 5.1, y: 188),
+        IndividualPoint(x: 5.5, y: 189),
+        IndividualPoint(x: 6.6, y: 189),
+        IndividualPoint(x: 7, y: 187),
+      ];
     });
   }
 
@@ -79,6 +111,21 @@ class _MetricsPageState extends State<MetricsPage> {
         167,
         180,
         174
+      ];
+      hourlyAvgHR = [
+        IndividualPoint(x: 2.5, y: 200),
+        IndividualPoint(x: 3.1, y: 192),
+        IndividualPoint(x: 3.5, y: 191),
+        IndividualPoint(x: 3.8, y: 184),
+        IndividualPoint(x: 3.9, y: 177),
+        IndividualPoint(x: 4, y: 177),
+        IndividualPoint(x: 4.2, y: 177),
+        IndividualPoint(x: 4.5, y: 181),
+        IndividualPoint(x: 4.9, y: 175),
+        IndividualPoint(x: 5.1, y: 198),
+        IndividualPoint(x: 6.5, y: 201),
+        IndividualPoint(x: 6.6, y: 215),
+        IndividualPoint(x: 7.1, y: 201),
       ];
     });
   }
@@ -129,6 +176,11 @@ class _MetricsPageState extends State<MetricsPage> {
             SizedBox(
               height: 200,
               child: WeeklyBarChart(data: dailyAvgHR),
+            ),
+            SizedBox(
+              height: 200,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: DailyLineChart(data: hourlyAvgHR),
             ),
           ],
         ),
