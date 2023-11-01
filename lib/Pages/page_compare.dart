@@ -17,56 +17,23 @@ class _ComparePageState extends State<ComparePage> {
     189,
     201,
   ];
-  DateTime dateSelected = DateTime.now();
-  DateTime dateNextSaturday = DateTime.now();
+  DateTime dateLeft = DateTime.now();
+  DateTime dateRight = DateTime.now();
   DateFormat dateFormat = DateFormat.MMMEd();
-  String nextSaturday = "";
-  String thisSunday = "";
+  String leftDateStr = "";
+  String rightDateStr = "";
+  String leftType = "Pick data type";
+  String rightType = "Pick data type";
   bool isInitialized = false;
-  int dateCorrection = 0;
 
   void initializeDate() {
     if (!isInitialized) {
-      if (dateSelected.weekday == 7) {
-        dateNextSaturday = dateSelected.add(const Duration(days: 6));
-      } else if (dateSelected.weekday == 6) {
-        dateNextSaturday = dateSelected;
-      } else {
-        dateNextSaturday =
-            dateSelected.add(Duration(days: 6 - dateSelected.weekday));
-      }
-      nextSaturday = dateFormat.format(dateNextSaturday);
-      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+      dateLeft = DateTime.now();
+      dateRight = DateTime.now();
+      leftDateStr = dateFormat.format(dateLeft);
+      rightDateStr = dateFormat.format(dateRight);
       isInitialized = true;
     }
-  }
-
-  void nextWeek (){
-    setState(() {
-      dateNextSaturday = dateNextSaturday.add(const Duration(days: 7));
-
-      nextSaturday = dateFormat.format(dateNextSaturday);
-      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
-
-      dailyAvgHR = [
-        174,
-        178,
-      ];
-    });
-  }
-
-  void lastWeek () {
-    setState(() {
-      dateNextSaturday = dateNextSaturday.subtract(const Duration(days: 7));
-
-      nextSaturday = dateFormat.format(dateNextSaturday);
-      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
-
-      dailyAvgHR = [
-        201,
-        209,
-      ];
-    });
   }
 
   @override
@@ -94,18 +61,49 @@ class _ComparePageState extends State<ComparePage> {
               color: style.subtextStyle.color,
             ),
             Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  IconButton(
-                    onPressed: lastWeek,
-                    icon: Icon(Icons.keyboard_arrow_left, color: style.iconColor),
-                    splashRadius: 15.0,
+                  Column(
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(leftType, style: style.textStyle),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          DateTime? newDate = await pickDate(dateLeft);
+
+                          if (newDate == null) return;
+
+                          setState(() {
+                            dateLeft = newDate;
+                            leftDateStr = dateFormat.format(dateLeft);
+                          });
+                        },
+                        child: Text(leftDateStr, style: style.textStyle),
+                      ),
+                    ],
                   ),
-                  Text("$thisSunday - $nextSaturday", style: style.textStyle),
-                  IconButton(
-                    onPressed: nextWeek,
-                    icon: Icon(Icons.keyboard_arrow_right, color: style.iconColor),
-                    splashRadius: 15.0,
+                  Column(
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(rightType, style: style.textStyle),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          DateTime? newDate = await pickDate(dateRight);
+
+                          if (newDate == null) return;
+
+                          setState(() {
+                            dateRight = newDate;
+                            rightDateStr = dateFormat.format(dateRight);
+                          });
+                        },
+                        child: Text(rightDateStr, style: style.textStyle),
+                      ),
+                    ],
                   ),
                 ]
             ),
@@ -162,5 +160,32 @@ class _ComparePageState extends State<ComparePage> {
         ),
       ),// This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  Future<DateTime?> pickDate(DateTime date) {
+    Future<DateTime?> newDate = showDatePicker(
+      context: context,
+      initialDate: date,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: style.mainColor, // header background color
+              onPrimary: Colors.white, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: style.mainColor, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    return newDate;
   }
 }
