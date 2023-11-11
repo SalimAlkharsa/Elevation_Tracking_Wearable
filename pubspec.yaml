@@ -38,6 +38,7 @@ dependencies:
   fl_chart: ^0.62.0
   intl: ^0.18.1
   google_fonts: ^4.0.4
+  postgres: ^2.6.2
 
 dev_dependencies:
   flutter_test:

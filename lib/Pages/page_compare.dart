@@ -22,8 +22,8 @@ class _ComparePageState extends State<ComparePage> {
   DateFormat dateFormat = DateFormat.MMMEd();
   String leftDateStr = "";
   String rightDateStr = "";
-  String leftType = "Pick data type";
-  String rightType = "Pick data type";
+  String leftType = "Average HR";
+  String rightType = "Average HR";
   bool isInitialized = false;
 
   void initializeDate() {

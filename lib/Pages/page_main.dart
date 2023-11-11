@@ -85,7 +85,7 @@ class _MainPageState extends State<MainPage> {
                           children: [
                             Icon(Icons.stairs_outlined, color: style.iconColor),
                             CircularProgressIndicator(
-                              value: 6/20,
+                              value: 21/20,
                               color: style.mainColor,
                               strokeWidth: 4.0,
                             ),
