@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:application/style.dart' as style;
+import 'package:application/connection.dart' as db;
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -12,6 +13,9 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    // TESTING
+    // test();
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -160,5 +164,23 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
     );
+  }
+
+  Future<void> test() async {
+    await db.connection.open();
+
+    await db.connection.query("INSERT INTO users (user_id, height, weight, first_name, last_name) VALUES (6, 130, 450, 'My', 'Mama')");
+
+    List<List<dynamic>> results = await db.connection.query("SELECT * FROM users");
+
+    for (final row in results) {
+      print(row[0]);
+      print(row[1]);
+      print(row[2]);
+      print(row[3]);
+      print(row[4]);
+    }
+
+    db.connection.close();
   }
 }
