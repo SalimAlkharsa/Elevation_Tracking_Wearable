@@ -11,17 +11,19 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
 
+  int stepGoal = 0;
+  int floorGoal = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initializeGoals();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TESTING
-    // test();
 
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       backgroundColor: style.backgroundColor,
       appBar: AppBar(
@@ -51,7 +53,7 @@ class _MainPageState extends State<MainPage> {
                             children: [
                               Icon(Icons.directions_run, color: style.iconColor),
                               CircularProgressIndicator(
-                                value: 1250/2000,
+                                value: 250/stepGoal,
                                 color: style.mainColor,
                                 strokeWidth: 4.0,
                               ),
@@ -67,9 +69,9 @@ class _MainPageState extends State<MainPage> {
                                         bottom: BorderSide(color: style.iconColor),
                                       ),
                                     ),
-                                    child: Text("1250", style: style.textStyle),
+                                    child: Text("250", style: style.textStyle),
                                   ),
-                                  Text("2000", style: style.textStyle),
+                                  Text("$stepGoal", style: style.textStyle),
                                 ]
                             )
                         ),
@@ -89,7 +91,7 @@ class _MainPageState extends State<MainPage> {
                           children: [
                             Icon(Icons.stairs_outlined, color: style.iconColor),
                             CircularProgressIndicator(
-                              value: 21/20,
+                              value: 8/floorGoal,
                               color: style.mainColor,
                               strokeWidth: 4.0,
                             ),
@@ -105,9 +107,9 @@ class _MainPageState extends State<MainPage> {
                                     bottom: BorderSide(color: style.iconColor),
                                   ),
                                 ),
-                                child: Text("6", style: style.textStyle),
+                                child: Text("8", style: style.textStyle),
                               ),
-                              Text("20", style: style.textStyle),
+                              Text("$floorGoal", style: style.textStyle),
                             ]
                           )
                         ),
@@ -166,21 +168,18 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Future<void> test() async {
-    await db.connection.open();
+  Future<void> initializeGoals() async {
+    // await db.connection.open();
 
-    await db.connection.query("INSERT INTO users (user_id, height, weight, first_name, last_name) VALUES (6, 130, 450, 'My', 'Mama')");
+    await db.connection.query("SELECT daily_steps, daily_floors FROM users WHERE user_id=0");
 
-    List<List<dynamic>> results = await db.connection.query("SELECT * FROM users");
+    List<List<dynamic>> results = await db.connection.query("SELECT daily_steps, daily_floors FROM users WHERE user_id=0");
 
-    for (final row in results) {
-      print(row[0]);
-      print(row[1]);
-      print(row[2]);
-      print(row[3]);
-      print(row[4]);
-    }
+    setState(() {
+      stepGoal = results[0][0];
+      floorGoal = results[0][1];
+    });
 
-    db.connection.close();
+    // db.connection.close();
   }
 }

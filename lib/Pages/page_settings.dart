@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:application/style.dart' as style;
+import 'package:application/connection.dart' as db;
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -25,17 +26,22 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
 
     controller = TextEditingController();
+
+    initializeSettings();
   }
 
   @override
   void dispose() {
     controller.dispose();
 
+    finalizeSettings();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: style.backgroundColor,
 
@@ -300,6 +306,38 @@ class _SettingsPageState extends State<SettingsPage> {
       );
       style.tooltipColor = const Color(0xFFBDBDBD);
     }
+  }
+
+  Future<void> initializeSettings() async {
+    // await db.connection.open();
+
+    List<List<dynamic>> results = await db.connection.query("SELECT * FROM users WHERE user_id=0");
+
+    for (final row in results) {
+      print(row[1]);
+      print(row[2]);
+      print(row[3]);
+      print(row[4]);
+      print(row[5]);
+      print(row[6]);
+    }
+
+    setState(() {
+      userHeight = results[0][1];
+      userWeight = results[0][2];
+      stepGoal = results[0][5];
+      floorGoal = results[0][6];
+    });
+
+    // db.connection.close();
+  }
+
+  Future<void> finalizeSettings() async {
+    // await db.connection.open();
+
+    await db.connection.query("UPDATE users SET height=$userHeight, weight=$userWeight, daily_steps=$stepGoal, daily_floors=$floorGoal WHERE user_id=0");
+
+    // db.connection.close();
   }
 }
 

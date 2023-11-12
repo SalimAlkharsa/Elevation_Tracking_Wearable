@@ -8,8 +8,10 @@ import 'Pages/page_main.dart';
 import 'Pages/page_metrics.dart';
 import 'Pages/page_settings.dart';
 import 'package:application/style.dart' as style;
+import 'package:application/connection.dart' as db;
 
 void main() {
+  db.initialize();
   runApp(const MyApp());
 }
 
