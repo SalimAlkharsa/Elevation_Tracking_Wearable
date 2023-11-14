@@ -13,6 +13,8 @@ class _MainPageState extends State<MainPage> {
 
   int stepGoal = 0;
   int floorGoal = 0;
+  double stepFraction = 0.0;
+  double floorFraction = 0.0;
 
   @override
   void initState() {
@@ -53,7 +55,7 @@ class _MainPageState extends State<MainPage> {
                             children: [
                               Icon(Icons.directions_run, color: style.iconColor),
                               CircularProgressIndicator(
-                                value: 250/stepGoal,
+                                value: stepFraction,
                                 color: style.mainColor,
                                 strokeWidth: 4.0,
                               ),
@@ -91,7 +93,7 @@ class _MainPageState extends State<MainPage> {
                           children: [
                             Icon(Icons.stairs_outlined, color: style.iconColor),
                             CircularProgressIndicator(
-                              value: 8/floorGoal,
+                              value: floorFraction,
                               color: style.mainColor,
                               strokeWidth: 4.0,
                             ),
@@ -171,13 +173,24 @@ class _MainPageState extends State<MainPage> {
   Future<void> initializeGoals() async {
     // await db.connection.open();
 
-    await db.connection.query("SELECT daily_steps, daily_floors FROM users WHERE user_id=0");
-
     List<List<dynamic>> results = await db.connection.query("SELECT daily_steps, daily_floors FROM users WHERE user_id=0");
 
     setState(() {
       stepGoal = results[0][0];
       floorGoal = results[0][1];
+
+      if (stepGoal != 0) {
+        stepFraction = 250 / stepGoal;
+      } else {
+        stepFraction = 0.0;
+      }
+
+      if (floorGoal != 0) {
+        floorFraction = 8 / floorGoal;
+      } else {
+        floorFraction = 0.0;
+      }
+
     });
 
     // db.connection.close();
