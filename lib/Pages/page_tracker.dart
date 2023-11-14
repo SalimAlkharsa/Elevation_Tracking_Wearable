@@ -1,14 +1,26 @@
+import 'package:application/Graphs/tracker_bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:application/style.dart' as style;
 
-class MetricsPage extends StatefulWidget {
-  const MetricsPage({super.key});
+// FOR TESTING
+import '../Graphs/individual_bar.dart';
+
+class TrackerPage extends StatefulWidget {
+  const TrackerPage({super.key});
 
   @override
-  State<MetricsPage> createState() => _MetricsPageState();
+  State<TrackerPage> createState() => _TrackerPageState();
 }
 
-class _MetricsPageState extends State<MetricsPage> {
+class _TrackerPageState extends State<TrackerPage> {
+
+  // TODO: Get real data from database
+  List<IndividualBar> testData = [
+    IndividualBar(x: 0, y: 2),
+    IndividualBar(x: 1, y: -1),
+    IndividualBar(x: 2, y: 5),
+    IndividualBar(x: 3, y: 0)
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -23,37 +35,41 @@ class _MetricsPageState extends State<MetricsPage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text("Stats"),
+        title: const Text("Tracker Bar Chart"),
         backgroundColor: style.mainColor,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/weekly');
-              },
-              child: Text("Weekly Chart", style: style.textStyle),
+            SizedBox(
+              height: 200,
+              child: TrackerBarChart(data: testData),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/daily');
-              },
-              child: Text("Daily Chart", style: style.textStyle),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/compare');
-              },
-              child: Text("Compare Chart", style: style.textStyle),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/tracker');
-              },
-              child: Text("Tracker Chart", style: style.textStyle),
-            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: ListTile(
+                    title: Text('These ListTiles are expanded '),
+                  ),
+                ),
+                Expanded(
+                  child: ListTile(
+                    title: Text('to fill the available space.'),
+                  ),
+                ),
+                Expanded(
+                  child: ListTile(
+                    title: Text('These ListTiles are expanded '),
+                  ),
+                ),
+                Expanded(
+                  child: ListTile(
+                    title: Text('to fill the available space.'),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -91,7 +107,9 @@ class _MetricsPageState extends State<MetricsPage> {
               child: Icon(Icons.house, size: 50, color: style.mainColor),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/metrics');
+              },
               child: Icon(Icons.bar_chart, size: 50, color: style.selectedColor),
             ),
           ],

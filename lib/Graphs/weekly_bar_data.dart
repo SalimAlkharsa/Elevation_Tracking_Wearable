@@ -1,6 +1,6 @@
 import 'individual_bar.dart';
 
-class TwoBarData {
+class WeeklyBarData {
   final double sun;
   final double mon;
   final double tue;
@@ -9,7 +9,7 @@ class TwoBarData {
   final double fri;
   final double sat;
 
-  TwoBarData({
+  WeeklyBarData({
     required this.sun,
     required this.mon,
     required this.tue,

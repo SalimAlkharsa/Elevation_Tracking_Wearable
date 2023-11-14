@@ -13,7 +13,7 @@ class WeeklyBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TwoBarData weeklyBarData = TwoBarData(
+    WeeklyBarData weeklyBarData = WeeklyBarData(
         sun: data[0],
         mon: data[1],
         tue: data[2],

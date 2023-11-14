@@ -10,6 +10,8 @@ import 'Pages/page_settings.dart';
 import 'package:application/style.dart' as style;
 import 'package:application/connection.dart' as db;
 
+import 'Pages/page_tracker.dart';
+
 void main() {
   db.initialize();
   runApp(const MyApp());
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/metrics/weekly' : (BuildContext context) => const WeeklyPage(),
         '/metrics/daily' : (BuildContext context) => const DailyPage(),
         '/metrics/compare' : (BuildContext context) => const ComparePage(),
+        '/metrics/tracker' : (BuildContext context) => const TrackerPage(),
       },
       theme: ThemeData(
         appBarTheme: AppBarTheme(
