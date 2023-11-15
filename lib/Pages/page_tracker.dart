@@ -1,6 +1,7 @@
 import 'package:application/Graphs/tracker_bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:application/style.dart' as style;
+import 'package:application/connection.dart' as db;
 
 // FOR TESTING
 import '../Graphs/individual_bar.dart';
@@ -22,14 +23,39 @@ class _TrackerPageState extends State<TrackerPage> {
     IndividualBar(x: 3, y: 0)
   ];
 
+  List<String> nameList = [];
+  List<String> validNameList = [];
+  List<Widget> textList = [];
+
+  bool initialized = false;
+
+  // The text editing controller is used to capture user input and pass it into
+  // local copies of data through dialog boxes
+  late TextEditingController controller;
+
+  // initState() and dispose() need to be overridden to handle the controller
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+
+    if (!initialized) {
+      initializeData();
+    }
+
+
     return Scaffold(
       backgroundColor: style.backgroundColor,
       appBar: AppBar(
@@ -42,33 +68,27 @@ class _TrackerPageState extends State<TrackerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            TextButton(
+              onPressed: () async {
+                final newName = await openTextEntryDialog();
+                if (newName == null || newName.isEmpty || !checkName(newName)) {
+                  errorNameDialog();
+                  return;
+                }
+
+                setState(() => nameList.add(newName));
+
+                updateData();
+              },
+              child: const Text("Add User")
+            ),
             SizedBox(
               height: 200,
               child: TrackerBarChart(data: testData),
             ),
             Row(
-              children: <Widget>[
-                Expanded(
-                  child: ListTile(
-                    title: Text('These ListTiles are expanded '),
-                  ),
-                ),
-                Expanded(
-                  child: ListTile(
-                    title: Text('to fill the available space.'),
-                  ),
-                ),
-                Expanded(
-                  child: ListTile(
-                    title: Text('These ListTiles are expanded '),
-                  ),
-                ),
-                Expanded(
-                  child: ListTile(
-                    title: Text('to fill the available space.'),
-                  ),
-                ),
-              ],
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: textList,
             )
           ],
         ),
@@ -116,5 +136,98 @@ class _TrackerPageState extends State<TrackerPage> {
         ),
       ),// This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void initializeData () async {
+
+    List<List<dynamic>> results = await db.connection.query("SELECT first_name FROM users ORDER BY user_id");
+
+    setState(() {
+      for (int i = 0; i < results.length; i++) {
+        String curr = results[i][0];
+        print("Added $curr");
+        validNameList.add(results[i][0]);
+      }
+
+      initialized = true;
+    });
+  }
+
+  void updateData () async {
+
+    // List<List<dynamic>> results = await db.connection.query("SELECT first_name FROM users ORDER BY user_id");
+
+    setState(() {
+      textList.clear();
+
+      for (int i = 0; i < nameList.length; i++) {
+        textList.add(Text(nameList[i]));
+      }
+    });
+  }
+
+  Future<String?> openTextEntryDialog() => showDialog<String>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Edit value", style: style.textStyle),
+      backgroundColor: style.backgroundAccent,
+      content: TextField(
+        decoration: InputDecoration(
+          hintText: "Enter value here",
+          hintStyle: style.subtextStyle,
+        ),
+        controller: controller,
+        onSubmitted: (_) => submitText(),
+        style: style.textStyle,
+      ),
+      actions: [
+        TextButton(
+          onPressed: submitText,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("SUBMIT"),
+        )
+      ],
+    ),
+  );
+
+  void submitText() {
+    Navigator.of(context).pop(controller.text);
+
+    controller.clear();
+  }
+
+  void errorNameDialog() => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: style.backgroundColor,
+      title: Text("Error: Not a valid name", style: style.textStyle),
+      actions: [
+        TextButton(
+          onPressed: close,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("OK"),
+        )
+      ],
+    ),
+  );
+
+  void close() {
+    Navigator.of(context).pop(context);
+  }
+
+  bool checkName(String name) {
+    bool isValid = false;
+
+    for (int i = 0; i < validNameList.length; i++) {
+      if (name == validNameList[i]) {
+        isValid = true;
+      }
+    }
+
+    return isValid;
   }
 }

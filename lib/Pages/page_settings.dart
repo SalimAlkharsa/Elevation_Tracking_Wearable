@@ -102,7 +102,6 @@ class _SettingsPageState extends State<SettingsPage> {
               }
 
               setState(() => userHeight = double.parse(newHeight));
-              //TODO: Update database with new value
             },
           ),
           Divider(
@@ -119,7 +118,6 @@ class _SettingsPageState extends State<SettingsPage> {
               }
 
               setState(() => userWeight = double.parse(newWeight));
-              //TODO: Update database with new value
             },
           ),
           Divider(
@@ -136,7 +134,6 @@ class _SettingsPageState extends State<SettingsPage> {
               }
 
               setState(() => stepGoal = int.parse(newGoal));
-              //TODO: Update database with new value
             },
           ),
           Divider(
@@ -153,7 +150,6 @@ class _SettingsPageState extends State<SettingsPage> {
               }
 
               setState(() => floorGoal = int.parse(newGoal));
-              //TODO: Update database with new value
             },
           ),
           Divider(
