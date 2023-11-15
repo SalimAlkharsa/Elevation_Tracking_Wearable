@@ -16,12 +16,7 @@ class TrackerPage extends StatefulWidget {
 class _TrackerPageState extends State<TrackerPage> {
 
   // TODO: Get real data from database
-  List<IndividualBar> testData = [
-    IndividualBar(x: 0, y: 2),
-    IndividualBar(x: 1, y: -1),
-    IndividualBar(x: 2, y: 5),
-    IndividualBar(x: 3, y: 0)
-  ];
+  List<IndividualBar> trackerData = [];
 
   List<String> nameList = [];
   List<String> validNameList = [];
@@ -84,7 +79,7 @@ class _TrackerPageState extends State<TrackerPage> {
             ),
             SizedBox(
               height: 200,
-              child: TrackerBarChart(data: testData),
+              child: TrackerBarChart(data: trackerData),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -145,7 +140,6 @@ class _TrackerPageState extends State<TrackerPage> {
     setState(() {
       for (int i = 0; i < results.length; i++) {
         String curr = results[i][0];
-        print("Added $curr");
         validNameList.add(results[i][0]);
       }
 
@@ -155,7 +149,10 @@ class _TrackerPageState extends State<TrackerPage> {
 
   void updateData () async {
 
-    // List<List<dynamic>> results = await db.connection.query("SELECT first_name FROM users ORDER BY user_id");
+    String curr_name = "";
+    String curr_direction = "";
+    int curr_amt = 0;
+    int tot_amt = 0;
 
     setState(() {
       textList.clear();
@@ -163,7 +160,33 @@ class _TrackerPageState extends State<TrackerPage> {
       for (int i = 0; i < nameList.length; i++) {
         textList.add(Text(nameList[i]));
       }
+
+      trackerData.clear();
+
     });
+
+    for (int i = 0; i < nameList.length; i++) {
+
+      curr_name = nameList[i];
+      List<List<dynamic>> results = await db.connection.query(
+          "SELECT amt, direction FROM climbs INNER JOIN users ON climbs.user_id = users.user_id WHERE first_name='$curr_name'");
+
+      for (int i = 0; i < results.length; i++) {
+        curr_amt = results[i][0];
+        curr_direction = results[i][1];
+        if (curr_direction == "up") {
+          tot_amt += curr_amt;
+        } else {
+          tot_amt -= curr_amt;
+        }
+      }
+
+      setState(() {
+        trackerData.add(IndividualBar(x: i, y: tot_amt.toDouble()));
+      });
+
+      tot_amt = 0;
+    }
   }
 
   Future<String?> openTextEntryDialog() => showDialog<String>(
@@ -225,6 +248,12 @@ class _TrackerPageState extends State<TrackerPage> {
     for (int i = 0; i < validNameList.length; i++) {
       if (name == validNameList[i]) {
         isValid = true;
+      }
+    }
+
+    for (int i = 0; i < nameList.length; i++) {
+      if (name == nameList[i]) {
+        isValid = false;
       }
     }
 

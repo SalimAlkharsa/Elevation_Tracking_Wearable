@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:application/style.dart' as style;
 import 'package:application/connection.dart' as db;
@@ -118,6 +120,10 @@ class _MainPageState extends State<MainPage> {
                       ]
                     )
                   ),
+                  TextButton(
+                    onPressed: testFunc,
+                    child: const Text("TEST"),
+                  )
                 ],
               ),
             ),
@@ -194,5 +200,24 @@ class _MainPageState extends State<MainPage> {
     });
 
     // db.connection.close();
+  }
+
+  void testFunc () async {
+    var rng = Random();
+    int user_id = 0;
+    int amt = 0;
+    String direction = "";
+
+    for(int i = 0; i < 20; i++) {
+      user_id = rng.nextInt(7);
+      amt = rng.nextInt(10);
+      if (rng.nextInt(5) == 0) {
+        direction = "down";
+      } else {
+        direction = "up";
+      }
+
+      await db.connection.query("INSERT INTO climbs (user_id, amt, direction) VALUES ($user_id, $amt, '$direction')");
+    }
   }
 }
