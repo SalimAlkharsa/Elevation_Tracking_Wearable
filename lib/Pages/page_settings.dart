@@ -120,22 +120,22 @@ class _SettingsPageState extends State<SettingsPage> {
               setState(() => userWeight = double.parse(newWeight));
             },
           ),
-          Divider(
-            color: style.subtextStyle.color,
-          ),
-          ListTile(
-            title: Text("Set Step Daily Goal", style: style.textStyle),
-            subtitle: Text("$stepGoal", style: style.subtextStyle),
-            onTap: () async {
-              final newGoal = await openTextEntryDialog();
-              if (newGoal == null || newGoal.isEmpty || (int.tryParse(newGoal) == null)) {
-                errorIntDialog();
-                return;
-              }
-
-              setState(() => stepGoal = int.parse(newGoal));
-            },
-          ),
+          // Divider(
+          //   color: style.subtextStyle.color,
+          // ),
+          // ListTile(
+          //   title: Text("Set Step Daily Goal", style: style.textStyle),
+          //   subtitle: Text("$stepGoal", style: style.subtextStyle),
+          //   onTap: () async {
+          //     final newGoal = await openTextEntryDialog();
+          //     if (newGoal == null || newGoal.isEmpty || (int.tryParse(newGoal) == null)) {
+          //       errorIntDialog();
+          //       return;
+          //     }
+          //
+          //     setState(() => stepGoal = int.parse(newGoal));
+          //   },
+          // ),
           Divider(
             color: style.subtextStyle.color,
           ),

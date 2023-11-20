@@ -40,55 +40,55 @@ class _MainPageState extends State<MainPage> {
           verticalDirection: VerticalDirection.up,
           children: <Widget>[
             Transform.scale(
-              scale: 3.2,
+              scale: 2.5,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Padding(
+                  //   padding: const EdgeInsets.all(5.0),
+                  //   child: Column(
+                  //     children: [
+                  //       Transform.scale(
+                  //         scale: 0.5,
+                  //         child: Text("Steps", style: style.textStyle),
+                  //       ),
+                  //       Stack(
+                  //           alignment: Alignment.center,
+                  //           children: [
+                  //             Icon(Icons.directions_run, color: style.iconColor),
+                  //             CircularProgressIndicator(
+                  //               value: stepFraction,
+                  //               color: style.mainColor,
+                  //               strokeWidth: 4.0,
+                  //             ),
+                  //           ]
+                  //       ),
+                  //       Transform.scale(
+                  //           scale: 0.4,
+                  //           child: Column(
+                  //               children: [
+                  //                 Container(
+                  //                   decoration: BoxDecoration(
+                  //                     border: Border(
+                  //                       bottom: BorderSide(color: style.iconColor),
+                  //                     ),
+                  //                   ),
+                  //                   child: Text("250", style: style.textStyle),
+                  //                 ),
+                  //                 Text("$stepGoal", style: style.textStyle),
+                  //               ]
+                  //           )
+                  //       ),
+                  //     ]
+                  //   )
+                  // ),
                   Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Column(
                       children: [
                         Transform.scale(
                           scale: 0.5,
-                          child: Text("Steps", style: style.textStyle),
-                        ),
-                        Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Icon(Icons.directions_run, color: style.iconColor),
-                              CircularProgressIndicator(
-                                value: stepFraction,
-                                color: style.mainColor,
-                                strokeWidth: 4.0,
-                              ),
-                            ]
-                        ),
-                        Transform.scale(
-                            scale: 0.4,
-                            child: Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(color: style.iconColor),
-                                      ),
-                                    ),
-                                    child: Text("250", style: style.textStyle),
-                                  ),
-                                  Text("$stepGoal", style: style.textStyle),
-                                ]
-                            )
-                        ),
-                      ]
-                    )
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Column(
-                      children: [
-                        Transform.scale(
-                          scale: 0.5,
-                          child: Text("Floors", style: style.textStyle),
+                          child: Text("Floors Today", style: style.textStyle),
                         ),
                         Stack(
                           alignment: Alignment.center,
@@ -102,7 +102,7 @@ class _MainPageState extends State<MainPage> {
                           ]
                         ),
                         Transform.scale(
-                          scale: 0.4,
+                          scale: 0.5,
                           child: Column(
                             children: [
                               Container(
@@ -120,16 +120,26 @@ class _MainPageState extends State<MainPage> {
                       ]
                     )
                   ),
-                  TextButton(
-                    onPressed: testFunc,
-                    child: const Text("TEST"),
-                  )
+                  // TextButton(
+                  //   onPressed: testFunc,
+                  //   child: const Text("TEST"),
+                  // )
                 ],
               ),
             ),
-            Transform.scale(
-              scale: 1.7,
-              child: Text("Average heart rate: 189", style: style.textStyle),
+            Padding (
+              padding: const EdgeInsets.all(5.0),
+              child: Transform.scale(
+                scale: 1.7,
+                child: Text("Average heart rate: 189", style: style.textStyle),
+              ),
+            ),
+            Padding (
+              padding: const EdgeInsets.all(5.0),
+              child: Transform.scale(
+                scale: 1.7,
+                child: Text("Welcome, Seth", style: style.textStyle),
+              ),
             ),
           ],
         ),
