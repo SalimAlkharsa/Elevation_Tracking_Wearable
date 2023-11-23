@@ -86,16 +86,12 @@ class _DailyPageState extends State<DailyPage> {
       double hour_val = 0.0;
       DateTime curr_timestamp;
 
-      print("Date range: $dateSelected - $nextDate");
-
       List<List<dynamic>> results = await db.connection.query("SELECT hr, timestamp FROM sensors WHERE user_id=0 AND timestamp>'$dateSelected' AND timestamp<'$nextDate'");
 
       for (int i = 0; i < results.length; i++) {
         hr = results[i][0];
         curr_timestamp = results[i][1];
         hour_val = curr_timestamp.hour + (curr_timestamp.minute / 60) + (curr_timestamp.second / (60 * 60));
-
-        print("Adding point: $hour_val, $hr");
 
         newDailyData.add(IndividualPoint(x: hour_val, y: hr));
       }

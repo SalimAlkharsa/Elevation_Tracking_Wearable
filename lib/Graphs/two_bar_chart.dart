@@ -7,9 +7,13 @@ class TwoBarChart extends StatelessWidget {
   const TwoBarChart({
     super.key,
     required this.data,
+    required this.min,
+    required this.max,
   });
 
   final List data;
+  final double min;
+  final double max;
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +25,8 @@ class TwoBarChart extends StatelessWidget {
 
     return BarChart(
       BarChartData(
-        minY: 0,
-        maxY: 250,
+        minY: min,
+        maxY: max,
         gridData: FlGridData(show: false),
         borderData: FlBorderData(show: false),
         barTouchData: BarTouchData(
@@ -43,11 +47,11 @@ class TwoBarChart extends StatelessWidget {
               barRods: [BarChartRodData(
                   toY: data.y,
                   color: style.mainColor,
-                  width: MediaQuery.of(context).size.width * 0.45,
+                  width: MediaQuery.of(context).size.width * 0.42,
                   borderRadius: BorderRadius.circular(1),
                   backDrawRodData: BackgroundBarChartRodData(
                     show: true,
-                    toY: 250,
+                    toY: max,
                     color: style.backgroundAccent,
                   )
               )],

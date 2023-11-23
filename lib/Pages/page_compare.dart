@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:application/style.dart' as style;
+import 'package:application/connection.dart' as db;
 
 import '../Graphs/two_bar_chart.dart';
 
@@ -13,26 +14,162 @@ class ComparePage extends StatefulWidget {
 
 class _ComparePageState extends State<ComparePage> {
 
-  List<double> dailyAvgHR = [
-    189,
-    201,
-  ];
+  List<double> compare = [];
   DateTime dateLeft = DateTime.now();
   DateTime dateRight = DateTime.now();
   DateFormat dateFormat = DateFormat.MMMEd();
   String leftDateStr = "";
   String rightDateStr = "";
-  String leftType = "Average HR";
-  String rightType = "Average HR";
+  String type = "";
+  double min = 0.0;
+  double max = 0.0;
   bool isInitialized = false;
 
   void initializeDate() {
     if (!isInitialized) {
-      dateLeft = DateTime.now();
-      dateRight = DateTime.now();
-      leftDateStr = dateFormat.format(dateLeft);
-      rightDateStr = dateFormat.format(dateRight);
-      isInitialized = true;
+      setState(() {
+        dateLeft = DateTime.now();
+        dateRight = DateTime.now();
+        leftDateStr = dateFormat.format(dateLeft);
+        rightDateStr = dateFormat.format(dateRight);
+        type = "Average Heart Rate";
+        updateData();
+        isInitialized = true;
+      });
+    }
+  }
+
+  void updateType(String? selectedValue) {
+    if (selectedValue is String) {
+      setState(() {
+        type = selectedValue;
+      });
+      updateData();
+    }
+  }
+
+  Future<void> updateData() async {
+    DateTime nextDateRight = dateRight.add(const Duration(days: 1));
+    DateTime nextDateLeft = dateLeft.add(const Duration(days: 1));
+    List<double> newCompare = [];
+    if (type == "Average Heart Rate") {
+      double total_hr = 0.0;
+      List<List<dynamic>> results = await db.connection.query("SELECT hr FROM sensors WHERE user_id=0 AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
+
+      for (int i = 0; i < results.length; i++) {
+        total_hr += results[i][0];
+      }
+
+      newCompare.add(total_hr / results.length);
+
+      total_hr = 0;
+
+      results = await db.connection.query("SELECT hr FROM sensors WHERE user_id=0 AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
+
+      for (int i = 0; i < results.length; i++) {
+        total_hr += results[i][0];
+      }
+
+      newCompare.add(total_hr / results.length);
+
+      total_hr = 0;
+
+      setState(() {
+        min = 170.0;
+        max = 210.0;
+      });
+
+    } else if (type == "Floors Climbed") {
+
+      double floors_climbed = 0.0;
+      int curr_amt = 0;
+      String curr_direction = "";
+
+      List<List<dynamic>> results = await db.connection.query("SELECT amt, direction FROM climbs WHERE user_id=0 AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
+
+      for (int i = 0; i < results.length; i++) {
+        curr_amt = results[i][0];
+        curr_direction = results[i][1];
+        if (curr_direction == "up") {
+          floors_climbed += curr_amt;
+        } else {
+          floors_climbed -= curr_amt;
+        }
+      }
+
+      newCompare.add(floors_climbed);
+
+      floors_climbed = 0;
+
+      results = await db.connection.query("SELECT amt, direction FROM climbs WHERE user_id=0 AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
+
+      for (int i = 0; i < results.length; i++) {
+        curr_amt = results[i][0];
+        curr_direction = results[i][1];
+        if (curr_direction == "up") {
+          floors_climbed += curr_amt;
+        } else {
+          floors_climbed -= curr_amt;
+        }
+      }
+
+      newCompare.add(floors_climbed);
+
+      floors_climbed = 0;
+
+      setState(() {
+        min = 0.0;
+        max = 30.0;
+      });
+    }
+
+    setState(() {
+      compare = newCompare;
+    });
+  }
+
+  Widget buildChart() {
+
+    List<int> nulls = [];
+
+    for (int i = 0; i < compare.length; i++) {
+      if (compare[i].isNaN) {
+        nulls.add(i);
+      }
+    }
+
+    if (nulls.isEmpty) {
+      return SizedBox(
+        height: 200,
+        width: MediaQuery.of(context).size.width,
+        child: TwoBarChart(data: compare, min: min, max: max),
+      );
+    } else if (nulls.length == 1) {
+      if (nulls[0] == 0) {
+        return SizedBox(
+            height: 200,
+            width: MediaQuery.of(context).size.width,
+            child: const Center(
+              child: Text("No data for the left date."),
+            )
+        );
+      } else {
+        return SizedBox(
+            height: 200,
+            width: MediaQuery.of(context).size.width,
+            child: const Center(
+              child: Text("No data for the right date."),
+            )
+        );
+      }
+    } else {
+      return SizedBox(
+          height: 200,
+          width: MediaQuery.of(context).size.width,
+          child: const Center(
+            child: Text("No data for either date."),
+          )
+      );
     }
   }
 
@@ -60,15 +197,27 @@ class _ComparePageState extends State<ComparePage> {
             Divider(
               color: style.subtextStyle.color,
             ),
-            Row(
+            Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Column(
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(leftType, style: style.textStyle),
+                  DropdownButton(
+                    items: const [
+                      DropdownMenuItem(
+                          value: "Average Heart Rate",
+                          child: Text("Average Heart Rate")
                       ),
+                      DropdownMenuItem(
+                          value: "Floors Climbed",
+                          child: Text("Floors Climbed")
+                      ),
+                    ],
+                    value: type,
+                    onChanged: updateType,
+                    focusColor: style.backgroundColor,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
                       TextButton(
                         onPressed: () async {
                           DateTime? newDate = await pickDate(dateLeft);
@@ -79,16 +228,10 @@ class _ComparePageState extends State<ComparePage> {
                             dateLeft = newDate;
                             leftDateStr = dateFormat.format(dateLeft);
                           });
+
+                          updateData();
                         },
                         child: Text(leftDateStr, style: style.textStyle),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(rightType, style: style.textStyle),
                       ),
                       TextButton(
                         onPressed: () async {
@@ -100,6 +243,8 @@ class _ComparePageState extends State<ComparePage> {
                             dateRight = newDate;
                             rightDateStr = dateFormat.format(dateRight);
                           });
+
+                          updateData();
                         },
                         child: Text(rightDateStr, style: style.textStyle),
                       ),
@@ -112,7 +257,7 @@ class _ComparePageState extends State<ComparePage> {
             ),
             SizedBox(
               height: 200,
-              child: TwoBarChart(data: dailyAvgHR),
+              child: buildChart(),
             ),
           ],
         ),
