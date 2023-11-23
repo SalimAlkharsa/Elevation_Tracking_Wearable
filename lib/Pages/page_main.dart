@@ -161,7 +161,7 @@ class _MainPageState extends State<MainPage> {
           // Each TextButton calls the Navigator to navigate between the three main pages
           // The currently active page is given an onPressed value which is blank and are given a different color
           // This prevents the user from repeatedly pressing the button and causing performance issues
-          // Pages which are not active use pushRaplacementNamed to push the new page onto the navigator stack
+          // Pages which are not active use pushReplacementNamed to push the new page onto the navigator stack
           // The internal names for each page are defined by the developer and can be found in main.dart
           children: [
             TextButton(

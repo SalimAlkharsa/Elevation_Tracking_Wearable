@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:application/Graphs/tracker_bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:application/style.dart' as style;
@@ -22,23 +24,39 @@ class _TrackerPageState extends State<TrackerPage> {
   List<String> validNameList = [];
   List<Widget> textList = [];
 
+  DateTime dateCursor = DateTime.now().subtract(const Duration(days: 2));
+
   bool initialized = false;
 
   // The text editing controller is used to capture user input and pass it into
   // local copies of data through dialog boxes
   late TextEditingController controller;
 
+  late Timer polling;
+
   // initState() and dispose() need to be overridden to handle the controller
   @override
   void initState() {
     super.initState();
 
+    setUpTimedFetch();
+
     controller = TextEditingController();
+  }
+
+  setUpTimedFetch() {
+    polling = Timer.periodic(const Duration(seconds: 5), (timer) {
+      setState(() {
+        updateData();
+      });
+    });
   }
 
   @override
   void dispose() {
     controller.dispose();
+
+    polling.cancel();
 
     super.dispose();
   }
@@ -139,7 +157,6 @@ class _TrackerPageState extends State<TrackerPage> {
 
     setState(() {
       for (int i = 0; i < results.length; i++) {
-        String curr = results[i][0];
         validNameList.add(results[i][0]);
       }
 
@@ -155,21 +172,27 @@ class _TrackerPageState extends State<TrackerPage> {
     int tot_amt = 0;
 
     setState(() {
+      dateCursor = dateCursor.subtract(const Duration(minutes: 20));
+    });
+
+    setState(() {
       textList.clear();
 
       for (int i = 0; i < nameList.length; i++) {
         textList.add(Text(nameList[i]));
       }
 
-      trackerData.clear();
-
     });
+
+    print("Gathering data from after $dateCursor");
+
+    List<IndividualBar> newTrackerData = [];
 
     for (int i = 0; i < nameList.length; i++) {
 
       curr_name = nameList[i];
       List<List<dynamic>> results = await db.connection.query(
-          "SELECT amt, direction FROM climbs INNER JOIN users ON climbs.user_id = users.user_id WHERE first_name='$curr_name'");
+          "SELECT amt, direction FROM climbs INNER JOIN users ON climbs.user_id = users.user_id WHERE first_name='$curr_name' AND timestamp>'$dateCursor'");
 
       for (int i = 0; i < results.length; i++) {
         curr_amt = results[i][0];
@@ -181,12 +204,14 @@ class _TrackerPageState extends State<TrackerPage> {
         }
       }
 
-      setState(() {
-        trackerData.add(IndividualBar(x: i, y: tot_amt.toDouble()));
-      });
+      newTrackerData.add(IndividualBar(x: i, y: tot_amt.toDouble()));
 
       tot_amt = 0;
     }
+
+    setState(() {
+      trackerData = newTrackerData;
+    });
   }
 
   Future<String?> openTextEntryDialog() => showDialog<String>(
