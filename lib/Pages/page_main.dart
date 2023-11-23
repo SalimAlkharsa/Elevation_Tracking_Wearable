@@ -214,20 +214,30 @@ class _MainPageState extends State<MainPage> {
 
   void testFunc () async {
     var rng = Random();
+    DateTime timestamp = DateTime.now();
     int user_id = 0;
     int amt = 0;
     String direction = "";
 
-    for(int i = 0; i < 20; i++) {
-      user_id = rng.nextInt(7);
-      amt = rng.nextInt(10);
-      if (rng.nextInt(5) == 0) {
-        direction = "down";
-      } else {
-        direction = "up";
-      }
+    timestamp = timestamp.subtract(const Duration(days: 7));
 
-      await db.connection.query("INSERT INTO climbs (user_id, amt, direction) VALUES ($user_id, $amt, '$direction')");
+    for (int d = 0; d < 7; d++) {
+      for (int i = 0; i < 100; i++) {
+        user_id = rng.nextInt(7);
+        amt = rng.nextInt(5);
+        if (rng.nextInt(4) == 0) {
+          direction = "down";
+        } else {
+          direction = "up";
+        }
+        timestamp = timestamp.add(const Duration(minutes: 5));
+
+        print("Inserting $user_id, $amt, $direction, $timestamp, into database.");
+
+        await db.connection.query("INSERT INTO climbs (user_id, amt, direction, timestamp) VALUES ($user_id, $amt, '$direction', '$timestamp')");
+      }
+      timestamp = timestamp.add(const Duration(days: 1));
+      timestamp = timestamp.subtract(const Duration(minutes: 500));
     }
   }
 }

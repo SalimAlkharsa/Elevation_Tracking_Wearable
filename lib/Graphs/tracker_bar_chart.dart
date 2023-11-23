@@ -21,8 +21,15 @@ class TrackerBarChart extends StatelessWidget {
 
     return BarChart(
       BarChartData(
-        minY: -25,
-        maxY: 25,
+        minY: -50,
+        maxY: 200,
+        extraLinesData: ExtraLinesData(
+          horizontalLines: [
+            HorizontalLine(
+              y: 0,
+            )
+          ]
+        ),
         gridData: FlGridData(show: false),
         borderData: FlBorderData(show: false),
         barTouchData: BarTouchData(
@@ -47,8 +54,8 @@ class TrackerBarChart extends StatelessWidget {
                   borderRadius: BorderRadius.circular(1),
                   backDrawRodData: BackgroundBarChartRodData(
                     show: true,
-                    fromY: -25,
-                    toY: 25,
+                    fromY: -50,
+                    toY: 200,
                     color: style.backgroundAccent,
                   )
               )],
