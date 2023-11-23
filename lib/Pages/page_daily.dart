@@ -3,6 +3,7 @@ import 'package:application/Graphs/individual_point.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:application/style.dart' as style;
+import 'package:application/connection.dart' as db;
 
 class DailyPage extends StatefulWidget {
   const DailyPage({super.key});
@@ -12,32 +13,22 @@ class DailyPage extends StatefulWidget {
 }
 
 class _DailyPageState extends State<DailyPage> {
-  List<IndividualPoint> hourlyAvgHR = [
-    IndividualPoint(x: 3, y: 189),
-    IndividualPoint(x: 3.1, y: 190),
-    IndividualPoint(x: 3.5, y: 199),
-    IndividualPoint(x: 3.9, y: 200),
-    IndividualPoint(x: 4, y: 201),
-    IndividualPoint(x: 4.3, y: 175),
-    IndividualPoint(x: 4.4, y: 176),
-    IndividualPoint(x: 4.5, y: 182),
-    IndividualPoint(x: 4.6, y: 170),
-    IndividualPoint(x: 5.1, y: 188),
-    IndividualPoint(x: 5.5, y: 189),
-    IndividualPoint(x: 5.6, y: 189),
-    IndividualPoint(x: 6, y: 187),
-  ];
-
-  DateTime dateSelected = DateTime.now(); // Initialized to current date
+  List<IndividualPoint> dailyData = [];
+  DateTime dateSelected = DateTime.now();// Initialized to current date
   DateFormat dateFormat = DateFormat.MMMEd(); // Date formatter for the UI
   String currentDate = ""; // String form of the date for display
   bool isInitialized = false; // Tracks whether date has been initialized
+  String mode = "";
 
   void initializeDate() {
     if (!isInitialized) {
-      dateSelected = DateTime.now();
-      currentDate = dateFormat.format(dateSelected);
-      isInitialized = true;
+      setState(() {
+        mode = "Floors Climbed";
+        dateSelected = dateSelected.subtract(Duration(hours: dateSelected.hour, minutes: dateSelected.minute, seconds: dateSelected.second, milliseconds: dateSelected.millisecond));
+        currentDate = dateFormat.format(dateSelected);
+        updateData();
+        isInitialized = true;
+      });
     }
   }
 
@@ -47,21 +38,7 @@ class _DailyPageState extends State<DailyPage> {
 
       currentDate = dateFormat.format(dateSelected);
 
-      hourlyAvgHR = [
-        IndividualPoint(x: 2, y: 189),
-        IndividualPoint(x: 2.1, y: 190),
-        IndividualPoint(x: 2.5, y: 199),
-        IndividualPoint(x: 2.9, y: 200),
-        IndividualPoint(x: 3, y: 201),
-        IndividualPoint(x: 3.3, y: 175),
-        IndividualPoint(x: 4.4, y: 176),
-        IndividualPoint(x: 4.5, y: 182),
-        IndividualPoint(x: 4.6, y: 170),
-        IndividualPoint(x: 5.1, y: 188),
-        IndividualPoint(x: 5.5, y: 189),
-        IndividualPoint(x: 6.6, y: 189),
-        IndividualPoint(x: 7, y: 187),
-      ];
+      updateData();
     });
   }
 
@@ -71,22 +48,113 @@ class _DailyPageState extends State<DailyPage> {
 
       currentDate = dateFormat.format(dateSelected);
 
-      hourlyAvgHR = [
-        IndividualPoint(x: 2.5, y: 200),
-        IndividualPoint(x: 3.1, y: 192),
-        IndividualPoint(x: 3.5, y: 191),
-        IndividualPoint(x: 3.8, y: 184),
-        IndividualPoint(x: 3.9, y: 177),
-        IndividualPoint(x: 4, y: 177),
-        IndividualPoint(x: 4.2, y: 177),
-        IndividualPoint(x: 4.5, y: 181),
-        IndividualPoint(x: 4.9, y: 175),
-        IndividualPoint(x: 5.1, y: 198),
-        IndividualPoint(x: 6.5, y: 201),
-        IndividualPoint(x: 6.6, y: 215),
-        IndividualPoint(x: 7.1, y: 201),
-      ];
+      updateData();
     });
+  }
+
+  Future<void> updateData() async {
+
+    List<IndividualPoint> newDailyData = [];
+
+    DateTime nextDate = dateSelected.add(const Duration(days: 1));
+
+    if (mode == "Floors Climbed") {
+      String curr_direction = "";
+      int curr_amt = 0;
+      int tot_amt = 0;
+
+      DateTime curr_timestamp;
+      double hour_val = 0.0;
+
+      List<List<dynamic>> results = await db.connection.query("SELECT amt, direction, timestamp FROM climbs WHERE user_id=0 AND timestamp>'$dateSelected' AND timestamp<'$nextDate'");
+
+      for (int i = 0; i < results.length; i++) {
+        curr_amt = results[i][0];
+        curr_direction = results[i][1];
+        curr_timestamp = results[i][2];
+        hour_val = curr_timestamp.hour + (curr_timestamp.minute / 60) + (curr_timestamp.second / (60 * 60));
+        if (curr_direction == "up") {
+          tot_amt += curr_amt;
+        } else {
+          tot_amt -= curr_amt;
+        }
+        newDailyData.add(IndividualPoint(x: hour_val, y: tot_amt.toDouble()));
+      }
+    } else if (mode == "Heart Rate") {
+
+      double hr = 0.0;
+      double hour_val = 0.0;
+      DateTime curr_timestamp;
+
+      print("Date range: $dateSelected - $nextDate");
+
+      List<List<dynamic>> results = await db.connection.query("SELECT hr, timestamp FROM sensors WHERE user_id=0 AND timestamp>'$dateSelected' AND timestamp<'$nextDate'");
+
+      for (int i = 0; i < results.length; i++) {
+        hr = results[i][0];
+        curr_timestamp = results[i][1];
+        hour_val = curr_timestamp.hour + (curr_timestamp.minute / 60) + (curr_timestamp.second / (60 * 60));
+
+        print("Adding point: $hour_val, $hr");
+
+        newDailyData.add(IndividualPoint(x: hour_val, y: hr));
+      }
+    }
+
+    setState(() {
+      dailyData = newDailyData;
+    });
+  }
+
+  Widget buildChart() {
+    if (dailyData.isEmpty) {
+      return SizedBox(
+        height: 200,
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: const Center(
+          child: Text("No data for selected date."),
+        )
+      );
+    } else {
+      return SizedBox(
+        height: 200,
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: DailyLineChart(data: dailyData, min: findMin(), max: findMax()),
+      );
+    }
+  }
+
+  double findMin() {
+    double min = dailyData[0].y;
+
+    for (int i = 1; i < dailyData.length; i++) {
+      if (dailyData[i].y < min) {
+        min = dailyData[i].y;
+      }
+    }
+
+    return min;
+  }
+
+  double findMax() {
+    double max = dailyData[0].y;
+
+    for (int i = 1; i < dailyData.length; i++) {
+      if (dailyData[i].y > max) {
+        max = dailyData[i].y;
+      }
+    }
+
+    return max;
+  }
+
+  void updateMode(String? selectedValue) {
+    if (selectedValue is String) {
+      setState(() {
+        mode = selectedValue;
+      });
+      updateData();
+    }
   }
 
   @override
@@ -110,6 +178,21 @@ class _DailyPageState extends State<DailyPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            DropdownButton(
+              items: const [
+                DropdownMenuItem(
+                    value: "Heart Rate",
+                    child: Text("Heart Rate")
+                ),
+                DropdownMenuItem(
+                    value: "Floors Climbed",
+                    child: Text("Floors Climbed")
+                ),
+              ],
+              value: mode,
+              onChanged: updateMode,
+              focusColor: style.backgroundColor,
+            ),
             Divider(
               color: style.subtextStyle.color,
             ),
@@ -132,11 +215,7 @@ class _DailyPageState extends State<DailyPage> {
             Divider(
               color: style.subtextStyle.color,
             ),
-            SizedBox(
-              height: 200,
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: DailyLineChart(data: hourlyAvgHR),
-            ),
+            buildChart(),
           ],
         ),
       ),

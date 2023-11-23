@@ -120,10 +120,10 @@ class _MainPageState extends State<MainPage> {
                       ]
                     )
                   ),
-                  // TextButton(
-                  //   onPressed: testFunc,
-                  //   child: const Text("TEST"),
-                  // )
+                  TextButton(
+                    onPressed: testFunc,
+                    child: const Text("TEST"),
+                  )
                 ],
               ),
             ),
@@ -216,28 +216,78 @@ class _MainPageState extends State<MainPage> {
     var rng = Random();
     DateTime timestamp = DateTime.now();
     int user_id = 0;
-    int amt = 0;
-    String direction = "";
+    double a_x = 0.0;
+    double a_y = 0.0;
+    double a_z = 0.0;
+    double r_x = 0.0;
+    double r_y = 0.0;
+    double r_z = 0.0;
+    double temperature = 0.0;
+    double pressure = 0.0;
+    double hr = 0.0;
 
     timestamp = timestamp.subtract(const Duration(days: 7));
 
     for (int d = 0; d < 7; d++) {
-      for (int i = 0; i < 100; i++) {
+      print("Day $d");
+      for (int u = 0; u < 5; u++) {
         user_id = rng.nextInt(7);
-        amt = rng.nextInt(5);
-        if (rng.nextInt(4) == 0) {
-          direction = "down";
-        } else {
-          direction = "up";
+
+        for (int i = 0; i < 100; i++) {
+          timestamp = timestamp.add(const Duration(seconds: 30));
+          a_x = testDouble(a_x);
+          a_y = testDouble(a_y);
+          a_z = testDouble(a_z);
+          r_x = testDouble(r_x);
+          r_y = testDouble(r_y);
+          r_z = testDouble(r_z);
+          temperature = 40 + (rng.nextDouble() * 2);
+          pressure = 30 + (rng.nextDouble() * 6);
+          hr = testHR();
+
+
+          await db.connection.query(
+              "INSERT INTO sensors (timestamp, user_id, a_x, a_y, a_z, r_x, r_y, r_z, temperature, pressure, hr) VALUES ('$timestamp', $user_id, $a_x, $a_y, $a_z, $r_x, $r_y, $r_z, $temperature, $pressure, $hr)");
         }
-        timestamp = timestamp.add(const Duration(minutes: 5));
-
-        print("Inserting $user_id, $amt, $direction, $timestamp, into database.");
-
-        await db.connection.query("INSERT INTO climbs (user_id, amt, direction, timestamp) VALUES ($user_id, $amt, '$direction', '$timestamp')");
       }
+
       timestamp = timestamp.add(const Duration(days: 1));
-      timestamp = timestamp.subtract(const Duration(minutes: 500));
+      timestamp = timestamp.subtract(const Duration(minutes: 250));
     }
+
+    print("Done!");
+  }
+
+  double testDouble (double curr) {
+
+    var rng = Random();
+    int direction = 1;
+
+    if (curr >= 20.0) {
+      direction = -1;
+    } else if (curr <= -20.0) {
+      direction = 1;
+    } else {
+      if (rng.nextInt(2) == 0) {
+        direction = 1;
+      } else {
+        direction = -1;
+      }
+    }
+
+    return curr + (rng.nextDouble() * 2 * direction);
+  }
+
+  double testHR () {
+    var rng = Random();
+    int direction = 1;
+
+    if (rng.nextInt(2) == 0) {
+      direction = 1;
+    } else {
+      direction = -1;
+    }
+
+    return 190 + (rng.nextDouble() * 15 * direction);
   }
 }

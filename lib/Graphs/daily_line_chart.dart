@@ -8,17 +8,21 @@ class DailyLineChart extends StatelessWidget {
   const DailyLineChart({
     super.key,
     required this.data,
+    required this.min,
+    required this.max,
   });
 
   final List<IndividualPoint> data;
+  final double min;
+  final double max;
 
   @override
   Widget build(BuildContext context) {
     DailyLineData dailyLineData = DailyLineData(data: data);
     return LineChart(
       LineChartData(
-        minY: 170,
-        maxY: 250,
+        minY: min,
+        maxY: max,
         gridData: FlGridData(show: false),
         borderData: FlBorderData(show: false),
         lineTouchData: LineTouchData(
