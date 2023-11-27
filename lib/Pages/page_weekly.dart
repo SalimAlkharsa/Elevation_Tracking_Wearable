@@ -2,6 +2,8 @@ import 'package:application/Graphs/weekly_bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:application/style.dart' as style;
+import 'package:application/connection.dart' as db;
+
 
 class WeeklyPage extends StatefulWidget {
   const WeeklyPage({super.key});
@@ -13,15 +15,7 @@ class WeeklyPage extends StatefulWidget {
 class _WeeklyPageState extends State<WeeklyPage> {
 
   // TODO: Get real data from database
-  List<double> dailyAvgHR = [
-    189,
-    201,
-    197,
-    172,
-    199,
-    200,
-    195
-  ];
+  List<double> weeklyData = [];
 
   DateTime dateSelected = DateTime.now(); // Current date and time
   DateTime dateNextSaturday = DateTime.now(); // Next saturday from selected date
@@ -30,20 +24,32 @@ class _WeeklyPageState extends State<WeeklyPage> {
   String thisSunday = ""; // String form of this sunday for display
   bool isInitialized = false; // Tracks whether date has been initialized
   int dateCorrection = 0; // Number used to calculate when next Saturday is relative to current date
+  String type = "";
+  double min = 0;
+  double max = 0;
 
   void initializeDate() {
     if (!isInitialized) {
-      if (dateSelected.weekday == 7) {
-        dateNextSaturday = dateSelected.add(const Duration(days: 6));
-      } else if (dateSelected.weekday == 6) {
-        dateNextSaturday = dateSelected;
-      } else {
-        dateNextSaturday =
-            dateSelected.add(Duration(days: 6 - dateSelected.weekday));
-      }
-      nextSaturday = dateFormat.format(dateNextSaturday);
-      thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
-      isInitialized = true;
+      setState(() {
+        dateSelected = dateSelected.subtract(Duration(hours: dateSelected.hour, minutes: dateSelected.minute, seconds: dateSelected.second, milliseconds: dateSelected.millisecond));
+
+        if (dateSelected.weekday == 7) {
+          dateNextSaturday = dateSelected.add(const Duration(days: 6));
+        } else if (dateSelected.weekday == 6) {
+          dateNextSaturday = dateSelected;
+        } else {
+          dateNextSaturday =
+              dateSelected.add(Duration(days: 6 - dateSelected.weekday));
+        }
+
+        nextSaturday = dateFormat.format(dateNextSaturday);
+        thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+
+        type = "Average Heart Rate";
+        updateData();
+
+        isInitialized = true;
+      });
     }
   }
 
@@ -53,17 +59,9 @@ class _WeeklyPageState extends State<WeeklyPage> {
 
       nextSaturday = dateFormat.format(dateNextSaturday);
       thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
-
-      dailyAvgHR = [
-        174,
-        178,
-        185,
-        212,
-        174,
-        173,
-        190
-      ];
     });
+
+    updateData();
   }
 
   void lastWeek () {
@@ -72,16 +70,86 @@ class _WeeklyPageState extends State<WeeklyPage> {
 
       nextSaturday = dateFormat.format(dateNextSaturday);
       thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
+    });
 
-      dailyAvgHR = [
-        201,
-        209,
-        204,
-        165,
-        167,
-        180,
-        174
-      ];
+    updateData();
+  }
+
+  void updateType(String? selectedValue) {
+    if (selectedValue is String) {
+      setState(() {
+        type = selectedValue;
+      });
+      updateData();
+    }
+  }
+
+  Future<void> updateData() async {
+    DateTime dateStart = dateNextSaturday.subtract(const Duration(days: 6));
+    DateTime dateNext = dateStart.add(const Duration(days: 1));
+
+    List<double> newWeekly = [];
+
+    if (type == "Average Heart Rate") {
+      double total_hr = 0.0;
+
+      for (int d = 0; d < 7; d++) {
+        List<List<dynamic>> results = await db.connection.query("SELECT hr FROM sensors WHERE user_id=0 AND timestamp>'$dateStart' AND timestamp<'$dateNext'");
+        for (int i = 0; i < results.length; i++) {
+          total_hr += results[i][0];
+        }
+
+
+        if (results.isNotEmpty) {
+          newWeekly.add(total_hr / results.length);
+        } else {
+          newWeekly.add(0);
+        }
+
+        total_hr = 0;
+        dateStart = dateNext;
+        dateNext = dateNext.add(const Duration(days: 1));
+      }
+
+      setState(() {
+        min = 170.0;
+        max = 210.0;
+      });
+    } else {
+      double floors_climbed = 0.0;
+      int curr_amt = 0;
+      String curr_direction = "";
+
+      for (int d = 0; d < 7; d++) {
+        List<List<dynamic>> results = await db.connection.query("SELECT amt, direction FROM climbs WHERE user_id=0 AND timestamp>'$dateStart' AND timestamp<'$dateNext'");
+
+        for (int i = 0; i < results.length; i++) {
+          curr_amt = results[i][0];
+          curr_direction = results[i][1];
+          if (curr_direction == "up") {
+            floors_climbed += curr_amt;
+          } else {
+            floors_climbed -= curr_amt;
+          }
+        }
+
+        newWeekly.add(floors_climbed);
+
+        floors_climbed = 0;
+
+        dateStart = dateNext;
+        dateNext = dateNext.add(const Duration(days: 1));
+
+      }
+
+      setState(() {
+        min = 0.0;
+        max = 30.0;
+      });
+    }
+
+    setState(() {
+      weeklyData = newWeekly;
     });
   }
 
@@ -106,6 +174,21 @@ class _WeeklyPageState extends State<WeeklyPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            DropdownButton(
+              items: const [
+                DropdownMenuItem(
+                    value: "Average Heart Rate",
+                    child: Text("Average Heart Rate")
+                ),
+                DropdownMenuItem(
+                    value: "Floors Climbed",
+                    child: Text("Floors Climbed")
+                ),
+              ],
+              value: type,
+              onChanged: updateType,
+              focusColor: style.backgroundColor,
+            ),
             Divider(
               color: style.subtextStyle.color,
             ),
@@ -130,7 +213,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
             ),
             SizedBox(
               height: 200,
-              child: WeeklyBarChart(data: dailyAvgHR),
+              child: WeeklyBarChart(data: weeklyData, min: min, max: max),
             ),
           ],
         ),

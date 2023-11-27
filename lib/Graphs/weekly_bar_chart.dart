@@ -7,9 +7,13 @@ class WeeklyBarChart extends StatelessWidget {
   const WeeklyBarChart({
     super.key,
     required this.data,
+    required this.min,
+    required this.max,
   });
 
   final List data;
+  final double min;
+  final double max;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +30,8 @@ class WeeklyBarChart extends StatelessWidget {
 
     return BarChart(
       BarChartData(
-        minY: 0,
-        maxY: 250,
+        minY: min,
+        maxY: max,
         gridData: FlGridData(show: false),
         borderData: FlBorderData(show: false),
         barTouchData: BarTouchData(
@@ -55,7 +59,8 @@ class WeeklyBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(1),
               backDrawRodData: BackgroundBarChartRodData(
                 show: true,
-                toY: 250,
+                fromY: min,
+                toY: max,
                 color: style.backgroundAccent,
               )
             )],
