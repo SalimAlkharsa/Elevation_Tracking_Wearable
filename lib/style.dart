@@ -16,5 +16,8 @@ TextStyle textStyle = const TextStyle(
 TextStyle subtextStyle = const TextStyle(
   color: Color(0xFF969696),
 );
+TextStyle buttonTextStyle = const TextStyle(
+  color: Color(0xFFFFFFFF),
+);
 
 bool switchValue = false;

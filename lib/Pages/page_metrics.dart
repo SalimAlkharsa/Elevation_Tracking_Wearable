@@ -28,31 +28,43 @@ class _MetricsPageState extends State<MetricsPage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            TextButton(
+            FloatingActionButton.extended(
+              heroTag: "Weekly",
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/metrics/weekly');
               },
-              child: Text("Weekly Chart", style: style.textStyle),
+              label: Text("Weekly Report", style: style.buttonTextStyle),
+              backgroundColor: style.mainColor,
+              foregroundColor: style.backgroundColor,
             ),
-            TextButton(
+            FloatingActionButton.extended(
+              heroTag: "Daily",
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/metrics/daily');
               },
-              child: Text("Daily Chart", style: style.textStyle),
+              label: Text("Daily Report", style: style.buttonTextStyle),
+              backgroundColor: style.mainColor,
+              foregroundColor: style.backgroundColor,
             ),
-            TextButton(
+            FloatingActionButton.extended(
+              heroTag: "Compare",
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/metrics/compare');
               },
-              child: Text("Compare Chart", style: style.textStyle),
+              label: Text("Compare Values", style: style.buttonTextStyle),
+              backgroundColor: style.mainColor,
+              foregroundColor: style.backgroundColor,
             ),
-            TextButton(
+            FloatingActionButton.extended(
+              heroTag: "Tracker",
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/metrics/tracker');
               },
-              child: Text("Tracker Chart", style: style.textStyle),
+              label: Text("Floor Tracker", style: style.buttonTextStyle),
+              backgroundColor: style.mainColor,
+              foregroundColor: style.backgroundColor,
             ),
           ],
         ),
