@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "872929347529",
+    "project_id": "tamu-ecen-capstone",
+    "storage_bucket": "tamu-ecen-capstone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872929347529:android:7831a8a8e11d3a17148a18",
+        "android_client_info": {
+          "package_name": "tamu.edu.application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIB5Z-pqHzvSF-zXTjq-AVwyvybZrvndk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

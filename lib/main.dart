@@ -1,5 +1,6 @@
 import 'package:application/Pages/page_compare.dart';
 import 'package:application/Pages/page_daily.dart';
+import 'package:application/Pages/page_login.dart';
 import 'package:application/Pages/page_weekly.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,13 +27,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Frontend',
       routes: {
-        '/' : (BuildContext context) => const MainPage(),
+        '/login' : (BuildContext context) => const LoginPage(),
         '/settings' : (BuildContext context) => const SettingsPage(),
         '/metrics' : (BuildContext context) => const MetricsPage(),
         '/metrics/weekly' : (BuildContext context) => const WeeklyPage(),
         '/metrics/daily' : (BuildContext context) => const DailyPage(),
         '/metrics/compare' : (BuildContext context) => const ComparePage(),
         '/metrics/tracker' : (BuildContext context) => const TrackerPage(),
+        '/' : (BuildContext context) => const MainPage(),
       },
       theme: ThemeData(
         appBarTheme: AppBarTheme(
