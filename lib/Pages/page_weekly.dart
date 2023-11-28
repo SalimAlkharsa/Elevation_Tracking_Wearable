@@ -153,6 +153,14 @@ class _WeeklyPageState extends State<WeeklyPage> {
     });
   }
 
+  Widget buildChart() {
+    if (weeklyData.isEmpty) {
+      return Center(child: Text("Loading chart...", style: style.textStyle,),);
+    } else {
+      return WeeklyBarChart(data: weeklyData, min: min, max: max);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     initializeDate();
@@ -213,7 +221,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
             ),
             SizedBox(
               height: 200,
-              child: WeeklyBarChart(data: weeklyData, min: min, max: max),
+              child: buildChart(),
             ),
           ],
         ),

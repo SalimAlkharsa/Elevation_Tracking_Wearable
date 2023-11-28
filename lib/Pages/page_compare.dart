@@ -138,7 +138,9 @@ class _ComparePageState extends State<ComparePage> {
       }
     }
 
-    if (nulls.isEmpty) {
+    if (compare.isEmpty) {
+      return Center(child: Text("Loading chart...", style: style.textStyle,),);
+    } else if (nulls.isEmpty) {
       return SizedBox(
         height: 200,
         width: MediaQuery.of(context).size.width,
