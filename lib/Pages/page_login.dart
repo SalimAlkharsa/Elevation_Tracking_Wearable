@@ -14,10 +14,8 @@ class LoginPage extends StatelessWidget {
       ),
       body: Center(
         child: FloatingActionButton.extended(
-          onPressed: () async {
-            WidgetsFlutterBinding.ensureInitialized();
-            GoogleSignIn googleSignIn = GoogleSignIn();
-            await googleSignIn.signIn();
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/main');
           },
           icon: Icon(Icons.security, color: style.iconColor),
           label: const Text("Sign in with Google"),

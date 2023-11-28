@@ -27,14 +27,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Frontend',
       routes: {
-        '/login' : (BuildContext context) => const LoginPage(),
+        '/' : (BuildContext context) => const LoginPage(),
         '/settings' : (BuildContext context) => const SettingsPage(),
         '/metrics' : (BuildContext context) => const MetricsPage(),
         '/metrics/weekly' : (BuildContext context) => const WeeklyPage(),
         '/metrics/daily' : (BuildContext context) => const DailyPage(),
         '/metrics/compare' : (BuildContext context) => const ComparePage(),
         '/metrics/tracker' : (BuildContext context) => const TrackerPage(),
-        '/' : (BuildContext context) => const MainPage(),
+        '/main' : (BuildContext context) => const MainPage(),
       },
       theme: ThemeData(
         appBarTheme: AppBarTheme(
