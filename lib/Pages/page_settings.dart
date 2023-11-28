@@ -62,7 +62,9 @@ class _SettingsPageState extends State<SettingsPage> {
             trailing: IconButton (
               icon: Icon(Icons.logout, color: style.iconColor),
               // TODO: Implement sign out
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
             )
           ),
           Divider(
