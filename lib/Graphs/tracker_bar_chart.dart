@@ -9,9 +9,13 @@ class TrackerBarChart extends StatelessWidget {
   const TrackerBarChart({
     super.key,
     required this.data,
+    required this.min,
+    required this.max,
   });
 
   final List<IndividualBar> data;
+  final double min;
+  final double max;
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +25,8 @@ class TrackerBarChart extends StatelessWidget {
 
     return BarChart(
       BarChartData(
-        minY: -5,
-        maxY: 30,
+        minY: min - 5,
+        maxY: max + 5,
         extraLinesData: ExtraLinesData(
           horizontalLines: [
             HorizontalLine(
@@ -54,8 +58,8 @@ class TrackerBarChart extends StatelessWidget {
                   borderRadius: BorderRadius.circular(1),
                   backDrawRodData: BackgroundBarChartRodData(
                     show: true,
-                    fromY: -5,
-                    toY: 30,
+                    fromY: min - 5,
+                    toY: max + 5,
                     color: style.backgroundAccent,
                   )
               )],

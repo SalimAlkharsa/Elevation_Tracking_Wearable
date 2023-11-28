@@ -17,8 +17,8 @@ class LoginPage extends StatelessWidget {
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/main');
           },
-          icon: Icon(Icons.security, color: style.iconColor),
-          label: const Text("Sign in with Google"),
+          icon: Icon(Icons.security, color: style.backgroundColor),
+          label: Text("Sign in with Google", style: style.buttonTextStyle,),
           backgroundColor: style.mainColor,
           foregroundColor: style.backgroundColor,
         )

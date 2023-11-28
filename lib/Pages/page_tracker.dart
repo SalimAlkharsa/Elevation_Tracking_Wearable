@@ -22,7 +22,10 @@ class _TrackerPageState extends State<TrackerPage> {
   List<String> validNameList = [];
   List<Widget> textList = [];
 
-  DateTime dateCursor = DateTime.now().subtract(const Duration(days: 2));
+  DateTime dateCursor = DateTime.now();
+
+  double min = 0;
+  double max = 0;
 
   bool initialized = false;
 
@@ -79,7 +82,9 @@ class _TrackerPageState extends State<TrackerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(
+            FloatingActionButton.extended(
+              label: Text("Add User", style: style.buttonTextStyle),
+              backgroundColor: style.mainColor,
               onPressed: () async {
                 final newName = await openTextEntryDialog();
                 if (newName == null || newName.isEmpty || !checkName(newName)) {
@@ -91,11 +96,11 @@ class _TrackerPageState extends State<TrackerPage> {
 
                 updateData();
               },
-              child: const Text("Add User")
             ),
+            Divider(color: style.subtextStyle.color),
             SizedBox(
               height: 200,
-              child: TrackerBarChart(data: trackerData),
+              child: TrackerBarChart(data: trackerData, min: min, max: max),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -168,6 +173,8 @@ class _TrackerPageState extends State<TrackerPage> {
     String curr_direction = "";
     int curr_amt = 0;
     int tot_amt = 0;
+    double newMax = 0.0;
+    double newMin = 0.0;
 
     setState(() {
       dateCursor = dateCursor.subtract(const Duration(minutes: 20));
@@ -182,9 +189,8 @@ class _TrackerPageState extends State<TrackerPage> {
 
     });
 
-    print("Gathering data from after $dateCursor");
-
     List<IndividualBar> newTrackerData = [];
+    print("Date cursor: $dateCursor");
 
     for (int i = 0; i < nameList.length; i++) {
 
@@ -202,6 +208,14 @@ class _TrackerPageState extends State<TrackerPage> {
         }
       }
 
+      if (tot_amt > newMax) {
+        newMax = tot_amt.toDouble();
+      }
+
+      if (tot_amt < newMin) {
+        newMin = tot_amt.toDouble();
+      }
+
       newTrackerData.add(IndividualBar(x: i, y: tot_amt.toDouble()));
 
       tot_amt = 0;
@@ -209,6 +223,8 @@ class _TrackerPageState extends State<TrackerPage> {
 
     setState(() {
       trackerData = newTrackerData;
+      min = newMin;
+      max = newMax;
     });
   }
 

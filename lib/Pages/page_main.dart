@@ -212,7 +212,42 @@ class _MainPageState extends State<MainPage> {
     // db.connection.close();
   }
 
-  void testFunc () async {
+  void testFunc () {
+    // populateSensors();
+    populateClimbs();
+  }
+
+  void populateClimbs () async {
+    var rng = Random();
+    DateTime timestamp = DateTime.now();
+    int user_id = 0;
+    int amt = 0;
+    String direction = "";
+    for (int d = 0; d < 14; d++) {
+      print("Day $d");
+      for (int h = 0; h < 24; h++) {
+        print("Hour $h");
+        for (int m = 0; m < 60; m++) {
+          user_id = rng.nextInt(7);
+          timestamp = timestamp.subtract(const Duration(minutes: 1));
+          amt = rng.nextInt(5);
+          if (rng.nextInt(5) == 0) {
+            direction = "down";
+          } else {
+            direction = "up";
+          }
+
+
+          await db.connection.query(
+              "INSERT INTO climbs (timestamp, user_id, amt, direction) VALUES ('$timestamp', $user_id, $amt, '$direction')");
+        }
+      }
+    }
+
+    print("Done!");
+  }
+
+  void populateSensors () async {
     var rng = Random();
     DateTime timestamp = DateTime.now();
     int user_id = 0;
