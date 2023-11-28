@@ -255,7 +255,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/');
+                Navigator.pushReplacementNamed(context, '/main');
               },
               child: Icon(Icons.house, size: 50, color: style.mainColor),
             ),

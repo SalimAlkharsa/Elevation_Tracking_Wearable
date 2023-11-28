@@ -1,12 +1,10 @@
 import 'dart:async';
 
+import 'package:application/Graphs/individual_bar.dart';
 import 'package:application/Graphs/tracker_bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:application/style.dart' as style;
 import 'package:application/connection.dart' as db;
-
-// FOR TESTING
-import '../Graphs/individual_bar.dart';
 
 class TrackerPage extends StatefulWidget {
   const TrackerPage({super.key});
@@ -135,7 +133,7 @@ class _TrackerPageState extends State<TrackerPage> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/');
+                Navigator.pushReplacementNamed(context, '/main');
               },
               child: Icon(Icons.house, size: 50, color: style.mainColor),
             ),

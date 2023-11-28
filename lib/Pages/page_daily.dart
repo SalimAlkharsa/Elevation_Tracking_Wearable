@@ -244,7 +244,7 @@ class _DailyPageState extends State<DailyPage> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/');
+                Navigator.pushReplacementNamed(context, '/main');
               },
               child: Icon(Icons.house, size: 50, color: style.mainColor),
             ),
