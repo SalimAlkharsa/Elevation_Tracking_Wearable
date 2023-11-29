@@ -159,6 +159,8 @@ class _TrackerPageState extends State<TrackerPage> {
     List<List<dynamic>> results = await db.connection.query("SELECT first_name FROM users ORDER BY user_id");
 
     setState(() {
+      dateCursor = dateCursor.subtract(const Duration(hours: 3));
+
       for (int i = 0; i < results.length; i++) {
         validNameList.add(results[i][0]);
       }

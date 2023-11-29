@@ -127,7 +127,7 @@ class _MainPageState extends State<MainPage> {
               padding: const EdgeInsets.all(5.0),
               child: Transform.scale(
                 scale: 1.7,
-                child: Text("Average heart rate: 189", style: style.textStyle),
+                child: Text("Average heart rate: 88", style: style.textStyle),
               ),
             ),
             Padding (
