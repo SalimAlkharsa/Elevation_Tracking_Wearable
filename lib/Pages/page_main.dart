@@ -120,6 +120,7 @@ class _MainPageState extends State<MainPage> {
                       ]
                     )
                   ),
+                  // TODO: REMOVE TEST
                   // TextButton(
                   //   onPressed: testFunc,
                   //   child: const Text("TEST"),
@@ -213,7 +214,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void testFunc () {
-    // populateSensors();
+    populateSensors();
     populateClimbs();
   }
 
@@ -278,7 +279,7 @@ class _MainPageState extends State<MainPage> {
           r_z = testDouble(r_z);
           temperature = 40 + (rng.nextDouble() * 2);
           pressure = 30 + (rng.nextDouble() * 6);
-          hr = testHR();
+          hr = testHR(hr);
 
 
           await db.connection.query(
@@ -313,16 +314,23 @@ class _MainPageState extends State<MainPage> {
     return curr + (rng.nextDouble() * 2 * direction);
   }
 
-  double testHR () {
+  double testHR (double curr) {
+
     var rng = Random();
     int direction = 1;
 
-    if (rng.nextInt(2) == 0) {
+    if (curr >= 105.0) {
+      direction = -1;
+    } else if (curr <= 55.0) {
       direction = 1;
     } else {
-      direction = -1;
+      if (rng.nextInt(2) == 0) {
+        direction = 1;
+      } else {
+        direction = -1;
+      }
     }
 
-    return 190 + (rng.nextDouble() * 15 * direction);
+    return curr + (rng.nextDouble() * 2 * direction);
   }
 }
