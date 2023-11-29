@@ -110,11 +110,6 @@ class _WeeklyPageState extends State<WeeklyPage> {
         dateStart = dateNext;
         dateNext = dateNext.add(const Duration(days: 1));
       }
-
-      setState(() {
-        min = 170.0;
-        max = 210.0;
-      });
     } else {
       double floors_climbed = 0.0;
       int curr_amt = 0;
@@ -141,11 +136,6 @@ class _WeeklyPageState extends State<WeeklyPage> {
         dateNext = dateNext.add(const Duration(days: 1));
 
       }
-
-      setState(() {
-        min = 0.0;
-        max = 30.0;
-      });
     }
 
     setState(() {
@@ -157,8 +147,54 @@ class _WeeklyPageState extends State<WeeklyPage> {
     if (weeklyData.isEmpty) {
       return Center(child: Text("Loading chart...", style: style.textStyle,),);
     } else {
-      return WeeklyBarChart(data: weeklyData, min: min, max: max);
+      return WeeklyBarChart(data: weeklyData, min: findMin(), max: findMax() + 5);
     }
+  }
+
+  // This function finds the minimum of the data in the chart
+  double findMin() {
+
+    double min = weeklyData[0];
+
+    for (int i = 1; i < weeklyData.length; i++) {
+      if (min == 0) {
+        min = weeklyData[i];
+      } else if (weeklyData[i] < min) {
+        min = weeklyData[i];
+      }
+    }
+
+    if (type == "Average Heart Rate") {
+      if (min > 5) {
+        min -= 5;
+      } else {
+        min = 0;
+      }
+    } else if (type == "Floors Climbed") {
+      if (min > 50) {
+        min -= 50;
+      } else {
+        min = 0;
+      }
+    }
+
+    return min;
+
+  }
+
+  // This function finds the maximum of the data in the chart
+  double findMax() {
+
+    double max = weeklyData[0];
+
+    for (int i = 1; i < weeklyData.length; i++) {
+      if (weeklyData[i] > max) {
+        max = weeklyData[i];
+      }
+    }
+
+    return max;
+
   }
 
   @override

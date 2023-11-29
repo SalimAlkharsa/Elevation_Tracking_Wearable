@@ -177,8 +177,10 @@ class _TrackerPageState extends State<TrackerPage> {
     double newMin = 0.0;
 
     setState(() {
-      dateCursor = dateCursor.subtract(const Duration(minutes: 20));
+      dateCursor = dateCursor.subtract(const Duration(minutes: 1));
     });
+
+    print("$dateCursor");
 
     setState(() {
       textList.clear();
