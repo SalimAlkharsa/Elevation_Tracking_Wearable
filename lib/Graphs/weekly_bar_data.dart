@@ -1,5 +1,10 @@
+// IMPORTS
+
 import 'individual_bar.dart';
 
+// DEFINITION
+
+// A basic class which contains a list of IndividualBars for the weekly chart
 class WeeklyBarData {
   final double sun;
   final double mon;
@@ -21,6 +26,7 @@ class WeeklyBarData {
 
   List<IndividualBar> data = [];
 
+  // Setter for the private data member
   void initializeData() {
     data = [
       IndividualBar(x: 0, y: sun),

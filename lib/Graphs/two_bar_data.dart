@@ -1,5 +1,10 @@
+// IMPORTS
+
 import 'individual_bar.dart';
 
+// DEFINITION
+
+// A basic class which converts two passed in doubles to a pair of IndividualBars
 class TwoBarData {
   final double left;
   final double right;
@@ -11,6 +16,7 @@ class TwoBarData {
 
   List<IndividualBar> data = [];
 
+  // Updates the private member data with the passed in values
   void initializeData() {
     data = [
       IndividualBar(x: 0, y: left),
