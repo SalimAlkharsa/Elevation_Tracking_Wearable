@@ -1,10 +1,15 @@
+// IMPORTS
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:application/style.dart' as style;
 import 'package:application/connection.dart' as db;
-
 import '../Graphs/two_bar_chart.dart';
 
+// DEFINITION
+
+// This class defines the compare data page, which houses a two bar chart where
+// both the date for each bar and the data type to compare may be chosen
 class ComparePage extends StatefulWidget {
   const ComparePage({super.key});
 
@@ -14,32 +19,49 @@ class ComparePage extends StatefulWidget {
 
 class _ComparePageState extends State<ComparePage> {
 
-  List<double> compare = [];
-  DateTime dateLeft = DateTime.now();
-  DateTime dateRight = DateTime.now();
-  DateFormat dateFormat = DateFormat.MMMEd();
-  String leftDateStr = "";
-  String rightDateStr = "";
-  String type = "";
-  double min = 0.0;
-  double max = 0.0;
-  bool isInitialized = false;
+  List<double> compare = []; // The pair of values to be compared
+  DateTime dateLeft = DateTime.now(); // Date for the left value
+  DateTime dateRight = DateTime.now(); // Date for the right value
+  DateFormat dateFormat = DateFormat.MMMEd(); // Date formatter for usability
+  String leftDateStr = ""; // A string to contain the formatted left date
+  String rightDateStr = ""; // A string to contain the formatted right date
+  String type = ""; // A string to contain the type of data being compared
+  double min = 0.0; // The minimum draw distance for the chart for usability
+  double max = 0.0; // The maximum draw distance for the chart for usability
+  bool isInitialized = false; // Prevents the page from continuously initializing
 
+  // This function initializes the data members to their required values
   void initializeDate() {
+
+    // Checks if the data has already been initialized
     if (!isInitialized) {
+
       setState(() {
+
+        // The left and right date should start at the current date
         dateLeft = DateTime.now();
         dateRight = DateTime.now();
         leftDateStr = dateFormat.format(dateLeft);
         rightDateStr = dateFormat.format(dateRight);
+
+        // The type begins by tracking average heart rate for each day
         type = "Average Heart Rate";
+
+        // The data is then updated with the values for the current date
         updateData();
+
+        // This is to keep the page from continuously initializing
         isInitialized = true;
       });
     }
   }
 
+  // This function calls setState to update and rebuild the page whenever
+  // the dropdown menu choosing the data type is changed
   void updateType(String? selectedValue) {
+
+    // If the user somehow inputs a value which isn't a string, the type
+    // won't be updated to prevent errors in updateData
     if (selectedValue is String) {
       setState(() {
         type = selectedValue;
@@ -48,32 +70,45 @@ class _ComparePageState extends State<ComparePage> {
     }
   }
 
+
   Future<void> updateData() async {
+
+    // Math cannot be done within strings so the edge of both date ranges must be initialized here
     DateTime nextDateRight = dateRight.add(const Duration(days: 1));
     DateTime nextDateLeft = dateLeft.add(const Duration(days: 1));
+
+    // Creating a new list and using setState at the end of the function makes updating
+    // the data look more aesthetically pleasing, as both values are updated at once
     List<double> newCompare = [];
+
     if (type == "Average Heart Rate") {
-      double total_hr = 0.0;
+
+      double total_hr = 0.0; // Sum of heart rates used for the average
+
+      // The database is queried for all heart rate data which happened on the left date
       List<List<dynamic>> results = await db.connection.query("SELECT hr FROM sensors WHERE user_id=0 AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
 
+      // We calculate the average heart rate which occurred on the left date
+      // and add it to the new compare list
       for (int i = 0; i < results.length; i++) {
         total_hr += results[i][0];
       }
-
       newCompare.add(total_hr / results.length);
 
+      // The heart rate sum is reset before the right value is calculated
       total_hr = 0;
 
+      // The database is queried for all heart rate data which happened on the right date
       results = await db.connection.query("SELECT hr FROM sensors WHERE user_id=0 AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
 
+      // We calculate the average heart rate which occurred on the left date
+      // and add it to the new compare list
       for (int i = 0; i < results.length; i++) {
         total_hr += results[i][0];
       }
-
       newCompare.add(total_hr / results.length);
 
-      total_hr = 0;
-
+      // We update the min and max to be more in line with typical heart rate ranges
       setState(() {
         min = 170.0;
         max = 210.0;
@@ -81,15 +116,19 @@ class _ComparePageState extends State<ComparePage> {
 
     } else if (type == "Floors Climbed") {
 
-      double floors_climbed = 0.0;
-      int curr_amt = 0;
-      String curr_direction = "";
+      double floors_climbed = 0.0; // Sum of floors climbed on the given date
+      int curr_amt = 0; // Stores the magnitude of the given climb
+      String curr_direction = ""; // Stores the direction of the given climb
 
+      // The database is queried for all climb data which happened on the left date
       List<List<dynamic>> results = await db.connection.query("SELECT amt, direction FROM climbs WHERE user_id=0 AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
 
       for (int i = 0; i < results.length; i++) {
-        curr_amt = results[i][0];
-        curr_direction = results[i][1];
+
+        curr_amt = results[i][0]; // Get the magnitude of the climb for the entry in the database
+        curr_direction = results[i][1]; // Get the direction of the climb for the entry in the database
+
+        // Update the total floors climbed according to the magnitude and the direction
         if (curr_direction == "up") {
           floors_climbed += curr_amt;
         } else {
@@ -97,15 +136,20 @@ class _ComparePageState extends State<ComparePage> {
         }
       }
 
+      // Add the left value to the new compare list
       newCompare.add(floors_climbed);
 
+      // The floors climbed sum is reset before the right value is calculated
       floors_climbed = 0;
 
+      // The database is queried for all climb data which happened on the right date
       results = await db.connection.query("SELECT amt, direction FROM climbs WHERE user_id=0 AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
 
       for (int i = 0; i < results.length; i++) {
-        curr_amt = results[i][0];
-        curr_direction = results[i][1];
+        curr_amt = results[i][0]; // Get the magnitude of the climb for the entry in the database
+        curr_direction = results[i][1]; // Get the direction of the climb for the entry in the database
+
+        // Update the total floors climbed according to the magnitude and the direction
         if (curr_direction == "up") {
           floors_climbed += curr_amt;
         } else {
@@ -113,25 +157,30 @@ class _ComparePageState extends State<ComparePage> {
         }
       }
 
+      // Add the right value to the new compare list
       newCompare.add(floors_climbed);
 
-      floors_climbed = 0;
-
+      // We update the min and max to be more in line with typical floors climbed ranges
       setState(() {
         min = 0.0;
         max = 30.0;
       });
     }
 
+    // We update the data in the two bar chart
     setState(() {
       compare = newCompare;
     });
   }
 
+  // This function is used to do some error checking on the two bar chart
   Widget buildChart() {
 
+    // This list contains the indexes of the compare list which are null
     List<int> nulls = [];
 
+    // Populate the nulls list, this happens when there are no entries
+    // for an average heart rate, resulting in a divide by zero
     for (int i = 0; i < compare.length; i++) {
       if (compare[i].isNaN) {
         nulls.add(i);
@@ -139,18 +188,26 @@ class _ComparePageState extends State<ComparePage> {
     }
 
     if (compare.isEmpty) {
-      return Center(child: Text("Loading chart...", style: style.textStyle,),);
+
+      // If there is nothing in the compare list, the chart is loading
+      return Center(child: Text("Loading chart...", style: style.textStyle));
+
     } else if (nulls.isEmpty) {
+
+      // If there are no nulls, then the chart can be displayed
       return SizedBox(
         height: 200,
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width, // MediaQuery is used for sizing relative to the page
         child: TwoBarChart(data: compare, min: min, max: max),
       );
+
     } else if (nulls.length == 1) {
+
+      // If there is a null, we must determine which date lacks the necessary data
       if (nulls[0] == 0) {
         return SizedBox(
             height: 200,
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width, // MediaQuery is used for sizing relative to the page
             child: const Center(
               child: Text("No data for the left date."),
             )
@@ -158,16 +215,19 @@ class _ComparePageState extends State<ComparePage> {
       } else {
         return SizedBox(
             height: 200,
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width, // MediaQuery is used for sizing relative to the page
             child: const Center(
               child: Text("No data for the right date."),
             )
         );
       }
+
     } else {
+
+      // If we reach here, nulls is full, and both dates are invalid
       return SizedBox(
           height: 200,
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery.of(context).size.width, // MediaQuery is used for sizing relative to the page
           child: const Center(
             child: Text("No data for either date."),
           )
@@ -177,19 +237,16 @@ class _ComparePageState extends State<ComparePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // First we initialize the data
     initializeDate();
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+
+    // The style class is used throughout to maintain consistent style across
+    // the entire app and to allow easy color theming from within the app
     return Scaffold(
       backgroundColor: style.backgroundColor,
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: const Text("Compare Bar Chart"),
+        title: const Text("Compare Bar Chart"), // Title for the page
         backgroundColor: style.mainColor,
       ),
       body: Center(
@@ -202,6 +259,10 @@ class _ComparePageState extends State<ComparePage> {
             Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  // The DropdownButton class allows us to let a user pick a data type
+                  // without being able to freely enter anything into the box
+                  // This helps a lot with error catching, as the user is restricted
+                  // from putting in unexpected values
                   DropdownButton(
                     items: const [
                       DropdownMenuItem(
@@ -219,11 +280,15 @@ class _ComparePageState extends State<ComparePage> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    // Each text button allows the user to pick a new date from the
+                    // built in date picker, which helps with error catching as
+                    // the user is restricted from putting in unexpected values
                     children: [
                       TextButton(
                         onPressed: () async {
                           DateTime? newDate = await pickDate(dateLeft);
 
+                          // Don't update the date if none was picked
                           if (newDate == null) return;
 
                           setState(() {
@@ -231,6 +296,7 @@ class _ComparePageState extends State<ComparePage> {
                             leftDateStr = dateFormat.format(dateLeft);
                           });
 
+                          // Every time a date is updated, the data must be updated for the chart as well
                           updateData();
                         },
                         child: Text(leftDateStr, style: style.textStyle),
@@ -239,6 +305,7 @@ class _ComparePageState extends State<ComparePage> {
                         onPressed: () async {
                           DateTime? newDate = await pickDate(dateRight);
 
+                          // Don't update the date if none was picked
                           if (newDate == null) return;
 
                           setState(() {
@@ -246,6 +313,7 @@ class _ComparePageState extends State<ComparePage> {
                             rightDateStr = dateFormat.format(dateRight);
                           });
 
+                          // Every time a date is updated, the data must be updated for the chart as well
                           updateData();
                         },
                         child: Text(rightDateStr, style: style.textStyle),
@@ -309,22 +377,34 @@ class _ComparePageState extends State<ComparePage> {
     );
   }
 
+  // This function describes the functionality of the date picker
   Future<DateTime?> pickDate(DateTime date) {
+
+    // The new date is picked from the date picker
     Future<DateTime?> newDate = showDatePicker(
+
       context: context,
+
+      // The date is initially set to the last date picked for usability purposes
       initialDate: date,
+
+      // Data should never be picked from before the year 2000 or after the year 2100
+      // Should this app outlive the year 2100, this constant would need to be changed
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
+
       builder: (context, child) {
+
+        // This widget contains the theme data for the date picker
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: style.mainColor, // header background color
-              onPrimary: Colors.white, // body text color
+              primary: style.mainColor, // Header background color
+              onPrimary: Colors.white, // Body text color
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: style.mainColor, // button text color
+                foregroundColor: style.mainColor, // Button text color
               ),
             ),
           ),
