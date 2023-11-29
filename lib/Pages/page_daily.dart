@@ -101,7 +101,8 @@ class _DailyPageState extends State<DailyPage> {
       double hour_val = 0.0;
 
       // The database is queried for climb data which happened on the given date
-      List<List<dynamic>> results = await db.connection.query("SELECT amt, direction, timestamp FROM climbs WHERE user_id=0 AND timestamp>'$dateSelected' AND timestamp<'$nextDate'");
+      List<List<dynamic>> results = await db.connection.query(
+          "SELECT amt, direction, timestamp FROM climbs WHERE user_id=0 AND timestamp>'$dateSelected' AND timestamp<'$nextDate' ORDER BY timestamp");
 
       for (int i = 0; i < results.length; i++) {
 
@@ -135,7 +136,8 @@ class _DailyPageState extends State<DailyPage> {
       double hour_val = 0.0;
 
       // The database is queried for heart rate sensor data which happened on the given date
-      List<List<dynamic>> results = await db.connection.query("SELECT hr, timestamp FROM sensors WHERE user_id=0 AND timestamp>'$dateSelected' AND timestamp<'$nextDate'");
+      List<List<dynamic>> results = await db.connection.query(
+          "SELECT hr, timestamp FROM sensors WHERE user_id=0 AND timestamp>'$dateSelected' AND timestamp<'$nextDate' ORDER BY timestamp");
 
       for (int i = 0; i < results.length; i++) {
 
