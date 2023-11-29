@@ -25,16 +25,11 @@ class _MainPageState extends State<MainPage> {
     initializeGoals();
   }
 
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      backgroundColor: style.backgroundColor,
-      appBar: AppBar(
-        title: const Text("Home"),
-        backgroundColor: style.mainColor,
-      ),
-      body: Center(
+  Widget buildBody() {
+    if (db.connection.isClosed) {
+      return Center(child: Text("No connection.", style: style.textStyle,),);
+    } else {
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           verticalDirection: VerticalDirection.up,
@@ -83,42 +78,42 @@ class _MainPageState extends State<MainPage> {
                   //   )
                   // ),
                   Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Column(
-                      children: [
-                        Transform.scale(
-                          scale: 0.5,
-                          child: Text("Floors Today", style: style.textStyle),
-                        ),
-                        Stack(
-                          alignment: Alignment.center,
+                      padding: const EdgeInsets.all(5.0),
+                      child: Column(
                           children: [
-                            Icon(Icons.stairs_outlined, color: style.iconColor),
-                            CircularProgressIndicator(
-                              value: floorFraction,
-                              color: style.mainColor,
-                              strokeWidth: 4.0,
+                            Transform.scale(
+                              scale: 0.5,
+                              child: Text("Floors Today", style: style.textStyle),
+                            ),
+                            Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Icon(Icons.stairs_outlined, color: style.iconColor),
+                                  CircularProgressIndicator(
+                                    value: floorFraction,
+                                    color: style.mainColor,
+                                    strokeWidth: 4.0,
+                                  ),
+                                ]
+                            ),
+                            Transform.scale(
+                                scale: 0.5,
+                                child: Column(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(color: style.iconColor),
+                                          ),
+                                        ),
+                                        child: Text("8", style: style.textStyle),
+                                      ),
+                                      Text("$floorGoal", style: style.textStyle),
+                                    ]
+                                )
                             ),
                           ]
-                        ),
-                        Transform.scale(
-                          scale: 0.5,
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(color: style.iconColor),
-                                  ),
-                                ),
-                                child: Text("8", style: style.textStyle),
-                              ),
-                              Text("$floorGoal", style: style.textStyle),
-                            ]
-                          )
-                        ),
-                      ]
-                    )
+                      )
                   ),
                   // TODO: REMOVE TEST
                   // TextButton(
@@ -144,7 +139,20 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      backgroundColor: style.backgroundColor,
+      appBar: AppBar(
+        title: const Text("Home"),
+        backgroundColor: style.mainColor,
       ),
+      body: buildBody(),
       // The bottom navigation bar allows for easy access to the three main pages of the application
       bottomNavigationBar: BottomAppBar(
         // This padding makes the icons look cleaner and increase readability for the user

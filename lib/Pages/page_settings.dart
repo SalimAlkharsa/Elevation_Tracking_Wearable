@@ -39,33 +39,22 @@ class _SettingsPageState extends State<SettingsPage> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      backgroundColor: style.backgroundColor,
-
-      // The app bar shows the title of the page the user is currently on
-      appBar: AppBar(
-        title: const Text("Settings"),
-        backgroundColor: style.mainColor,
-      ),
-
-      // The list view allows for multiple ListTile widgets, which is the backbone of the settings page
-      // The Divider widgets between each ListTile make the UI more readable for the user by cleanly
-      // dividing each tile
-      body: ListView(
+  Widget buildBody() {
+    if (db.connection.isClosed) {
+      return Center(child: Text("No connection.", style: style.textStyle,),);
+    } else {
+      return ListView(
         children: <Widget>[
           // TODO: Explain sign out
           ListTile(
-            title: Text("Sign Out", style: style.textStyle),
-            trailing: IconButton (
-              icon: Icon(Icons.logout, color: style.iconColor),
-              // TODO: Implement sign out
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/');
-              },
-            )
+              title: Text("Sign Out", style: style.textStyle),
+              trailing: IconButton (
+                icon: Icon(Icons.logout, color: style.iconColor),
+                // TODO: Implement sign out
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+              )
           ),
           Divider(
             color: style.subtextStyle.color,
@@ -101,6 +90,9 @@ class _SettingsPageState extends State<SettingsPage> {
               if (newHeight == null || newHeight.isEmpty || double.tryParse(newHeight) == null) {
                 errorDoubleDialog();
                 return;
+              } else if (double.parse(newHeight) < 0) {
+                errorSmallDialog(0);
+                return;
               }
 
               setState(() => userHeight = double.parse(newHeight));
@@ -116,6 +108,9 @@ class _SettingsPageState extends State<SettingsPage> {
               final newWeight = await openTextEntryDialog();
               if (newWeight == null || newWeight.isEmpty || (double.tryParse(newWeight) == null)) {
                 errorDoubleDialog();
+                return;
+              } else if (double.parse(newWeight) < 0) {
+                errorSmallDialog(0);
                 return;
               }
 
@@ -146,8 +141,11 @@ class _SettingsPageState extends State<SettingsPage> {
             subtitle: Text("$floorGoal", style: style.subtextStyle),
             onTap: () async {
               final newGoal = await openTextEntryDialog();
-              if (newGoal == null || newGoal.isEmpty || (int.tryParse(newGoal) == null)) {
+              if (newGoal == null || newGoal.isEmpty || (int.tryParse(newGoal) == null) ) {
                 errorIntDialog();
+                return;
+              } else if (int.parse(newGoal) < 1) {
+                errorSmallDialog(1);
                 return;
               }
 
@@ -158,7 +156,26 @@ class _SettingsPageState extends State<SettingsPage> {
             color: style.subtextStyle.color,
           ),
         ],
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      backgroundColor: style.backgroundColor,
+
+      // The app bar shows the title of the page the user is currently on
+      appBar: AppBar(
+        title: const Text("Settings"),
+        backgroundColor: style.mainColor,
       ),
+
+      // The list view allows for multiple ListTile widgets, which is the backbone of the settings page
+      // The Divider widgets between each ListTile make the UI more readable for the user by cleanly
+      // dividing each tile
+      body: buildBody(),
 
       // The bottom navigation bar allows for easy access to the three main pages of the application
       bottomNavigationBar: BottomAppBar(
@@ -256,6 +273,23 @@ class _SettingsPageState extends State<SettingsPage> {
     builder: (context) => AlertDialog(
       backgroundColor: style.backgroundColor,
       title: Text("Error: Value must be an integer", style: style.textStyle),
+      actions: [
+        TextButton(
+          onPressed: close,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("OK"),
+        )
+      ],
+    ),
+  );
+
+  void errorSmallDialog(double min) => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: style.backgroundColor,
+      title: Text("Error: Value must be equal to or greater than $min", style: style.textStyle),
       actions: [
         TextButton(
           onPressed: close,
