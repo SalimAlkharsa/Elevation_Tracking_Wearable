@@ -173,8 +173,10 @@ class _WeeklyPageState extends State<WeeklyPage> {
         min = 0;
       }
     } else if (type == "Floors Climbed") {
-      if (min > 50) {
-        min -= 50;
+      if (min > 25) {
+        min -= 25;
+      } else if (min < 0 ) {
+        min -= 10;
       } else {
         min = 0;
       }
