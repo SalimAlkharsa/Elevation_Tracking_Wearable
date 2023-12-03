@@ -26,8 +26,6 @@ class _ComparePageState extends State<ComparePage> {
   String leftDateStr = ""; // A string to contain the formatted left date
   String rightDateStr = ""; // A string to contain the formatted right date
   String type = ""; // A string to contain the type of data being compared
-  double min = 0.0; // The minimum draw distance for the chart for usability
-  double max = 0.0; // The maximum draw distance for the chart for usability
   bool isInitialized = false; // Prevents the page from continuously initializing
 
   // This function initializes the data members to their required values
@@ -108,12 +106,6 @@ class _ComparePageState extends State<ComparePage> {
       }
       newCompare.add(total_hr / results.length);
 
-      // We update the min and max to be more in line with typical heart rate ranges
-      setState(() {
-        min = 170.0;
-        max = 210.0;
-      });
-
     } else if (type == "Floors Climbed") {
 
       double floors_climbed = 0.0; // Sum of floors climbed on the given date
@@ -160,17 +152,30 @@ class _ComparePageState extends State<ComparePage> {
       // Add the right value to the new compare list
       newCompare.add(floors_climbed);
 
-      // We update the min and max to be more in line with typical floors climbed ranges
-      setState(() {
-        min = 0.0;
-        max = 30.0;
-      });
     }
 
     // We update the data in the two bar chart
     setState(() {
       compare = newCompare;
     });
+  }
+
+  double findMin() {
+    double min = compare[0] - 5;
+    if (compare[1] < compare[0]) {
+      min = compare[1] - 5;
+    }
+
+    return min;
+  }
+
+  double findMax() {
+    double max = compare[0] + 5;
+    if (compare[1] > compare[0]) {
+      max = compare[1] + 5;
+    }
+
+    return max;
   }
 
   // This function is used to do some error checking on the two bar chart
@@ -198,7 +203,7 @@ class _ComparePageState extends State<ComparePage> {
       return SizedBox(
         height: 200,
         width: MediaQuery.of(context).size.width, // MediaQuery is used for sizing relative to the page
-        child: TwoBarChart(data: compare, min: min, max: max),
+        child: TwoBarChart(data: compare, min: findMin(), max: findMax()),
       );
 
     } else if (nulls.length == 1) {
