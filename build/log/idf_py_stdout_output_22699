@@ -1,0 +1,103 @@
+[1/10] Performing build step for 'bootloader'
+[1/1] cd /Users/salimalkharsa/esp/sample_project/build/bootloader/esp-idf/esptool_py && /Users/salimalkharsa/.espressif/python_env/idf5.0_py3.10_env/bin/python /Users/salimalkharsa/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /Users/salimalkharsa/esp/sample_project/build/bootloader/bootloader.bin
+Bootloader binary size 0x6750 bytes. 0x8b0 bytes (8%) free.
+[2/8] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/main.c.obj
+/Users/salimalkharsa/esp/sample_project/main/main.c: In function 'timer_callback':
+/Users/salimalkharsa/esp/sample_project/main/main.c:173:24: warning: unused variable 'current_ms' [-Wunused-variable]
+  173 |     unsigned long long current_ms = current_time.tv_sec * 1000 + current_time.tv_usec / 1000;
+      |                        ^~~~~~~~~~
+/Users/salimalkharsa/esp/sample_project/main/main.c:172:24: warning: unused variable 'start_ms' [-Wunused-variable]
+  172 |     unsigned long long start_ms = start_time.tv_sec * 1000 + start_time.tv_usec / 1000;
+      |                        ^~~~~~~~
+/Users/salimalkharsa/esp/sample_project/main/main.c: In function 'report_time_elapsed':
+/Users/salimalkharsa/esp/sample_project/main/main.c:295:24: warning: unused variable 'elapsed_sec' [-Wunused-variable]
+  295 |     unsigned long long elapsed_sec = elapsed_ms / 1000;
+      |                        ^~~~~~~~~~~
+/Users/salimalkharsa/esp/sample_project/main/main.c: In function 'send_post_request':
+/Users/salimalkharsa/esp/sample_project/main/main.c:531:15: warning: unused variable 'err' [-Wunused-variable]
+  531 |     esp_err_t err = esp_http_client_perform(client);
+      |               ^~~
+[3/8] Linking C static library esp-idf/main/libmain.a
+[4/8] Generating ld/sections.ld
+[5/8] Linking CXX executable project_name.elf
+[6/8] Generating binary image from built executable
+esptool.py v4.7.0
+Creating esp32 image...
+Merged 26 ELF sections
+Successfully created esp32 image.
+Generated /Users/salimalkharsa/esp/sample_project/build/project_name.bin
+[7/8] cd /Users/salimalkharsa/esp/sample_project/build/esp-idf/esptool_py && /Users/salimalkharsa/.espressif/python_env/idf5.0_py3.10_env/bin/python /Users/salimalkharsa/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Users/salimalkharsa/esp/sample_project/build/partition_table/partition-table.bin /Users/salimalkharsa/esp/sample_project/build/project_name.bin
+project_name.bin binary size 0xf1db0 bytes. Smallest app partition is 0x100000 bytes. 0xe250 bytes (6%) free.
+[7/8] cd /Users/salimalkharsa/esp/esp-idf/components/esptool_py && /Users/salimalkharsa/.espressif/tools/cmake/3.24.0/CMake.app/Contents/bin/cmake -D IDF_PATH=/Users/salimalkharsa/esp/esp-idf -D "SERIAL_TOOL=/Users/salimalkharsa/.espressif/python_env/idf5.0_py3.10_env/bin/python;;/Users/salimalkharsa/esp/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/Users/salimalkharsa/esp/sample_project/build -P /Users/salimalkharsa/esp/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32 -p /dev/cu.usbserial-1130 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 bootloader/bootloader.bin 0x10000 project_name.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.7.0
+Serial port /dev/cu.usbserial-1130
+Connecting....
+Chip is ESP32-D0WDQ6 (revision v1.0)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: ec:62:60:b2:ef:20
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00001000 to 0x00007fff...
+Flash will be erased from 0x00010000 to 0x00101fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+Compressed 26448 bytes to 16479...
+Writing at 0x00001000... (50 %)
+Writing at 0x000076d3... (100 %)
+Wrote 26448 bytes (16479 compressed) at 0x00001000 in 0.9 seconds (effective 233.0 kbit/s)...
+Hash of data verified.
+Compressed 990640 bytes to 645738...
+Writing at 0x00010000... (2 %)
+Writing at 0x000183ff... (5 %)
+Writing at 0x0001d0ad... (7 %)
+Writing at 0x000224ba... (10 %)
+Writing at 0x00029605... (12 %)
+Writing at 0x00033624... (15 %)
+Writing at 0x00038ad8... (17 %)
+Writing at 0x0004186e... (20 %)
+Writing at 0x0004bf9a... (22 %)
+Writing at 0x00051af2... (25 %)
+Writing at 0x000575ea... (27 %)
+Writing at 0x0005d202... (30 %)
+Writing at 0x00062b19... (32 %)
+Writing at 0x0006810b... (35 %)
+Writing at 0x0006d6f9... (37 %)
+Writing at 0x000731a5... (40 %)
+Writing at 0x00078ac8... (42 %)
+Writing at 0x0007e7b0... (45 %)
+Writing at 0x00083f81... (47 %)
+Writing at 0x0008a244... (50 %)
+Writing at 0x0008fd5d... (52 %)
+Writing at 0x00095819... (55 %)
+Writing at 0x0009acc2... (57 %)
+Writing at 0x0009fef0... (60 %)
+Writing at 0x000a5305... (62 %)
+Writing at 0x000aa6d0... (65 %)
+Writing at 0x000afd30... (67 %)
+Writing at 0x000b5527... (70 %)
+Writing at 0x000bb06f... (72 %)
+Writing at 0x000c0785... (75 %)
+Writing at 0x000c6347... (77 %)
+Writing at 0x000cc5ac... (80 %)
+Writing at 0x000d21ee... (82 %)
+Writing at 0x000d74af... (85 %)
+Writing at 0x000e0295... (87 %)
+Writing at 0x000e6e55... (90 %)
+Writing at 0x000ee9fa... (92 %)
+Writing at 0x000f4841... (95 %)
+Writing at 0x000fa5c7... (97 %)
+Writing at 0x000ff7b5... (100 %)
+Wrote 990640 bytes (645738 compressed) at 0x00010000 in 16.2 seconds (effective 488.3 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 103...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (103 compressed) at 0x00008000 in 0.1 seconds (effective 305.8 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

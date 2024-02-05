@@ -1,0 +1,130 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6984
+load:0x40078000,len:15512
+load:0x40080400,len:3864
+entry 0x40080650
+[0;32mI (27) boot: ESP-IDF v5.0.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time 10:12:17[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v1.0[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (48) boot: Enabling RNG early entropy source...[0m
+[0;32mI (53) boot: Partition Table:[0m
+[0;32mI (57) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (64) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (71) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (79) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (86) boot: End of partition table[0m
+[0;32mI (91) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=3677ch (223100) map[0m
+[0;32mI (180) esp_image: segment 1: paddr=000467a4 vaddr=3ffb0000 size=03538h ( 13624) load[0m
+[0;32mI (185) esp_image: segment 2: paddr=00049ce4 vaddr=40080000 size=06334h ( 25396) load[0m
+[0;32mI (196) esp_image: segment 3: paddr=00050020 vaddr=400d0020 size=a111ch (659740) map[0m
+[0;32mI (435) esp_image: segment 4: paddr=000f1144 vaddr=40086334 size=10c6ch ( 68716) load[0m
+[0;32mI (474) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (475) boot: Disabling RNG early entropy source...[0m
+[0;32mI (486) cpu_start: Multicore app[0m
+[0;32mI (486) cpu_start: Pro cpu up.[0m
+[0;32mI (486) cpu_start: Starting app cpu, entry point is 0x40081444[0m
+[0;32mI (0) cpu_start: App cpu up.[0m
+[0;32mI (504) cpu_start: Pro cpu start user code[0m
+[0;32mI (504) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (504) cpu_start: Application information:[0m
+[0;32mI (509) cpu_start: Project name:     project_name[0m
+[0;32mI (514) cpu_start: App version:      1[0m
+[0;32mI (519) cpu_start: Compile time:     Jan 30 2024 10:10:19[0m
+[0;32mI (525) cpu_start: ELF file SHA256:  792b0d3b65fa5520...[0m
+[0;32mI (531) cpu_start: ESP-IDF:          v5.0.4[0m
+[0;32mI (536) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (541) cpu_start: Max chip rev:     v3.99 [0m
+[0;32mI (545) cpu_start: Chip rev:         v1.0[0m
+[0;32mI (550) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (557) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (563) heap_init: At 3FFB7AE8 len 00028518 (161 KiB): DRAM[0m
+[0;32mI (570) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (576) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (582) heap_init: At 40096FA0 len 00009060 (36 KiB): IRAM[0m
+[0;32mI (590) spi_flash: detected chip: generic[0m
+[0;32mI (593) spi_flash: flash io: dio[0m
+[0;33mW (597) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (612) app_start: Starting scheduler on CPU0[0m
+[0;32m[0;32mI (615) app_start: Starting scheduler on CPU1[0m
+I (615) main_task: Started on CPU0[0m
+[0;32mI (625) main_task: Calling app_main()[0m
+Hello world!
+This is esp32 chip with 2 CPU core(s), WiFi/BT/BLE, silicon revision v1.0, 2MB external flash
+Minimum free heap size: 277748 bytes
+I (675) wifi:wifi driver task: 3ffc0498, prio:23, stack:6656, core=0
+[0;32mI (675) system_api: Base MAC address is not set[0m
+[0;32mI (675) system_api: read default base MAC address from EFUSE[0m
+I (695) wifi:wifi firmware version: e2d0ad8
+I (695) wifi:wifi certification version: v7.0
+I (695) wifi:config NVS flash: enabled
+I (695) wifi:config nano formating: disabled
+I (695) wifi:Init data frame dynamic rx buffer num: 32
+I (705) wifi:Init management frame dynamic rx buffer num: 32
+I (705) wifi:Init management short buffer num: 32
+I (715) wifi:Init dynamic tx buffer num: 32
+I (715) wifi:Init static rx buffer size: 1600
+I (725) wifi:Init static rx buffer num: 10
+I (725) wifi:Init dynamic rx buffer num: 32
+[0;32mI (735) wifi_init: rx ba win: 6[0m
+[0;32mI (735) wifi_init: tcpip mbox: 32[0m
+[0;32mI (735) wifi_init: udp mbox: 6[0m
+[0;32mI (745) wifi_init: tcp mbox: 6[0m
+[0;32mI (745) wifi_init: tcp tx win: 5744[0m
+[0;32mI (745) wifi_init: tcp rx win: 5744[0m
+[0;32mI (755) wifi_init: tcp mss: 1440[0m
+[0;32mI (755) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (765) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (765) phy_init: phy_version 4771,450c73b,Aug 16 2023,11:03:10[0m
+I (865) wifi:mode : sta (ec:62:60:b2:ef:20)
+I (865) wifi:enable tsf
+[0;32mI (865) demo: wifi_init_sta finished.[0m
+I (895) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1
+I (905) wifi:state: init -> auth (b0)
+I (915) wifi:state: auth -> assoc (0)
+I (955) wifi:state: assoc -> run (10)
+I (955) wifi:connected with TAMU_IoT, aid = 1, channel 1, BW20, bssid = dc:b7:ac:a5:a6:52
+I (965) wifi:security: Open Auth, phy: bgn, rssi: -75
+I (965) wifi:pm start, type: 1
+
+I (995) wifi:AP's beacon interval = 102400 us, DTIM period = 1
+I (1025) wifi:<ba-add>idx:0 (ifx:0, dc:b7:ac:a5:a6:52), tid:6, ssn:0, winSize:64
+I (1085) wifi:<ba-add>idx:1 (ifx:0, dc:b7:ac:a5:a6:52), tid:0, ssn:0, winSize:64
+I (1085) wifi:<ba-del>idx
+I (1185) wifi:<ba-add>idx:1 (ifx:0, dc:b7:ac:a5:a6:52), tid:0, ssn:0, winSize:64
+[0;32mI (3475) esp_netif_handlers: sta ip: 10.224.242.218, mask: 255.255.0.0, gw: 10.224.0.1[0m
+[0;32mI (3475) demo: got ip:10.224.242.218[0m
+[0;32mI (3475) demo: connected to ap SSID:TAMU_IoT password:[0m
+[0;32mI (11485) demo: MPU6050 sensor detected.[0m
+[0;32mI (11515) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.172852, y = 0.013184, z = 1.526367 g
+Rotation: x = 498.755737, y = 0.717557, z = 0.725191 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97354.12 Pa
+Temperature: 24.86 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:36:07.783"],
+	"user_id":	[287423],
+	"a_x":	[0.1728515625],
+	"a_y":	[0.01318359375],
+	"a_z":	[1.5263671875],
+	"r_x":	[498.7557373046875],
+	"r_y":	[0.71755725145339966],
+	"r_z":	[0.725190818309784],
+	"temperature":	[24.860000610351562],
+	"pressure":	[97354.125]
+}
+MPU6050 is connected.
+Acceleration: x = 0.165039, y = 7.990723, z = 1.507324 g
+Rotation: x = 498.824432, y = 0.847328, z = 0.832061 degrees/sec
+BMP280 is connected.

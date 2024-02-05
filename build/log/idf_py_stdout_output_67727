@@ -1,0 +1,404 @@
+�&'������0001dbcc vaddr���0244ch (  9292) load[0m
+[0;32m�ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6984
+load:0x40078000,len:15512
+load:0x40080400,len:3864
+entry 0x40080650
+[0;32mI (27) boot: ESP-IDF v5.0.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time 10:12:17[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v1.0[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (48) boot: Enabling RNG early entropy source...[0m
+[0;32mI (53) boot: Partition Table:[0m
+[0;32mI (57) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (64) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (72) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (79) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (87) boot: End of partition table[0m
+[0;32mI (91) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=0bbe8h ( 48104) map[0m
+[0;32mI (117) esp_image: segment 1: paddr=0001bc10 vaddr=3ffb0000 size=01fb4h (  8116) load[0m
+[0;32mI (120) esp_image: segment 2: paddr=0001dbcc vaddr=40080000 size=0244ch (  9292) load[0m
+[0;32mI (126) esp_image: segment 3: paddr=00020020 vaddr=400d0020 size=20b20h (133920) map[0m
+[0;32mI (179) esp_image: segment 4: paddr=00040b48 vaddr=4008244c size=0bd1ch ( 48412) load[0m
+[0;32mI (206) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (206) boot: Disabling RNG early entropy source...[0m
+[0;32mI (218) cpu_start: Multicore app[0m
+[0;32mI (218) cpu_start: Pro cpu up.[0m
+[0;32mI (218) cpu_start: Starting app cpu, entry point is 0x400812f4[0m
+[0;32mI (0) cpu_start: App cpu up.[0m
+[0;32mI (236) cpu_start: Pro cpu start user code[0m
+[0;32mI (236) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (236) cpu_start: Application information:[0m
+[0;32mI (241) cpu_start: Project name:     project_name[0m
+[0;32mI (246) cpu_start: App version:      1[0m
+[0;32mI (251) cpu_start: Compile time:     Jan 30 2024 10:10:19[0m
+[0;32mI (257) cpu_start: ELF file SHA256:  87e87b1cac877733...[0m
+[0;32mI (263) cpu_start: ESP-IDF:          v5.0.4[0m
+[0;32mI (268) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (272) cpu_start: Max chip rev:     v3.99 [0m
+[0;32mI (277) cpu_start: Chip rev:         v1.0[0m
+[0;32mI (282) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (289) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (295) heap_init: At 3FFB2A80 len 0002D580 (181 KiB): DRAM[0m
+[0;32mI (302) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (308) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (314) heap_init: At 4008E168 len 00011E98 (71 KiB): IRAM[0m
+[0;32mI (322) spi_flash: detected chip: generic[0m
+[0;32mI (325) spi_flash: flash io: dio[0m
+[0;33mW (329) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (343) app_start: Starting scheduler on CPU0[0m
+[0;32m[0;32mI (347) app_start: Starting scheduler on CPU1[0m
+I (347) main_task: Started on CPU0[0m
+[0;32mI (357) main_task: Calling app_main()[0m
+Hello world!
+This is esp32 chip with 2 CPU core(s), WiFi/BT/BLE, silicon revision v1.0, 2MB external flash
+Minimum free heap size: 298332 bytes
+[0;32mI (8407) demo: MPU6050 sensor detected.[0m
+[0;32mI (8437) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.109375, y = 0.031250, z = 1.508789 g
+Rotation: x = 498.671753, y = 0.900763, z = 0.557252 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96693.12 Pa
+Temperature: 24.70 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.115723, y = 0.030762, z = 1.516113 g
+Rotation: x = 498.717560, y = 0.839695, z = 0.572519 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96682.80 Pa
+Temperature: 24.77 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.119629, y = 0.021973, z = 1.498047 g
+Rotation: x = 498.534363, y = 0.877863, z = 0.458015 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96662.16 Pa
+Temperature: 24.89 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.113770, y = 0.046387, z = 1.455078 g
+Rotation: x = 499.404572, y = 1.206107, z = 0.488550 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96649.24 Pa
+Temperature: 24.99 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.122070, y = 0.020508, z = 1.507324 g
+Rotation: x = 498.763367, y = 1.137405, z = 0.419847 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.110352, y = 0.039062, z = 1.522461 g
+Rotation: x = 498.610687, y = 0.671756, z = 0.519084 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.096680, y = 0.019043, z = 1.505371 g
+Rotation: x = 498.664124, y = 0.832061, z = 0.480916 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.113770, y = 0.058594, z = 1.501953 g
+Rotation: x = 498.511444, y = 0.755725, z = 0.511450 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.097168, y = 0.032227, z = 1.514160 g
+Rotation: x = 498.389313, y = 0.984733, z = 0.557252 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (59557) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.081543, y = 0.041992, z = 1.510742 g
+Rotation: x = 498.587799, y = 1.083969, z = 0.305344 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (69637) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.108887, y = 0.032715, z = 1.508789 g
+Rotation: x = 498.694672, y = 0.717557, z = 0.564885 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96654.41 Pa
+Temperature: 24.92 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.107910, y = 0.028809, z = 1.499512 g
+Rotation: x = 498.671753, y = 0.992366, z = 0.412214 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96656.98 Pa
+Temperature: 24.90 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.102539, y = 0.037598, z = 1.499512 g
+Rotation: x = 498.763367, y = 0.954198, z = 0.541985 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96662.16 Pa
+Temperature: 24.87 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.103516, y = 0.033203, z = 1.503418 g
+Rotation: x = 498.740448, y = 0.748092, z = 0.511450 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96669.89 Pa
+Temperature: 24.84 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.151855, y = 0.124512, z = 1.504395 g
+Rotation: x = 8.038168, y = 6.480916, z = 1.213740 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96672.48 Pa
+Temperature: 24.82 degrees Celsius
+Observation 0: Pa = 96693.125000, Z_rot = 0.557252, Z_acc = 1.508789, Y_acc = 0.031250
+Observation 1: Pa = 96682.804688, Z_rot = 0.572519, Z_acc = 1.516113, Y_acc = 0.030762
+Observation 2: Pa = 96662.156250, Z_rot = 0.458015, Z_acc = 1.498047, Y_acc = 0.021973
+Observation 3: Pa = 96649.242188, Z_rot = 0.488550, Z_acc = 1.455078, Y_acc = 0.046387
+Observation 4: Pa = 63809.808594, Z_rot = 0.419847, Z_acc = 1.507324, Y_acc = 0.020508
+Observation 5: Pa = 63809.808594, Z_rot = 0.519084, Z_acc = 1.522461, Y_acc = 0.039062
+Observation 6: Pa = 63809.808594, Z_rot = 0.480916, Z_acc = 1.505371, Y_acc = 0.019043
+Observation 7: Pa = 63809.808594, Z_rot = 0.511450, Z_acc = 1.501953, Y_acc = 0.058594
+Observation 8: Pa = 96654.406250, Z_rot = 0.564885, Z_acc = 1.508789, Y_acc = 0.032715
+Observation 9: Pa = 96656.984375, Z_rot = 0.412214, Z_acc = 1.499512, Y_acc = 0.028809
+Observation 10: Pa = 96662.156250, Z_rot = 0.541985, Z_acc = 1.499512, Y_acc = 0.037598
+Observation 11: Pa = 96669.890625, Z_rot = 0.511450, Z_acc = 1.503418, Y_acc = 0.033203
+Metrics: Pa_roc = -0.415196, Z_rot_max_min = 0.160305, Z_g_max = 1.522461, Z_g_min = 1.455078, Y_g_kurtosis = 0.000116
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+[0;31mE (100387) demo: MPU6050 initialization failed[0m
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+[0;32mI (105397) demo: MPU6050 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.114258, y = 0.026367, z = 1.527832 g
+Rotation: x = 11.282443, y = 477.427490, z = 495.473297 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96675.05 Pa
+Temperature: 24.80 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.110352, y = 0.041992, z = 1.512207 g
+Rotation: x = 498.900757, y = 0.908397, z = 0.175573 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96675.05 Pa
+Temperature: 24.80 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.107422, y = 0.025391, z = 1.518555 g
+Rotation: x = 498.633575, y = 0.816794, z = 0.198473 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96675.05 Pa
+Temperature: 24.81 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 7.917969, y = 0.101074, z = 1.530273 g
+Rotation: x = 498.916016, y = 23.045801, z = 499.839691 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96675.05 Pa
+Temperature: 24.81 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 7.385254, y = 0.042969, z = 1.370117 g
+Rotation: x = 498.580139, y = 1.282443, z = 0.290076 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96672.48 Pa
+Temperature: 24.81 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 7.390625, y = 0.021973, z = 1.384766 g
+Rotation: x = 498.709930, y = 0.740458, z = 0.267176 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96672.48 Pa
+Temperature: 24.82 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.099121, y = 0.035645, z = 1.501465 g
+Rotation: x = 498.610687, y = 0.778626, z = 0.328244 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96672.48 Pa
+Temperature: 24.82 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.101562, y = 0.033691, z = 1.494141 g
+Rotation: x = 498.488556, y = 0.641221, z = 0.198473 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.096191, y = 0.015137, z = 1.511719 g
+Rotation: x = 498.412201, y = 0.916031, z = 0.282443 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 7.681641, y = 0.011230, z = 1.534668 g
+Rotation: x = 498.732819, y = 480.755737, z = 0.709924 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 7.735840, y = 0.022949, z = 1.537109 g
+Rotation: x = 498.282440, y = 46.679390, z = 0.725191 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 7.878906, y = 7.999023, z = 1.681641 g
+Rotation: x = 497.595428, y = 461.832062, z = 0.396947 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 7.580078, y = 0.075195, z = 1.124023 g
+Rotation: x = 498.709930, y = 5.641222, z = 0.198473 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+Observation 0: Pa = 96675.054688, Z_rot = 495.473297, Z_acc = 1.527832, Y_acc = 0.026367
+Observation 1: Pa = 96675.054688, Z_rot = 0.175573, Z_acc = 1.512207, Y_acc = 0.041992
+Observation 2: Pa = 96675.054688, Z_rot = 0.198473, Z_acc = 1.518555, Y_acc = 0.025391
+Observation 3: Pa = 96675.054688, Z_rot = 499.839691, Z_acc = 1.530273, Y_acc = 0.101074
+Observation 4: Pa = 96672.476562, Z_rot = 0.290076, Z_acc = 1.370117, Y_acc = 0.042969
+Observation 5: Pa = 96672.476562, Z_rot = 0.267176, Z_acc = 1.384766, Y_acc = 0.021973
+Observation 6: Pa = 96672.476562, Z_rot = 0.328244, Z_acc = 1.501465, Y_acc = 0.035645
+Observation 7: Pa = 63809.808594, Z_rot = 0.198473, Z_acc = 1.494141, Y_acc = 0.033691
+Observation 8: Pa = 63809.808594, Z_rot = 0.282443, Z_acc = 1.511719, Y_acc = 0.015137
+Observation 9: Pa = 63809.808594, Z_rot = 0.709924, Z_acc = 1.534668, Y_acc = 0.011230
+Observation 10: Pa = 63809.808594, Z_rot = 0.725191, Z_acc = 1.537109, Y_acc = 0.022949
+Observation 11: Pa = 63809.808594, Z_rot = 0.396947, Z_acc = 1.681641, Y_acc = 7.999023
+Metrics: Pa_roc = -587.298889, Z_rot_max_min = 499.664124, Z_g_max = 1.681641, Z_g_min = 1.370117, Y_g_kurtosis = 4.846238
+MPU6050 is connected.
+Acceleration: x = 7.512695, y = 0.037598, z = 1.146484 g
+Rotation: x = 498.778625, y = 14.267176, z = 0.396947 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 7.845215, y = 0.003418, z = 1.815430 g
+Rotation: x = 0.671756, y = 24.381680, z = 0.786260 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 7.880371, y = 0.033691, z = 1.680664 g
+Rotation: x = 499.862610, y = 479.511444, z = 498.007629 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (192537) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.119141, y = 0.038574, z = 1.561523 g
+Rotation: x = 498.091614, y = 0.374046, z = 0.083969 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (202617) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.301270, y = 6.796387, z = 1.528809 g
+Rotation: x = 85.809158, y = 250.129776, z = 491.160309 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (212697) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.122070, y = 7.793457, z = 0.803223 g
+Rotation: x = 476.183197, y = 487.549622, z = 491.954193 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (222777) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.058105, y = 0.049805, z = 1.747070 g
+Rotation: x = 2.778626, y = 9.236641, z = 496.862610 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (232857) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 6.439453, y = 7.257812, z = 0.323242 g
+Rotation: x = 41.335876, y = 401.541992, z = 2.221374 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (242937) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 6.082031, y = 0.000977, z = 7.506836 g
+Rotation: x = 495.671753, y = 1.816794, z = 0.175573 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (253017) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 6.084961, y = 7.997070, z = 7.466797 g
+Rotation: x = 499.061066, y = 0.778626, z = 0.183206 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (263097) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 6.476074, y = 0.089355, z = 0.823242 g
+Rotation: x = 6.534351, y = 499.061066, z = 490.893127 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (273177) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 7.952148, y = 0.154297, z = 1.549316 g
+Rotation: x = 496.969452, y = 20.679390, z = 498.251923 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+[0;32mI (283257) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.119629, y = 0.034668, z = 1.494141 g
+Rotation: x = 498.816803, y = 0.839695, z = 0.465649 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96742.19 Pa
+Temperature: 24.47 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.104980, y = 0.020996, z = 1.512695 g
+Rotation: x = 498.717560, y = 0.877863, z = 0.312977 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.114746, y = 0.002441, z = 1.500977 g
+Rotation: x = 498.549622, y = 0.832061, z = 0.343511 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.123535, y = 0.019531, z = 1.504395 g
+Rotation: x = 498.496185, y = 1.053435, z = 0.549618 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!

@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "mpu6050sensor.h": "c",
+    "window.h": "c",
+    "micro_interpreter.h": "c",
+    "schema_generated.h": "c",
+    "ratio": "c",
+    "*.tflite": "c"
+  }
+}

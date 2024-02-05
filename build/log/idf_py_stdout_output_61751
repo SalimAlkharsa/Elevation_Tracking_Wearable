@@ -1,0 +1,2126 @@
+nt 3: paddr=0002�ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6984
+load:0x40078000,len:15512
+load:0x40080400,len:3864
+entry 0x40080650
+[0;32mI (27) boot: ESP-IDF v5.0.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time 10:12:17[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v1.0[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (48) boot: Enabling RNG early entropy source...[0m
+[0;32mI (53) boot: Partition Table:[0m
+[0;32mI (57) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (64) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (72) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (79) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (87) boot: End of partition table[0m
+[0;32mI (91) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=0bbe8h ( 48104) map[0m
+[0;32mI (117) esp_image: segment 1: paddr=0001bc10 vaddr=3ffb0000 size=01fb4h (  8116) load[0m
+[0;32mI (120) esp_image: segment 2: paddr=0001dbcc vaddr=40080000 size=0244ch (  9292) load[0m
+[0;32mI (126) esp_image: segment 3: paddr=00020020 vaddr=400d0020 size=20b04h (133892) map[0m
+[0;32mI (179) esp_image: segment 4: paddr=00040b2c vaddr=4008244c size=0bd1ch ( 48412) load[0m
+[0;32mI (206) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (207) boot: Disabling RNG early entropy source...[0m
+[0;32mI (218) cpu_start: Multicore app[0m
+[0;32mI (218) cpu_start: Pro cpu up.[0m
+[0;32mI (218) cpu_start: Starting app cpu, entry point is 0x400812f4[0m
+[0;32mI (0) cpu_start: App cpu up.[0m
+[0;32mI (236) cpu_start: Pro cpu start user code[0m
+[0;32mI (236) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (236) cpu_start: Application information:[0m
+[0;32mI (241) cpu_start: Project name:     project_name[0m
+[0;32mI (246) cpu_start: App version:      1[0m
+[0;32mI (251) cpu_start: Compile time:     Jan 30 2024 10:10:19[0m
+[0;32mI (257) cpu_start: ELF file SHA256:  612f18aa8d40f760...[0m
+[0;32mI (263) cpu_start: ESP-IDF:          v5.0.4[0m
+[0;32mI (268) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (272) cpu_start: Max chip rev:     v3.99 [0m
+[0;32mI (277) cpu_start: Chip rev:         v1.0[0m
+[0;32mI (282) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (289) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (295) heap_init: At 3FFB2A80 len 0002D580 (181 KiB): DRAM[0m
+[0;32mI (302) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (308) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (314) heap_init: At 4008E168 len 00011E98 (71 KiB): IRAM[0m
+[0;32mI (322) spi_flash: detected chip: generic[0m
+[0;32mI (325) spi_flash: flash io: dio[0m
+[0;33mW (329) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (343) app_start: Starting scheduler on CPU0[0m
+[0;32m[0;32mI (347) app_start: Starting scheduler on CPU1[0m
+I (347) main_task: Started on CPU0[0m
+[0;32mI (357) main_task: Calling app_main()[0m
+Hello world!
+This is esp32 chip with 2 CPU core(s), WiFi/BT/BLE, silicon revision v1.0, 2MB external flash
+Minimum free heap size: 298332 bytes
+[0;32mI (8407) demo: MPU6050 sensor detected.[0m
+[0;32mI (8437) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.061035, y = 0.022949, z = 1.514648 g
+Rotation: x = 498.618317, y = 0.824427, z = 0.740458 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96484.02 Pa
+Temperature: 26.02 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.058594, y = 0.029297, z = 1.505371 g
+Rotation: x = 498.770996, y = 0.816794, z = 0.885496 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+MPU6050 is connected.
+Acceleration: x = 0.061035, y = 0.034180, z = 1.513184 g
+Rotation: x = 498.740448, y = 0.862595, z = 0.557252 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.068359, y = 0.037109, z = 1.516113 g
+Rotation: x = 498.687012, y = 0.877863, z = 0.641221 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.052246, y = 0.028320, z = 1.508789 g
+Rotation: x = 498.557251, y = 0.801527, z = 0.732824 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.057617, y = 0.041016, z = 1.505371 g
+Rotation: x = 498.687012, y = 0.984733, z = 0.709924 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.063477, y = 0.033203, z = 1.496094 g
+Rotation: x = 498.625946, y = 0.877863, z = 0.725191 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+MPU6050 is connected.
+Acceleration: x = 0.049805, y = 0.034668, z = 1.511230 g
+Rotation: x = 498.862610, y = 0.931298, z = 0.580153 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.050781, y = 0.037598, z = 1.505371 g
+Rotation: x = 498.801514, y = 0.648855, z = 0.709924 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.056152, y = 0.040527, z = 1.509766 g
+Rotation: x = 498.778625, y = 1.038168, z = 0.687023 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.055664, y = 0.049316, z = 1.507324 g
+Rotation: x = 498.694672, y = 0.793893, z = 0.839695 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.068359, y = 0.039062, z = 1.505859 g
+Rotation: x = 498.770996, y = 1.045802, z = 0.557252 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.048340, y = 0.038086, z = 1.495117 g
+Rotation: x = 498.732819, y = 0.748092, z = 0.496183 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.062988, y = 0.049805, z = 1.515137 g
+Rotation: x = 498.885498, y = 0.885496, z = 0.717557 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+MPU6050 is connected.
+Acceleration: x = 0.067383, y = 0.045898, z = 1.490723 g
+Rotation: x = 498.908386, y = 0.870229, z = 0.610687 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.100586, y = 0.050781, z = 1.507812 g
+Rotation: x = 7.122138, y = 0.396947, z = 2.152672 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+Observation 0: Pa = 96484.015625, Z_rot = 0.740458, Z_acc = 1.514648, Y_acc = 0.022949
+Observation 1: Pa = 63809.808594, Z_rot = 0.557252, Z_acc = 1.513184, Y_acc = 0.034180
+Observation 2: Pa = 63809.808594, Z_rot = 0.641221, Z_acc = 1.516113, Y_acc = 0.037109
+Observation 3: Pa = 63809.808594, Z_rot = 0.732824, Z_acc = 1.508789, Y_acc = 0.028320
+Observation 4: Pa = 63809.808594, Z_rot = 0.709924, Z_acc = 1.505371, Y_acc = 0.041016
+Observation 5: Pa = 63809.808594, Z_rot = 0.580153, Z_acc = 1.511230, Y_acc = 0.034668
+Observation 6: Pa = 63809.808594, Z_rot = 0.709924, Z_acc = 1.505371, Y_acc = 0.037598
+Observation 7: Pa = 63809.808594, Z_rot = 0.687023, Z_acc = 1.509766, Y_acc = 0.040527
+Observation 8: Pa = 63809.808594, Z_rot = 0.839695, Z_acc = 1.507324, Y_acc = 0.049316
+Observation 9: Pa = 63809.808594, Z_rot = 0.557252, Z_acc = 1.505859, Y_acc = 0.039062
+Observation 10: Pa = 63809.808594, Z_rot = 0.496183, Z_acc = 1.495117, Y_acc = 0.038086
+Observation 11: Pa = 63809.808594, Z_rot = 0.610687, Z_acc = 1.490723, Y_acc = 0.045898
+Metrics: Pa_roc = -583.885071, Z_rot_max_min = 0.343511, Z_g_max = 1.516113, Z_g_min = 1.490723, Y_g_kurtosis = 0.000046
+MPU6050 is connected.
+Acceleration: x = 0.087891, y = 0.083008, z = 1.508301 g
+Rotation: x = 498.679382, y = 0.824427, z = 1.740458 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+Observation 0: Pa = 63809.808594, Z_rot = 1.740458, Z_acc = 1.508301, Y_acc = 0.083008
+Observation 1: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 2: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 3: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 4: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 5: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 6: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 7: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 8: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 9: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 10: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 11: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Metrics: Pa_roc = 0.000000, Z_rot_max_min = 1.740458, Z_g_max = 1.508301, Z_g_min = 0.000000, Y_g_kurtosis = 0.000526
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+Observation 0: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 1: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 2: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 3: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 4: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 5: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 6: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 7: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 8: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 9: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 10: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Observation 11: Pa = 63809.808594, Z_rot = 0.000000, Z_acc = 0.000000, Y_acc = 0.000000
+Metrics: Pa_roc = 0.000000, Z_rot_max_min = 0.000000, Z_g_max = 0.000000, Z_g_min = 0.000000, Y_g_kurtosis = 0.000000
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.

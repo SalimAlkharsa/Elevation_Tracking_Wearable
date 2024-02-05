@@ -1,0 +1,122 @@
+z�V����1: paddr=0001bc10 vaets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6984
+load:0x40078000,len:15512
+load:0x40080400,len:3864
+entry 0x40080650
+[0;32mI (27) boot: ESP-IDF v5.0.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time 10:12:17[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v1.0[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (48) boot: Enabling RNG early entropy source...[0m
+[0;32mI (53) boot: Partition Table:[0m
+[0;32mI (57) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (64) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (72) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (79) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (87) boot: End of partition table[0m
+[0;32mI (91) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=0bbe8h ( 48104) map[0m
+[0;32mI (117) esp_image: segment 1: paddr=0001bc10 vaddr=3ffb0000 size=01fb4h (  8116) load[0m
+[0;32mI (120) esp_image: segment 2: paddr=0001dbcc vaddr=40080000 size=0244ch (  9292) load[0m
+[0;32mI (126) esp_image: segment 3: paddr=00020020 vaddr=400d0020 size=20b1ch (133916) map[0m
+[0;32mI (179) esp_image: segment 4: paddr=00040b44 vaddr=4008244c size=0bd1ch ( 48412) load[0m
+[0;32mI (206) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (207) boot: Disabling RNG early entropy source...[0m
+[0;32mI (218) cpu_start: Multicore app[0m
+[0;32mI (218) cpu_start: Pro cpu up.[0m
+[0;32mI (218) cpu_start: Starting app cpu, entry point is 0x400812f4[0m
+[0;32mI (0) cpu_start: App cpu up.[0m
+[0;32mI (236) cpu_start: Pro cpu start user code[0m
+[0;32mI (236) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (236) cpu_start: Application information:[0m
+[0;32mI (241) cpu_start: Project name:     project_name[0m
+[0;32mI (246) cpu_start: App version:      1[0m
+[0;32mI (251) cpu_start: Compile time:     Jan 30 2024 10:10:19[0m
+[0;32mI (257) cpu_start: ELF file SHA256:  1df7bcf92f022eb2...[0m
+[0;32mI (263) cpu_start: ESP-IDF:          v5.0.4[0m
+[0;32mI (268) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (272) cpu_start: Max chip rev:     v3.99 [0m
+[0;32mI (277) cpu_start: Chip rev:         v1.0[0m
+[0;32mI (282) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (289) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (295) heap_init: At 3FFB2A80 len 0002D580 (181 KiB): DRAM[0m
+[0;32mI (302) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (308) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (314) heap_init: At 4008E168 len 00011E98 (71 KiB): IRAM[0m
+[0;32mI (322) spi_flash: detected chip: generic[0m
+[0;32mI (325) spi_flash: flash io: dio[0m
+[0;33mW (329) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (343) app_start: Starting scheduler on CPU0[0m
+[0;32m[0;32mI (347) app_start: Starting scheduler on CPU1[0m
+I (347) main_task: Started on CPU0[0m
+[0;32mI (357) main_task: Calling app_main()[0m
+Hello world!
+This is esp32 chip with 2 CPU core(s), WiFi/BT/BLE, silicon revision v1.0, 2MB external flash
+Minimum free heap size: 298332 bytes
+[0;32mI (8407) demo: MPU6050 sensor detected.[0m
+[0;32mI (8437) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.015137, y = 7.948242, z = 1.474609 g
+Rotation: x = 498.671753, y = 0.702290, z = 499.282440 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 96873.86 Pa
+Temperature: 23.59 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.014160, y = 7.960449, z = 1.498047 g
+Rotation: x = 498.396942, y = 0.702290, z = 499.366425 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+[0;32mI (24637) demo: MPU6050 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.003906, y = 7.961426, z = 1.498047 g
+Rotation: x = 498.679382, y = 0.778626, z = 499.259552 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+[0;32mI (35757) demo: MPU6050 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 7.996094, y = 7.961914, z = 1.495605 g
+Rotation: x = 498.389313, y = 0.496183, z = 499.366425 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 63809.81 Pa
+Temperature: 22.72 degrees Celsius
+MPU6050 is connected.
+Acceleration: x = 0.067383, y = 0.049805, z = 1.512207 g
+Rotation: x = 496.488556, y = 21.152672, z = 0.290076 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+[0;31mE (51997) demo: MPU6050 initialization failed[0m
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+[0;32mI (57017) demo: MPU6050 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.
+BMP280 calibration read failed!
+BMP280 sensor not connected!
+MPU6050 sensor not connected!
+MPU6050 sensor not connected!
+[0;32mI (68127) demo: MPU6050 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.000000, y = 0.000000, z = 0.000000 g
+Rotation: x = 0.000000, y = 0.000000, z = 0.000000 degrees/sec
+BMP280 is connected.

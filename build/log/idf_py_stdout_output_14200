@@ -1,0 +1,749 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6984
+load:0x40078000,len:15512
+load:0x40080400,len:3864
+entry 0x40080650
+[0;32mI (27) boot: ESP-IDF v5.0.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time 10:12:17[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v1.0[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (48) boot: Enabling RNG early entropy source...[0m
+[0;32mI (53) boot: Partition Table:[0m
+[0;32mI (57) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (64) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (72) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (79) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (87) boot: End of partition table[0m
+[0;32mI (91) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=36914h (223508) map[0m
+[0;32mI (180) esp_image: segment 1: paddr=0004693c vaddr=3ffb0000 size=03538h ( 13624) load[0m
+[0;32mI (185) esp_image: segment 2: paddr=00049e7c vaddr=40080000 size=0619ch ( 24988) load[0m
+[0;32mI (196) esp_image: segment 3: paddr=00050020 vaddr=400d0020 size=a16f8h (661240) map[0m
+[0;32mI (435) esp_image: segment 4: paddr=000f1720 vaddr=4008619c size=10e04h ( 69124) load[0m
+[0;32mI (475) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (475) boot: Disabling RNG early entropy source...[0m
+[0;32mI (487) cpu_start: Multicore app[0m
+[0;32mI (487) cpu_start: Pro cpu up.[0m
+[0;32mI (487) cpu_start: Starting app cpu, entry point is 0x40081444[0m
+[0;32mI (0) cpu_start: App cpu up.[0m
+[0;32mI (505) cpu_start: Pro cpu start user code[0m
+[0;32mI (505) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (505) cpu_start: Application information:[0m
+[0;32mI (510) cpu_start: Project name:     project_name[0m
+[0;32mI (515) cpu_start: App version:      1[0m
+[0;32mI (520) cpu_start: Compile time:     Jan 30 2024 10:10:19[0m
+[0;32mI (526) cpu_start: ELF file SHA256:  676a27d8fb7d0e2b...[0m
+[0;32mI (532) cpu_start: ESP-IDF:          v5.0.4[0m
+[0;32mI (537) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (541) cpu_start: Max chip rev:     v3.99 [0m
+[0;32mI (546) cpu_start: Chip rev:         v1.0[0m
+[0;32mI (551) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (558) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (564) heap_init: At 3FFB7AE8 len 00028518 (161 KiB): DRAM[0m
+[0;32mI (570) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (577) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (583) heap_init: At 40096FA0 len 00009060 (36 KiB): IRAM[0m
+[0;32mI (591) spi_flash: detected chip: generic[0m
+[0;32mI (594) spi_flash: flash io: dio[0m
+[0;33mW (598) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (612) app_start: Starting scheduler on CPU0[0m
+[0;32mI[0;32mI (616) app_start: Starting scheduler on CPU1[0m
+ (616) main_task: Started on CPU0[0m
+[0;32mI (626) main_task: Calling app_main()[0m
+Hello world!
+This is esp32 chip with 2 CPU core(s), WiFi/BT/BLE, silicon revision v1.0, 2MB external flash
+Minimum free heap size: 277748 bytes
+I (676) wifi:wifi driver task: 3ffc0498, prio:23, stack:6656, core=0
+[0;32mI (676) system_api: Base MAC address is not set[0m
+[0;32mI (676) system_api: read default base MAC address from EFUSE[0m
+I (696) wifi:wifi firmware version: e2d0ad8
+I (696) wifi:wifi certification version: v7.0
+I (696) wifi:config NVS flash: enabled
+I (696) wifi:config nano formating: disabled
+I (696) wifi:Init data frame dynamic rx buffer num: 32
+I (706) wifi:Init management frame dynamic rx buffer num: 32
+I (706) wifi:Init management short buffer num: 32
+I (716) wifi:Init dynamic tx buffer num: 32
+I (716) wifi:Init static rx buffer size: 1600
+I (726) wifi:Init static rx buffer num: 10
+I (726) wifi:Init dynamic rx buffer num: 32
+[0;32mI (736) wifi_init: rx ba win: 6[0m
+[0;32mI (736) wifi_init: tcpip mbox: 32[0m
+[0;32mI (736) wifi_init: udp mbox: 6[0m
+[0;32mI (746) wifi_init: tcp mbox: 6[0m
+[0;32mI (746) wifi_init: tcp tx win: 5744[0m
+[0;32mI (746) wifi_init: tcp rx win: 5744[0m
+[0;32mI (756) wifi_init: tcp mss: 1440[0m
+[0;32mI (756) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (766) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (766) phy_init: phy_version 4771,450c73b,Aug 16 2023,11:03:10[0m
+I (866) wifi:mode : sta (ec:62:60:b2:ef:20)
+I (866) wifi:enable tsf
+[0;32mI (866) demo: wifi_init_sta finished.[0m
+[0;32mI (3286) demo: retry to connect to the AP[0m
+[0;32mI (5286) demo: connect to the AP fail[0m
+[0;32mI (5696) demo: retry to connect to the AP[0m
+[0;32mI (7696) demo: connect to the AP fail[0m
+[0;32mI (8106) demo: retry to connect to the AP[0m
+[0;32mI (10106) demo: connect to the AP fail[0m
+[0;32mI (10516) demo: retry to connect to the AP[0m
+[0;32mI (12516) demo: connect to the AP fail[0m
+[0;32mI (12936) demo: retry to connect to the AP[0m
+[0;32mI (14936) demo: connect to the AP fail[0m
+[0;32mI (15346) demo: connect to the AP fail[0m
+[0;32mI (15346) demo: Failed to connect to SSID:TAMU_IoT, password:[0m
+[0;32mI (23356) demo: MPU6050 sensor detected.[0m
+[0;32mI (23386) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.036621, y = 0.051270, z = 1.499512 g
+Rotation: x = 498.625946, y = 0.961832, z = 0.541985 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94945.82 Pa
+Temperature: 24.91 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:00:28.666"],
+	"user_id":	[287423],
+	"a_x":	[0.03662109375],
+	"a_y":	[0.05126953125],
+	"a_z":	[1.49951171875],
+	"r_x":	[498.62594604492188],
+	"r_y":	[0.961832046508789],
+	"r_z":	[0.541984736919403],
+	"temperature":	[24.909999847412109],
+	"pressure":	[94945.8203125]
+}
+[0;31mE (28536) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (28546) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (28546) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.034180, y = 0.037598, z = 1.503418 g
+Rotation: x = 498.549622, y = 0.908397, z = 0.580153 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94943.24 Pa
+Temperature: 24.91 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:00:33.846"],
+	"user_id":	[287423],
+	"a_x":	[0.0341796875],
+	"a_y":	[0.03759765625],
+	"a_z":	[1.50341796875],
+	"r_x":	[498.54962158203125],
+	"r_y":	[0.90839695930480957],
+	"r_z":	[0.580152690410614],
+	"temperature":	[24.909999847412109],
+	"pressure":	[94943.2421875]
+}
+[0;31mE (33716) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (33726) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (33726) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.050781, y = 0.057617, z = 1.511719 g
+Rotation: x = 498.625946, y = 0.740458, z = 0.603053 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94943.24 Pa
+Temperature: 24.93 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:00:38.026"],
+	"user_id":	[287423],
+	"a_x":	[0.05078125],
+	"a_y":	[0.0576171875],
+	"a_z":	[1.51171875],
+	"r_x":	[498.62594604492188],
+	"r_y":	[0.74045801162719727],
+	"r_z":	[0.60305345058441162],
+	"temperature":	[24.930000305175781],
+	"pressure":	[94943.2421875]
+}
+[0;31mE (38896) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (38906) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (38906) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.093750, y = 0.041992, z = 1.492188 g
+Rotation: x = 498.229004, y = 1.633588, z = 0.435115 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94940.66 Pa
+Temperature: 24.93 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:00:43.206"],
+	"user_id":	[287423],
+	"a_x":	[0.09375],
+	"a_y":	[0.0419921875],
+	"a_z":	[1.4921875],
+	"r_x":	[498.22900390625],
+	"r_y":	[1.6335878372192383],
+	"r_z":	[0.43511450290679932],
+	"temperature":	[24.930000305175781],
+	"pressure":	[94940.65625]
+}
+[0;31mE (44066) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (44086) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (44086) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.044922, y = 0.048340, z = 1.539551 g
+Rotation: x = 498.641235, y = 1.045802, z = 0.534351 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94940.66 Pa
+Temperature: 24.94 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:00:48.376"],
+	"user_id":	[287423],
+	"a_x":	[0.044921875],
+	"a_y":	[0.04833984375],
+	"a_z":	[1.53955078125],
+	"r_x":	[498.6412353515625],
+	"r_y":	[1.0458015203475952],
+	"r_z":	[0.5343511700630188],
+	"temperature":	[24.940000534057617],
+	"pressure":	[94940.65625]
+}
+[0;31mE (49246) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (49256) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (49256) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.046387, y = 0.043457, z = 1.500977 g
+Rotation: x = 498.610687, y = 0.847328, z = 0.587786 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94938.08 Pa
+Temperature: 24.95 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:00:53.556"],
+	"user_id":	[287423],
+	"a_x":	[0.04638671875],
+	"a_y":	[0.04345703125],
+	"a_z":	[1.5009765625],
+	"r_x":	[498.61068725585938],
+	"r_y":	[0.847328245639801],
+	"r_z":	[0.58778625726699829],
+	"temperature":	[24.950000762939453],
+	"pressure":	[94938.078125]
+}
+[0;31mE (54426) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (54436) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (54436) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.062988, y = 0.055176, z = 1.506836 g
+Rotation: x = 498.839691, y = 0.519084, z = 0.549618 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94938.08 Pa
+Temperature: 24.96 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:00:59.736"],
+	"user_id":	[287423],
+	"a_x":	[0.06298828125],
+	"a_y":	[0.05517578125],
+	"a_z":	[1.5068359375],
+	"r_x":	[498.83969116210938],
+	"r_y":	[0.51908397674560547],
+	"r_z":	[0.54961830377578735],
+	"temperature":	[24.959999084472656],
+	"pressure":	[94938.078125]
+}
+[0;31mE (59606) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (59616) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (59616) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.046387, y = 0.053223, z = 1.505859 g
+Rotation: x = 498.549622, y = 0.801527, z = 0.656489 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94935.50 Pa
+Temperature: 24.97 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:01:04.916"],
+	"user_id":	[287423],
+	"a_x":	[0.04638671875],
+	"a_y":	[0.05322265625],
+	"a_z":	[1.505859375],
+	"r_x":	[498.54962158203125],
+	"r_y":	[0.80152672529220581],
+	"r_z":	[0.656488537788391],
+	"temperature":	[24.969999313354492],
+	"pressure":	[94935.5]
+}
+[0;31mE (64786) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (64796) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (64796) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.037109, y = 0.048340, z = 1.502441 g
+Rotation: x = 498.709930, y = 0.916031, z = 0.618321 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94935.50 Pa
+Temperature: 24.99 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:01:09.096"],
+	"user_id":	[287423],
+	"a_x":	[0.037109375],
+	"a_y":	[0.04833984375],
+	"a_z":	[1.50244140625],
+	"r_x":	[498.70993041992188],
+	"r_y":	[0.916030526161194],
+	"r_z":	[0.61832058429718018],
+	"temperature":	[24.989999771118164],
+	"pressure":	[94935.5]
+}
+[0;31mE (69966) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (69976) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (69976) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.052734, y = 0.033203, z = 1.508789 g
+Rotation: x = 497.977112, y = 1.541985, z = 0.496183 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94932.92 Pa
+Temperature: 25.00 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:01:14.276"],
+	"user_id":	[287423],
+	"a_x":	[0.052734375],
+	"a_y":	[0.033203125],
+	"a_z":	[1.5087890625],
+	"r_x":	[497.97711181640625],
+	"r_y":	[1.5419846773147583],
+	"r_z":	[0.49618321657180786],
+	"temperature":	[25],
+	"pressure":	[94932.921875]
+}
+[0;31mE (75136) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (75156) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (75156) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.060547, y = 0.065918, z = 1.521973 g
+Rotation: x = 498.809174, y = 0.664122, z = 0.488550 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94930.34 Pa
+Temperature: 25.01 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:01:19.446"],
+	"user_id":	[287423],
+	"a_x":	[0.060546875],
+	"a_y":	[0.06591796875],
+	"a_z":	[1.52197265625],
+	"r_x":	[498.80917358398438],
+	"r_y":	[0.66412216424942],
+	"r_z":	[0.4885496199131012],
+	"temperature":	[25.010000228881836],
+	"pressure":	[94930.34375]
+}
+[0;31mE (80316) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (80326) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (80326) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.043457, y = 0.046875, z = 1.524902 g
+Rotation: x = 498.725189, y = 0.893130, z = 0.511450 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94927.77 Pa
+Temperature: 25.03 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:01:24.626"],
+	"user_id":	[287423],
+	"a_x":	[0.04345703125],
+	"a_y":	[0.046875],
+	"a_z":	[1.52490234375],
+	"r_x":	[498.72518920898438],
+	"r_y":	[0.89312976598739624],
+	"r_z":	[0.51145040988922119],
+	"temperature":	[25.030000686645508],
+	"pressure":	[94927.765625]
+}
+[0;31mE (85496) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (85506) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (85506) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.051270, y = 0.049316, z = 1.521484 g
+Rotation: x = 498.572510, y = 0.816794, z = 0.633588 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94925.18 Pa
+Temperature: 25.04 degrees Celsius
+Observation 0: Pa = 94945.820312, Z_rot = 0.541985, Z_acc = 1.499512, Y_acc = 0.051270
+Observation 1: Pa = 94943.242188, Z_rot = 0.580153, Z_acc = 1.503418, Y_acc = 0.037598
+Observation 2: Pa = 94943.242188, Z_rot = 0.603053, Z_acc = 1.511719, Y_acc = 0.057617
+Observation 3: Pa = 94940.656250, Z_rot = 0.435115, Z_acc = 1.492188, Y_acc = 0.041992
+Observation 4: Pa = 94940.656250, Z_rot = 0.534351, Z_acc = 1.539551, Y_acc = 0.048340
+Observation 5: Pa = 94938.078125, Z_rot = 0.587786, Z_acc = 1.500977, Y_acc = 0.043457
+Observation 6: Pa = 94938.078125, Z_rot = 0.549618, Z_acc = 1.506836, Y_acc = 0.055176
+Observation 7: Pa = 94935.500000, Z_rot = 0.656489, Z_acc = 1.505859, Y_acc = 0.053223
+Observation 8: Pa = 94935.500000, Z_rot = 0.618321, Z_acc = 1.502441, Y_acc = 0.048340
+Observation 9: Pa = 94932.921875, Z_rot = 0.496183, Z_acc = 1.508789, Y_acc = 0.033203
+Observation 10: Pa = 94930.343750, Z_rot = 0.488550, Z_acc = 1.521973, Y_acc = 0.065918
+Observation 11: Pa = 94927.765625, Z_rot = 0.511450, Z_acc = 1.524902, Y_acc = 0.046875
+Metrics: Pa_roc = 9.937514, Z_rot_max_min = -114696.031250, Z_g_max = 0.000000, Z_g_min = -682826718511104.000000, Y_g_kurtosis = 1.971607
+{
+	"my_timestamp":	["1969-12-31 18:01:30.806"],
+	"user_id":	[287423],
+	"a_x":	[0.05126953125],
+	"a_y":	[0.04931640625],
+	"a_z":	[1.521484375],
+	"r_x":	[498.572509765625],
+	"r_y":	[0.816793918609619],
+	"r_z":	[0.63358777761459351],
+	"temperature":	[25.040000915527344],
+	"pressure":	[94925.1796875]
+}
+[0;31mE (90776) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (90786) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (90796) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.059082, y = 0.051758, z = 1.501465 g
+Rotation: x = 498.473297, y = 1.083969, z = 0.496183 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94925.18 Pa
+Temperature: 25.06 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:01:35.086"],
+	"user_id":	[287423],
+	"a_x":	[0.05908203125],
+	"a_y":	[0.0517578125],
+	"a_z":	[1.50146484375],
+	"r_x":	[498.47329711914062],
+	"r_y":	[1.0839694738388062],
+	"r_z":	[0.49618321657180786],
+	"temperature":	[25.059999465942383],
+	"pressure":	[94925.1796875]
+}
+[0;31mE (95956) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (95966) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (95966) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.049316, y = 0.048340, z = 1.483398 g
+Rotation: x = 498.809174, y = 0.763359, z = 0.427481 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94922.59 Pa
+Temperature: 25.07 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:01:40.266"],
+	"user_id":	[287423],
+	"a_x":	[0.04931640625],
+	"a_y":	[0.04833984375],
+	"a_z":	[1.4833984375],
+	"r_x":	[498.80917358398438],
+	"r_y":	[0.763358771800995],
+	"r_z":	[0.42748090624809265],
+	"temperature":	[25.069999694824219],
+	"pressure":	[94922.59375]
+}
+[0;31mE (101136) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (101146) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (101146) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.044434, y = 0.043945, z = 1.518066 g
+Rotation: x = 498.687012, y = 0.916031, z = 0.519084 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94922.59 Pa
+Temperature: 25.08 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:01:45.446"],
+	"user_id":	[287423],
+	"a_x":	[0.04443359375],
+	"a_y":	[0.0439453125],
+	"a_z":	[1.51806640625],
+	"r_x":	[498.68701171875],
+	"r_y":	[0.916030526161194],
+	"r_z":	[0.51908397674560547],
+	"temperature":	[25.079999923706055],
+	"pressure":	[94922.59375]
+}
+[0;31mE (106316) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (106326) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (106326) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.046387, y = 0.049805, z = 1.511719 g
+Rotation: x = 498.748077, y = 0.938931, z = 0.450382 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94920.02 Pa
+Temperature: 25.09 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:01:50.626"],
+	"user_id":	[287423],
+	"a_x":	[0.04638671875],
+	"a_y":	[0.0498046875],
+	"a_z":	[1.51171875],
+	"r_x":	[498.74807739257812],
+	"r_y":	[0.93893128633499146],
+	"r_z":	[0.45038166642189026],
+	"temperature":	[25.090000152587891],
+	"pressure":	[94920.015625]
+}
+[0;31mE (111496) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (111506) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (111506) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.036621, y = 0.048340, z = 1.528809 g
+Rotation: x = 498.725189, y = 0.625954, z = 0.625954 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94917.44 Pa
+Temperature: 25.11 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:01:56.806"],
+	"user_id":	[287423],
+	"a_x":	[0.03662109375],
+	"a_y":	[0.04833984375],
+	"a_z":	[1.52880859375],
+	"r_x":	[498.72518920898438],
+	"r_y":	[0.62595421075820923],
+	"r_z":	[0.62595421075820923],
+	"temperature":	[25.110000610351562],
+	"pressure":	[94917.4375]
+}
+[0;31mE (116676) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (116686) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (116686) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.038574, y = 0.047363, z = 1.543457 g
+Rotation: x = 498.519073, y = 1.114504, z = 0.496183 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94914.86 Pa
+Temperature: 25.12 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:02:01.986"],
+	"user_id":	[287423],
+	"a_x":	[0.03857421875],
+	"a_y":	[0.04736328125],
+	"a_z":	[1.54345703125],
+	"r_x":	[498.51907348632812],
+	"r_y":	[1.1145038604736328],
+	"r_z":	[0.49618321657180786],
+	"temperature":	[25.1200008392334],
+	"pressure":	[94914.859375]
+}
+[0;31mE (121856) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (121866) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (121866) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.056641, y = 0.052734, z = 1.506348 g
+Rotation: x = 498.633575, y = 1.145038, z = 0.488550 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94912.28 Pa
+Temperature: 25.13 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:02:06.166"],
+	"user_id":	[287423],
+	"a_x":	[0.056640625],
+	"a_y":	[0.052734375],
+	"a_z":	[1.50634765625],
+	"r_x":	[498.63357543945312],
+	"r_y":	[1.14503812789917],
+	"r_z":	[0.4885496199131012],
+	"temperature":	[25.1299991607666],
+	"pressure":	[94912.28125]
+}
+[0;31mE (127036) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (127046) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (127046) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.049805, y = 0.057617, z = 1.487793 g
+Rotation: x = 498.374054, y = 1.396947, z = 0.580153 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94909.70 Pa
+Temperature: 25.14 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:02:11.346"],
+	"user_id":	[287423],
+	"a_x":	[0.0498046875],
+	"a_y":	[0.0576171875],
+	"a_z":	[1.48779296875],
+	"r_x":	[498.37405395507812],
+	"r_y":	[1.3969465494155884],
+	"r_z":	[0.580152690410614],
+	"temperature":	[25.139999389648438],
+	"pressure":	[94909.703125]
+}
+[0;31mE (132216) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (132226) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (132226) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.049805, y = 0.041504, z = 1.517090 g
+Rotation: x = 498.770996, y = 0.832061, z = 0.580153 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94909.70 Pa
+Temperature: 25.15 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:02:16.526"],
+	"user_id":	[287423],
+	"a_x":	[0.0498046875],
+	"a_y":	[0.04150390625],
+	"a_z":	[1.51708984375],
+	"r_x":	[498.77099609375],
+	"r_y":	[0.8320610523223877],
+	"r_z":	[0.580152690410614],
+	"temperature":	[25.149999618530273],
+	"pressure":	[94909.703125]
+}
+[0;31mE (137396) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (137406) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (137406) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.047852, y = 0.052734, z = 1.493164 g
+Rotation: x = 498.687012, y = 0.709924, z = 0.503817 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94909.70 Pa
+Temperature: 25.16 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:02:22.706"],
+	"user_id":	[287423],
+	"a_x":	[0.0478515625],
+	"a_y":	[0.052734375],
+	"a_z":	[1.4931640625],
+	"r_x":	[498.68701171875],
+	"r_y":	[0.70992368459701538],
+	"r_z":	[0.503816783428192],
+	"temperature":	[25.159999847412109],
+	"pressure":	[94909.703125]
+}
+[0;31mE (142576) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (142586) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (142586) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.043945, y = 0.051758, z = 1.528809 g
+Rotation: x = 498.687012, y = 0.770992, z = 0.656489 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94907.12 Pa
+Temperature: 25.17 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:02:27.886"],
+	"user_id":	[287423],
+	"a_x":	[0.0439453125],
+	"a_y":	[0.0517578125],
+	"a_z":	[1.52880859375],
+	"r_x":	[498.68701171875],
+	"r_y":	[0.770992338657379],
+	"r_z":	[0.656488537788391],
+	"temperature":	[25.170000076293945],
+	"pressure":	[94907.1171875]
+}
+[0;31mE (147756) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (147766) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (147766) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.022949, y = 0.058594, z = 1.504883 g
+Rotation: x = 498.625946, y = 0.732824, z = 0.656489 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94904.54 Pa
+Temperature: 25.18 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:02:32.066"],
+	"user_id":	[287423],
+	"a_x":	[0.02294921875],
+	"a_y":	[0.05859375],
+	"a_z":	[1.5048828125],
+	"r_x":	[498.62594604492188],
+	"r_y":	[0.732824444770813],
+	"r_z":	[0.656488537788391],
+	"temperature":	[25.180000305175781],
+	"pressure":	[94904.5390625]
+}
+[0;31mE (152936) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (152946) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (152946) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.061035, y = 0.033691, z = 1.478516 g
+Rotation: x = 498.419861, y = 0.977099, z = 0.648855 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94901.95 Pa
+Temperature: 25.19 degrees Celsius
+Observation 0: Pa = 94925.179688, Z_rot = 0.496183, Z_acc = 1.501465, Y_acc = 0.051758
+Observation 1: Pa = 94922.593750, Z_rot = 0.427481, Z_acc = 1.483398, Y_acc = 0.048340
+Observation 2: Pa = 94922.593750, Z_rot = 0.519084, Z_acc = 1.518066, Y_acc = 0.043945
+Observation 3: Pa = 94920.015625, Z_rot = 0.450382, Z_acc = 1.511719, Y_acc = 0.049805
+Observation 4: Pa = 94917.437500, Z_rot = 0.625954, Z_acc = 1.528809, Y_acc = 0.048340
+Observation 5: Pa = 94914.859375, Z_rot = 0.496183, Z_acc = 1.543457, Y_acc = 0.047363
+Observation 6: Pa = 94912.281250, Z_rot = 0.488550, Z_acc = 1.506348, Y_acc = 0.052734
+Observation 7: Pa = 94909.703125, Z_rot = 0.580153, Z_acc = 1.487793, Y_acc = 0.057617
+Observation 8: Pa = 94909.703125, Z_rot = 0.580153, Z_acc = 1.517090, Y_acc = 0.041504
+Observation 9: Pa = 94909.703125, Z_rot = 0.503817, Z_acc = 1.493164, Y_acc = 0.052734
+Observation 10: Pa = 94907.117188, Z_rot = 0.656489, Z_acc = 1.528809, Y_acc = 0.051758
+Observation 11: Pa = 94904.539062, Z_rot = 0.656489, Z_acc = 1.504883, Y_acc = 0.058594
+Metrics: Pa_roc = 0.000000, Z_rot_max_min = 0.000000, Z_g_max = 1.312500, Z_g_min = 0.000000, Y_g_kurtosis = 1.972076
+{
+	"my_timestamp":	["1969-12-31 18:02:37.246"],
+	"user_id":	[287423],
+	"a_x":	[0.06103515625],
+	"a_y":	[0.03369140625],
+	"a_z":	[1.478515625],
+	"r_x":	[498.41986083984375],
+	"r_y":	[0.97709923982620239],
+	"r_z":	[0.648854970932007],
+	"temperature":	[25.190000534057617],
+	"pressure":	[94901.953125]
+}
+[0;31mE (158216) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (158226) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (158236) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.052734, y = 0.036133, z = 1.505859 g
+Rotation: x = 498.511444, y = 0.755725, z = 0.664122 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94901.95 Pa
+Temperature: 25.20 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:02:42.526"],
+	"user_id":	[287423],
+	"a_x":	[0.052734375],
+	"a_y":	[0.0361328125],
+	"a_z":	[1.505859375],
+	"r_x":	[498.51144409179688],
+	"r_y":	[0.7557252049446106],
+	"r_z":	[0.66412216424942],
+	"temperature":	[25.200000762939453],
+	"pressure":	[94901.953125]
+}
+[0;31mE (163396) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (163406) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (163406) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.062988, y = 0.053223, z = 1.498535 g
+Rotation: x = 498.870239, y = 0.709924, z = 0.557252 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 94901.95 Pa
+Temperature: 25.21 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:02:48.706"],
+	"user_id":	[287423],
+	"a_x":	[0.06298828125],
+	"a_y":	[0.05322265625],
+	"a_z":	[1.49853515625],
+	"r_x":	[498.8702392578125],
+	"r_y":	[0.70992368459701538],
+	"r_z":	[0.55725193023681641],
+	"temperature":	[25.209999084472656],
+	"pressure":	[94901.953125]
+}
+[0;31mE (168576) esp-tls: couldn't get hostname for :i-want-to-pass-capstone-96abfc16411c.herokuapp.com: getaddrinfo() returns 202, addrinfo=0x0[0m
+[0;31mE (168586) transport_base: Failed to open a new connection: 32769[0m
+[0;31mE (168586) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.042480, y = 0.052246, z = 1.506348 g
+Rotation: x = 498.687012, y = 1.114504, z = 0.610687 degrees/sec
+BMP280 is connected.

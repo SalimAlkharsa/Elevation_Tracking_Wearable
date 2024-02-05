@@ -1,0 +1,546 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6984
+load:0x40078000,len:15512
+load:0x40080400,len:3864
+entry 0x40080650
+[0;32mI (27) boot: ESP-IDF v5.0.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time 10:12:17[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v1.0[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (48) boot: Enabling RNG early entropy source...[0m
+[0;32mI (53) boot: Partition Table:[0m
+[0;32mI (57) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (64) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (71) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (79) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (86) boot: End of partition table[0m
+[0;32mI (91) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=3677ch (223100) map[0m
+[0;32mI (180) esp_image: segment 1: paddr=000467a4 vaddr=3ffb0000 size=03538h ( 13624) load[0m
+[0;32mI (185) esp_image: segment 2: paddr=00049ce4 vaddr=40080000 size=06334h ( 25396) load[0m
+[0;32mI (196) esp_image: segment 3: paddr=00050020 vaddr=400d0020 size=a111ch (659740) map[0m
+[0;32mI (435) esp_image: segment 4: paddr=000f1144 vaddr=40086334 size=10c6ch ( 68716) load[0m
+[0;32mI (474) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (475) boot: Disabling RNG early entropy source...[0m
+[0;32mI (486) cpu_start: Multicore app[0m
+[0;32mI (486) cpu_start: Pro cpu up.[0m
+[0;32mI (486) cpu_start: Starting app cpu, entry point is 0x40081444[0m
+[0;32mI (0) cpu_start: App cpu up.[0m
+[0;32mI (504) cpu_start: Pro cpu start user code[0m
+[0;32mI (504) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (504) cpu_start: Application information:[0m
+[0;32mI (509) cpu_start: Project name:     project_name[0m
+[0;32mI (514) cpu_start: App version:      1[0m
+[0;32mI (519) cpu_start: Compile time:     Jan 30 2024 10:10:19[0m
+[0;32mI (525) cpu_start: ELF file SHA256:  792b0d3b65fa5520...[0m
+[0;32mI (531) cpu_start: ESP-IDF:          v5.0.4[0m
+[0;32mI (536) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (540) cpu_start: Max chip rev:     v3.99 [0m
+[0;32mI (545) cpu_start: Chip rev:         v1.0[0m
+[0;32mI (550) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (557) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (563) heap_init: At 3FFB7AE8 len 00028518 (161 KiB): DRAM[0m
+[0;32mI (570) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (576) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (582) heap_init: At 40096FA0 len 00009060 (36 KiB): IRAM[0m
+[0;32mI (590) spi_flash: detected chip: generic[0m
+[0;32mI (593) spi_flash: flash io: dio[0m
+[0;33mW (597) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (612) app_start: Starting scheduler on CPU0[0m
+[0;32m[0;32mI (615) app_start: Starting scheduler on CPU1[0m
+I (615) main_task: Started on CPU0[0m
+[0;32mI (625) main_task: Calling app_main()[0m
+Hello world!
+This is esp32 chip with 2 CPU core(s), WiFi/BT/BLE, silicon revision v1.0, 2MB external flash
+Minimum free heap size: 277748 bytes
+I (675) wifi:wifi driver task: 3ffc0498, prio:23, stack:6656, core=0
+[0;32mI (675) system_api: Base MAC address is not set[0m
+[0;32mI (675) system_api: read default base MAC address from EFUSE[0m
+I (695) wifi:wifi firmware version: e2d0ad8
+I (695) wifi:wifi certification version: v7.0
+I (695) wifi:config NVS flash: enabled
+I (695) wifi:config nano formating: disabled
+I (695) wifi:Init data frame dynamic rx buffer num: 32
+I (705) wifi:Init management frame dynamic rx buffer num: 32
+I (705) wifi:Init management short buffer num: 32
+I (715) wifi:Init dynamic tx buffer num: 32
+I (715) wifi:Init static rx buffer size: 1600
+I (725) wifi:Init static rx buffer num: 10
+I (725) wifi:Init dynamic rx buffer num: 32
+[0;32mI (735) wifi_init: rx ba win: 6[0m
+[0;32mI (735) wifi_init: tcpip mbox: 32[0m
+[0;32mI (735) wifi_init: udp mbox: 6[0m
+[0;32mI (745) wifi_init: tcp mbox: 6[0m
+[0;32mI (745) wifi_init: tcp tx win: 5744[0m
+[0;32mI (745) wifi_init: tcp rx win: 5744[0m
+[0;32mI (755) wifi_init: tcp mss: 1440[0m
+[0;32mI (755) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (765) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (765) phy_init: phy_version 4771,450c73b,Aug 16 2023,11:03:10[0m
+I (855) wifi:mode : sta (ec:62:60:b2:ef:20)
+I (865) wifi:enable tsf
+[0;32mI (865) demo: wifi_init_sta finished.[0m
+I (875) wifi:new:<6,0>, old:<1,0>, ap:<255,255>, sta:<6,0>, prof:1
+I (885) wifi:state: init -> auth (b0)
+I (895) wifi:state: auth -> assoc (0)
+I (925) wifi:state: assoc -> run (10)
+I (925) wifi:connected with TAMU_IoT, aid = 1, channel 6, BW20, bssid = dc:b7:ac:a3:51:e2
+I (925) wifi:security: Open Auth, phy: bgn, rssi: -59
+I (935) wifi:pm start, type: 1
+
+I (975) wifi:AP's beacon interval = 102400 us, DTIM period = 1
+I (2835) wifi:<ba-add>idx:0 (ifx:0, dc:b7:ac:a3:51:e2), tid:0, ssn:0, winSize:64
+I (2845) wifi:<ba-add>idx:1 (ifx:0, dc:b7:ac:a3:51:e2), tid:6, ssn:0, winSize:64
+[0;32mI (4435) esp_netif_handlers: sta ip: 10.224.242.218, mask: 255.255.0.0, gw: 10.224.0.1[0m
+[0;32mI (4435) demo: got ip:10.224.242.218[0m
+[0;32mI (4435) demo: connected to ap SSID:TAMU_IoT password:[0m
+[0;32mI (12455) demo: MPU6050 sensor detected.[0m
+[0;32mI (12485) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.136230, y = 0.012695, z = 1.502441 g
+Rotation: x = 498.625946, y = 0.786260, z = 0.610687 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97323.14 Pa
+Temperature: 25.02 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:00:17.677"],
+	"user_id":	[287423],
+	"a_x":	[0.13623046875],
+	"a_y":	[0.0126953125],
+	"a_z":	[1.50244140625],
+	"r_x":	[498.62594604492188],
+	"r_y":	[0.78625953197479248],
+	"r_z":	[0.610687017440796],
+	"temperature":	[25.020000457763672],
+	"pressure":	[97323.140625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.126465, y = 0.012207, z = 1.524414 g
+Rotation: x = 498.625946, y = 0.961832, z = 0.648855 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97320.56 Pa
+Temperature: 25.03 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:00:23.907"],
+	"user_id":	[287423],
+	"a_x":	[0.12646484375],
+	"a_y":	[0.01220703125],
+	"a_z":	[1.5244140625],
+	"r_x":	[498.62594604492188],
+	"r_y":	[0.961832046508789],
+	"r_z":	[0.648854970932007],
+	"temperature":	[25.030000686645508],
+	"pressure":	[97320.5625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.161621, y = 7.998047, z = 1.549805 g
+Rotation: x = 499.572510, y = 3.129771, z = 0.717557 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97320.56 Pa
+Temperature: 25.04 degrees Celsius
+{
+	"my_timestamp":	["1969-12-31 18:00:30.767"],
+	"user_id":	[287423],
+	"a_x":	[0.16162109375],
+	"a_y":	[7.998046875],
+	"a_z":	[1.5498046875],
+	"r_x":	[499.572509765625],
+	"r_y":	[3.1297709941864014],
+	"r_z":	[0.71755725145339966],
+	"temperature":	[25.040000915527344],
+	"pressure":	[97320.5625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.129883, y = 0.023438, z = 1.523438 g
+Rotation: x = 498.625946, y = 0.603053, z = 0.709924 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97317.98 Pa
+Temperature: 25.05 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:50:19.556"],
+	"user_id":	[287423],
+	"a_x":	[0.1298828125],
+	"a_y":	[0.0234375],
+	"a_z":	[1.5234375],
+	"r_x":	[498.62594604492188],
+	"r_y":	[0.60305345058441162],
+	"r_z":	[0.70992368459701538],
+	"temperature":	[25.049999237060547],
+	"pressure":	[97317.984375]
+}
+MPU6050 is connected.
+Acceleration: x = 0.134766, y = 0.025879, z = 1.491699 g
+Rotation: x = 498.610687, y = 0.786260, z = 0.702290 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97317.98 Pa
+Temperature: 25.05 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:50:24.385"],
+	"user_id":	[287423],
+	"a_x":	[0.134765625],
+	"a_y":	[0.02587890625],
+	"a_z":	[1.49169921875],
+	"r_x":	[498.61068725585938],
+	"r_y":	[0.78625953197479248],
+	"r_z":	[0.70229005813598633],
+	"temperature":	[25.049999237060547],
+	"pressure":	[97317.984375]
+}
+MPU6050 is connected.
+Acceleration: x = 0.131836, y = 0.006836, z = 1.519531 g
+Rotation: x = 498.488556, y = 1.061069, z = 0.679389 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97320.56 Pa
+Temperature: 25.04 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:50:30.215"],
+	"user_id":	[287423],
+	"a_x":	[0.1318359375],
+	"a_y":	[0.0068359375],
+	"a_z":	[1.51953125],
+	"r_x":	[498.48855590820312],
+	"r_y":	[1.0610686540603638],
+	"r_z":	[0.67938929796218872],
+	"temperature":	[25.040000915527344],
+	"pressure":	[97320.5625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.156738, y = 0.011719, z = 1.436035 g
+Rotation: x = 496.854950, y = 496.244263, z = 0.595420 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97320.56 Pa
+Temperature: 25.03 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:50:36.145"],
+	"user_id":	[287423],
+	"a_x":	[0.15673828125],
+	"a_y":	[0.01171875],
+	"a_z":	[1.43603515625],
+	"r_x":	[496.85494995117188],
+	"r_y":	[496.2442626953125],
+	"r_z":	[0.59541982412338257],
+	"temperature":	[25.030000686645508],
+	"pressure":	[97320.5625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.195801, y = 7.993164, z = 1.501465 g
+Rotation: x = 498.664124, y = 0.923664, z = 1.213740 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97320.56 Pa
+Temperature: 25.02 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:50:42.986"],
+	"user_id":	[287423],
+	"a_x":	[0.19580078125],
+	"a_y":	[7.9931640625],
+	"a_z":	[1.50146484375],
+	"r_x":	[498.66412353515625],
+	"r_y":	[0.923664093017578],
+	"r_z":	[1.2137404680252075],
+	"temperature":	[25.020000457763672],
+	"pressure":	[97320.5625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.114746, y = 0.022461, z = 1.484375 g
+Rotation: x = 498.824432, y = 0.954198, z = 0.732824 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97323.14 Pa
+Temperature: 25.01 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:50:48.835"],
+	"user_id":	[287423],
+	"a_x":	[0.11474609375],
+	"a_y":	[0.0224609375],
+	"a_z":	[1.484375],
+	"r_x":	[498.82443237304688],
+	"r_y":	[0.95419847965240479],
+	"r_z":	[0.732824444770813],
+	"temperature":	[25.010000228881836],
+	"pressure":	[97323.140625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.135254, y = 0.020020, z = 1.507812 g
+Rotation: x = 498.625946, y = 1.122137, z = 0.641221 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97323.14 Pa
+Temperature: 25.00 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:50:54.895"],
+	"user_id":	[287423],
+	"a_x":	[0.13525390625],
+	"a_y":	[0.02001953125],
+	"a_z":	[1.5078125],
+	"r_x":	[498.62594604492188],
+	"r_y":	[1.1221374273300171],
+	"r_z":	[0.64122134447097778],
+	"temperature":	[25],
+	"pressure":	[97323.140625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.054688, y = 0.031738, z = 1.291016 g
+Rotation: x = 496.679382, y = 497.679382, z = 0.671756 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97325.72 Pa
+Temperature: 24.99 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:51:00.105"],
+	"user_id":	[287423],
+	"a_x":	[0.0546875],
+	"a_y":	[0.03173828125],
+	"a_z":	[1.291015625],
+	"r_x":	[496.67938232421875],
+	"r_y":	[497.67938232421875],
+	"r_z":	[0.67175573110580444],
+	"temperature":	[24.989999771118164],
+	"pressure":	[97325.71875]
+}
+MPU6050 is connected.
+Acceleration: x = 0.133789, y = 0.002441, z = 1.519531 g
+Rotation: x = 498.671753, y = 1.152672, z = 0.709924 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97325.72 Pa
+Temperature: 24.99 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:51:06.275"],
+	"user_id":	[287423],
+	"a_x":	[0.1337890625],
+	"a_y":	[0.00244140625],
+	"a_z":	[1.51953125],
+	"r_x":	[498.6717529296875],
+	"r_y":	[1.1526718139648438],
+	"r_z":	[0.70992368459701538],
+	"temperature":	[24.989999771118164],
+	"pressure":	[97325.71875]
+}
+MPU6050 is connected.
+Acceleration: x = 0.154785, y = 0.008301, z = 1.503418 g
+Rotation: x = 498.450378, y = 0.572519, z = 0.641221 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97325.72 Pa
+Temperature: 24.99 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:51:12.195"],
+	"user_id":	[287423],
+	"a_x":	[0.15478515625],
+	"a_y":	[0.00830078125],
+	"a_z":	[1.50341796875],
+	"r_x":	[498.45037841796875],
+	"r_y":	[0.572519063949585],
+	"r_z":	[0.64122134447097778],
+	"temperature":	[24.989999771118164],
+	"pressure":	[97325.71875]
+}
+MPU6050 is connected.
+Acceleration: x = 0.134277, y = 7.994629, z = 1.512207 g
+Rotation: x = 498.511444, y = 0.633588, z = 0.595420 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97325.72 Pa
+Temperature: 24.99 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:51:18.035"],
+	"user_id":	[287423],
+	"a_x":	[0.13427734375],
+	"a_y":	[7.99462890625],
+	"a_z":	[1.51220703125],
+	"r_x":	[498.51144409179688],
+	"r_y":	[0.63358777761459351],
+	"r_z":	[0.59541982412338257],
+	"temperature":	[24.989999771118164],
+	"pressure":	[97325.71875]
+}
+MPU6050 is connected.
+Acceleration: x = 0.171875, y = 0.000488, z = 1.531738 g
+Rotation: x = 497.503815, y = 497.839691, z = 0.633588 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97325.72 Pa
+Temperature: 25.00 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:51:24.865"],
+	"user_id":	[287423],
+	"a_x":	[0.171875],
+	"a_y":	[0.00048828125],
+	"a_z":	[1.53173828125],
+	"r_x":	[497.50381469726562],
+	"r_y":	[497.83969116210938],
+	"r_z":	[0.63358777761459351],
+	"temperature":	[25],
+	"pressure":	[97325.71875]
+}
+MPU6050 is connected.
+Acceleration: x = 0.241699, y = 0.060059, z = 1.432129 g
+Rotation: x = 500.206116, y = 0.900763, z = 0.503817 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97323.14 Pa
+Temperature: 25.01 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:51:31.145"],
+	"user_id":	[287423],
+	"a_x":	[0.24169921875],
+	"a_y":	[0.06005859375],
+	"a_z":	[1.43212890625],
+	"r_x":	[500.20611572265625],
+	"r_y":	[0.90076333284378052],
+	"r_z":	[0.503816783428192],
+	"temperature":	[25.010000228881836],
+	"pressure":	[97323.140625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.132812, y = 0.020020, z = 1.507324 g
+Rotation: x = 498.412201, y = 0.564885, z = 0.816794 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97317.98 Pa
+Temperature: 25.03 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:51:37.995"],
+	"user_id":	[287423],
+	"a_x":	[0.1328125],
+	"a_y":	[0.02001953125],
+	"a_z":	[1.50732421875],
+	"r_x":	[498.41220092773438],
+	"r_y":	[0.56488549709320068],
+	"r_z":	[0.816793918609619],
+	"temperature":	[25.030000686645508],
+	"pressure":	[97317.984375]
+}
+MPU6050 is connected.
+Acceleration: x = 0.131348, y = 0.011719, z = 1.495605 g
+Rotation: x = 498.656494, y = 0.671756, z = 0.778626 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97317.98 Pa
+Temperature: 25.04 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:51:43.915"],
+	"user_id":	[287423],
+	"a_x":	[0.13134765625],
+	"a_y":	[0.01171875],
+	"a_z":	[1.49560546875],
+	"r_x":	[498.656494140625],
+	"r_y":	[0.67175573110580444],
+	"r_z":	[0.7786259651184082],
+	"temperature":	[25.040000915527344],
+	"pressure":	[97317.984375]
+}
+MPU6050 is connected.
+Acceleration: x = 0.129395, y = 0.012695, z = 1.516602 g
+Rotation: x = 498.549622, y = 0.893130, z = 0.664122 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97315.39 Pa
+Temperature: 25.06 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:51:49.956"],
+	"user_id":	[287423],
+	"a_x":	[0.12939453125],
+	"a_y":	[0.0126953125],
+	"a_z":	[1.5166015625],
+	"r_x":	[498.54962158203125],
+	"r_y":	[0.89312976598739624],
+	"r_z":	[0.66412216424942],
+	"temperature":	[25.059999465942383],
+	"pressure":	[97315.390625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.141113, y = 0.008789, z = 1.538086 g
+Rotation: x = 497.114502, y = 497.114502, z = 0.816794 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97315.39 Pa
+Temperature: 25.06 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:51:55.705"],
+	"user_id":	[287423],
+	"a_x":	[0.14111328125],
+	"a_y":	[0.0087890625],
+	"a_z":	[1.5380859375],
+	"r_x":	[497.114501953125],
+	"r_y":	[497.114501953125],
+	"r_z":	[0.816793918609619],
+	"temperature":	[25.059999465942383],
+	"pressure":	[97315.390625]
+}
+MPU6050 is connected.
+Acceleration: x = 0.183105, y = 0.003418, z = 1.369629 g
+Rotation: x = 497.099243, y = 498.931305, z = 0.664122 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97312.81 Pa
+Temperature: 25.07 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:52:00.525"],
+	"user_id":	[287423],
+	"a_x":	[0.18310546875],
+	"a_y":	[0.00341796875],
+	"a_z":	[1.36962890625],
+	"r_x":	[497.0992431640625],
+	"r_y":	[498.93130493164062],
+	"r_z":	[0.66412216424942],
+	"temperature":	[25.069999694824219],
+	"pressure":	[97312.8125]
+}
+MPU6050 is connected.
+Acceleration: x = 0.186523, y = 0.002930, z = 1.496582 g
+Rotation: x = 498.610687, y = 0.916031, z = 0.809160 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97310.23 Pa
+Temperature: 25.08 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:52:06.475"],
+	"user_id":	[287423],
+	"a_x":	[0.1865234375],
+	"a_y":	[0.0029296875],
+	"a_z":	[1.49658203125],
+	"r_x":	[498.61068725585938],
+	"r_y":	[0.916030526161194],
+	"r_z":	[0.80916029214859],
+	"temperature":	[25.079999923706055],
+	"pressure":	[97310.234375]
+}
+MPU6050 is connected.
+Acceleration: x = 0.139648, y = 7.990723, z = 1.486328 g
+Rotation: x = 495.832062, y = 492.603058, z = 0.793893 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97307.65 Pa
+Temperature: 25.09 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:52:14.045"],
+	"user_id":	[287423],
+	"a_x":	[0.1396484375],
+	"a_y":	[7.99072265625],
+	"a_z":	[1.486328125],
+	"r_x":	[495.83206176757812],
+	"r_y":	[492.60305786132812],
+	"r_z":	[0.79389315843582153],
+	"temperature":	[25.090000152587891],
+	"pressure":	[97307.6484375]
+}
+MPU6050 is connected.
+Acceleration: x = 0.193359, y = 0.001465, z = 1.504395 g
+Rotation: x = 498.778625, y = 0.587786, z = 0.709924 degrees/sec
+BMP280 is connected.

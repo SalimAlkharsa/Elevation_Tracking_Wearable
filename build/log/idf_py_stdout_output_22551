@@ -1,0 +1,441 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6984
+load:0x40078000,len:15512
+load:0x40080400,len:3864
+entry 0x40080650
+[0;32mI (27) boot: ESP-IDF v5.0.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time 10:12:17[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v1.0[0m
+[0;32mI (34) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (48) boot: Enabling RNG early entropy source...[0m
+[0;32mI (53) boot: Partition Table:[0m
+[0;32mI (57) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (64) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (71) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (79) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (86) boot: End of partition table[0m
+[0;32mI (91) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=36754h (223060) map[0m
+[0;32mI (180) esp_image: segment 1: paddr=0004677c vaddr=3ffb0000 size=03538h ( 13624) load[0m
+[0;32mI (185) esp_image: segment 2: paddr=00049cbc vaddr=40080000 size=0635ch ( 25436) load[0m
+[0;32mI (196) esp_image: segment 3: paddr=00050020 vaddr=400d0020 size=a111ch (659740) map[0m
+[0;32mI (434) esp_image: segment 4: paddr=000f1144 vaddr=4008635c size=10c44h ( 68676) load[0m
+[0;32mI (474) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (474) boot: Disabling RNG early entropy source...[0m
+[0;32mI (486) cpu_start: Multicore app[0m
+[0;32mI (486) cpu_start: Pro cpu up.[0m
+[0;32mI (486) cpu_start: Starting app cpu, entry point is 0x40081444[0m
+[0;32mI (0) cpu_start: App cpu up.[0m
+[0;32mI (504) cpu_start: Pro cpu start user code[0m
+[0;32mI (504) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (504) cpu_start: Application information:[0m
+[0;32mI (509) cpu_start: Project name:     project_name[0m
+[0;32mI (514) cpu_start: App version:      1[0m
+[0;32mI (519) cpu_start: Compile time:     Jan 30 2024 10:10:19[0m
+[0;32mI (525) cpu_start: ELF file SHA256:  6f20c241dffb17f5...[0m
+[0;32mI (531) cpu_start: ESP-IDF:          v5.0.4[0m
+[0;32mI (536) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (540) cpu_start: Max chip rev:     v3.99 [0m
+[0;32mI (545) cpu_start: Chip rev:         v1.0[0m
+[0;32mI (550) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (557) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (563) heap_init: At 3FFB7AE8 len 00028518 (161 KiB): DRAM[0m
+[0;32mI (570) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (576) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (582) heap_init: At 40096FA0 len 00009060 (36 KiB): IRAM[0m
+[0;32mI (590) spi_flash: detected chip: generic[0m
+[0;32mI (593) spi_flash: flash io: dio[0m
+[0;33mW (597) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (611) app_start: Starting scheduler on CPU0[0m
+[0;32m[0;32mI (615) app_start: Starting scheduler on CPU1[0m
+I (615) main_task: Started on CPU0[0m
+[0;32mI (625) main_task: Calling app_main()[0m
+Hello world!
+This is esp32 chip with 2 CPU core(s), WiFi/BT/BLE, silicon revision v1.0, 2MB external flash
+Minimum free heap size: 277748 bytes
+I (675) wifi:wifi driver task: 3ffc0498, prio:23, stack:6656, core=0
+[0;32mI (675) system_api: Base MAC address is not set[0m
+[0;32mI (675) system_api: read default base MAC address from EFUSE[0m
+I (695) wifi:wifi firmware version: e2d0ad8
+I (695) wifi:wifi certification version: v7.0
+I (695) wifi:config NVS flash: enabled
+I (695) wifi:config nano formating: disabled
+I (695) wifi:Init data frame dynamic rx buffer num: 32
+I (705) wifi:Init management frame dynamic rx buffer num: 32
+I (705) wifi:Init management short buffer num: 32
+I (715) wifi:Init dynamic tx buffer num: 32
+I (715) wifi:Init static rx buffer size: 1600
+I (725) wifi:Init static rx buffer num: 10
+I (725) wifi:Init dynamic rx buffer num: 32
+[0;32mI (735) wifi_init: rx ba win: 6[0m
+[0;32mI (735) wifi_init: tcpip mbox: 32[0m
+[0;32mI (735) wifi_init: udp mbox: 6[0m
+[0;32mI (745) wifi_init: tcp mbox: 6[0m
+[0;32mI (745) wifi_init: tcp tx win: 5744[0m
+[0;32mI (745) wifi_init: tcp rx win: 5744[0m
+[0;32mI (755) wifi_init: tcp mss: 1440[0m
+[0;32mI (755) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (765) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (765) phy_init: phy_version 4771,450c73b,Aug 16 2023,11:03:10[0m
+I (865) wifi:mode : sta (ec:62:60:b2:ef:20)
+I (865) wifi:enable tsf
+[0;32mI (865) demo: wifi_init_sta finished.[0m
+I (875) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1
+I (885) wifi:state: init -> auth (b0)
+I (885) wifi:state: auth -> assoc (0)
+I (895) wifi:state: assoc -> run (10)
+I (895) wifi:connected with TAMU_IoT, aid = 1, channel 1, BW20, bssid = dc:b7:ac:a4:72:42
+I (895) wifi:security: Open Auth, phy: bgn, rssi: -67
+I (905) wifi:pm start, type: 1
+
+I (905) wifi:AP's beacon interval = 102400 us, DTIM period = 1
+I (2145) wifi:<ba-add>idx:0 (ifx:0, dc:b7:ac:a4:72:42), tid:6, ssn:0, winSize:64
+I (2155) wifi:<ba-add>idx:1 (ifx:0, dc:b7:ac:a4:72:42), tid:0, ssn:0, winSize:64
+I (2165) wifi:<ba-del>idx
+I (2225) wifi:<ba-add>idx:1 (ifx:0, dc:b7:ac:a4:72:42), tid:0, ssn:0, winSize:64
+[0;32mI (2915) esp_netif_handlers: sta ip: 10.224.242.218, mask: 255.255.0.0, gw: 10.224.0.1[0m
+[0;32mI (2915) demo: got ip:10.224.242.218[0m
+[0;32mI (2915) demo: connected to ap SSID:TAMU_IoT password:[0m
+[0;32mI (10935) demo: MPU6050 sensor detected.[0m
+[0;32mI (10965) demo: BMP280 sensor detected.[0m
+MPU6050 is connected.
+Acceleration: x = 0.172363, y = 0.016113, z = 1.485840 g
+Rotation: x = 498.786255, y = 0.862595, z = 0.938931 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97343.80 Pa
+Temperature: 24.94 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:34:09.653"],
+	"user_id":	[287423],
+	"a_x":	[0.17236328125],
+	"a_y":	[0.01611328125],
+	"a_z":	[1.48583984375],
+	"r_x":	[498.7862548828125],
+	"r_y":	[0.86259543895721436],
+	"r_z":	[0.93893128633499146],
+	"temperature":	[24.940000534057617],
+	"pressure":	[97343.796875]
+}
+[0;31mE (16125) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (16125) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (16135) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.156250, y = 7.982422, z = 1.487305 g
+Rotation: x = 498.671753, y = 1.061069, z = 1.007634 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97343.80 Pa
+Temperature: 24.94 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:34:14.824"],
+	"user_id":	[287423],
+	"a_x":	[0.15625],
+	"a_y":	[7.982421875],
+	"a_z":	[1.4873046875],
+	"r_x":	[498.6717529296875],
+	"r_y":	[1.0610686540603638],
+	"r_z":	[1.0076335668563843],
+	"temperature":	[24.940000534057617],
+	"pressure":	[97343.796875]
+}
+[0;31mE (21295) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (21295) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (21305) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.170898, y = 7.999023, z = 1.513672 g
+Rotation: x = 498.671753, y = 0.778626, z = 0.847328 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97341.22 Pa
+Temperature: 24.94 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:34:19.993"],
+	"user_id":	[287423],
+	"a_x":	[0.1708984375],
+	"a_y":	[7.9990234375],
+	"a_z":	[1.513671875],
+	"r_x":	[498.6717529296875],
+	"r_y":	[0.7786259651184082],
+	"r_z":	[0.847328245639801],
+	"temperature":	[24.940000534057617],
+	"pressure":	[97341.21875]
+}
+[0;31mE (26465) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (26465) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (26475) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.161621, y = 0.011719, z = 1.489258 g
+Rotation: x = 498.671753, y = 0.717557, z = 0.900763 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97341.22 Pa
+Temperature: 24.95 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:34:25.164"],
+	"user_id":	[287423],
+	"a_x":	[0.16162109375],
+	"a_y":	[0.01171875],
+	"a_z":	[1.4892578125],
+	"r_x":	[498.6717529296875],
+	"r_y":	[0.71755725145339966],
+	"r_z":	[0.90076333284378052],
+	"temperature":	[24.950000762939453],
+	"pressure":	[97341.21875]
+}
+[0;31mE (31635) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (31635) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (31645) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.173340, y = 7.999512, z = 1.506348 g
+Rotation: x = 498.679382, y = 0.923664, z = 0.893130 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97343.80 Pa
+Temperature: 24.95 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:34:30.334"],
+	"user_id":	[287423],
+	"a_x":	[0.17333984375],
+	"a_y":	[7.99951171875],
+	"a_z":	[1.50634765625],
+	"r_x":	[498.67938232421875],
+	"r_y":	[0.923664093017578],
+	"r_z":	[0.89312976598739624],
+	"temperature":	[24.950000762939453],
+	"pressure":	[97343.796875]
+}
+[0;31mE (36805) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (36805) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (36815) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.163086, y = 7.997070, z = 1.497070 g
+Rotation: x = 498.580139, y = 0.801527, z = 0.893130 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97341.22 Pa
+Temperature: 24.95 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:34:35.504"],
+	"user_id":	[287423],
+	"a_x":	[0.1630859375],
+	"a_y":	[7.9970703125],
+	"a_z":	[1.4970703125],
+	"r_x":	[498.58013916015625],
+	"r_y":	[0.80152672529220581],
+	"r_z":	[0.89312976598739624],
+	"temperature":	[24.950000762939453],
+	"pressure":	[97341.21875]
+}
+[0;31mE (41975) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (41975) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (41985) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.186035, y = 7.991699, z = 1.545898 g
+Rotation: x = 498.725189, y = 0.389313, z = 0.755725 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97341.22 Pa
+Temperature: 24.96 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:34:40.673"],
+	"user_id":	[287423],
+	"a_x":	[0.18603515625],
+	"a_y":	[7.99169921875],
+	"a_z":	[1.5458984375],
+	"r_x":	[498.72518920898438],
+	"r_y":	[0.3893129825592041],
+	"r_z":	[0.7557252049446106],
+	"temperature":	[24.959999084472656],
+	"pressure":	[97341.21875]
+}
+[0;31mE (47145) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (47145) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (47155) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.183105, y = 0.011230, z = 1.500977 g
+Rotation: x = 498.694672, y = 0.610687, z = 0.946565 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97338.64 Pa
+Temperature: 24.97 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:34:45.844"],
+	"user_id":	[287423],
+	"a_x":	[0.18310546875],
+	"a_y":	[0.01123046875],
+	"a_z":	[1.5009765625],
+	"r_x":	[498.69467163085938],
+	"r_y":	[0.610687017440796],
+	"r_z":	[0.94656491279602051],
+	"temperature":	[24.969999313354492],
+	"pressure":	[97338.640625]
+}
+[0;31mE (52315) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (52315) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (52325) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.159668, y = 7.975098, z = 1.498047 g
+Rotation: x = 498.679382, y = 1.000000, z = 0.816794 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97338.64 Pa
+Temperature: 24.97 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:34:50.014"],
+	"user_id":	[287423],
+	"a_x":	[0.15966796875],
+	"a_y":	[7.97509765625],
+	"a_z":	[1.498046875],
+	"r_x":	[498.67938232421875],
+	"r_y":	[1],
+	"r_z":	[0.816793918609619],
+	"temperature":	[24.969999313354492],
+	"pressure":	[97338.640625]
+}
+[0;31mE (57485) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (57485) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (57495) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.129883, y = 0.022949, z = 1.505859 g
+Rotation: x = 497.633575, y = 498.595428, z = 0.519084 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97338.64 Pa
+Temperature: 24.97 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:34:56.184"],
+	"user_id":	[287423],
+	"a_x":	[0.1298828125],
+	"a_y":	[0.02294921875],
+	"a_z":	[1.505859375],
+	"r_x":	[497.63357543945312],
+	"r_y":	[498.59542846679688],
+	"r_z":	[0.51908397674560547],
+	"temperature":	[24.969999313354492],
+	"pressure":	[97338.640625]
+}
+[0;31mE (62655) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (62655) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (62665) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.174316, y = 7.995117, z = 1.504395 g
+Rotation: x = 498.679382, y = 0.893130, z = 0.908397 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97338.64 Pa
+Temperature: 24.96 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:35:01.353"],
+	"user_id":	[287423],
+	"a_x":	[0.17431640625],
+	"a_y":	[7.9951171875],
+	"a_z":	[1.50439453125],
+	"r_x":	[498.67938232421875],
+	"r_y":	[0.89312976598739624],
+	"r_z":	[0.90839695930480957],
+	"temperature":	[24.959999084472656],
+	"pressure":	[97338.640625]
+}
+[0;31mE (67825) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (67825) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (67835) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.180664, y = 7.992676, z = 1.513672 g
+Rotation: x = 498.770996, y = 0.969466, z = 0.839695 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97341.22 Pa
+Temperature: 24.95 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:35:06.524"],
+	"user_id":	[287423],
+	"a_x":	[0.1806640625],
+	"a_y":	[7.99267578125],
+	"a_z":	[1.513671875],
+	"r_x":	[498.77099609375],
+	"r_y":	[0.969465672969818],
+	"r_z":	[0.83969467878341675],
+	"temperature":	[24.950000762939453],
+	"pressure":	[97341.21875]
+}
+[0;31mE (72995) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (72995) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (73005) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.161621, y = 0.002930, z = 1.502441 g
+Rotation: x = 498.679382, y = 0.793893, z = 0.992366 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97343.80 Pa
+Temperature: 24.93 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:35:11.694"],
+	"user_id":	[287423],
+	"a_x":	[0.16162109375],
+	"a_y":	[0.0029296875],
+	"a_z":	[1.50244140625],
+	"r_x":	[498.67938232421875],
+	"r_y":	[0.79389315843582153],
+	"r_z":	[0.99236643314361572],
+	"temperature":	[24.930000305175781],
+	"pressure":	[97343.796875]
+}
+[0;31mE (78165) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (78165) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (78175) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.091309, y = 0.026367, z = 1.251953 g
+Rotation: x = 499.908386, y = 3.381679, z = 0.526718 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97343.80 Pa
+Temperature: 24.92 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:35:16.864"],
+	"user_id":	[287423],
+	"a_x":	[0.09130859375],
+	"a_y":	[0.0263671875],
+	"a_z":	[1.251953125],
+	"r_x":	[499.90838623046875],
+	"r_y":	[3.38167929649353],
+	"r_z":	[0.52671754360198975],
+	"temperature":	[24.920000076293945],
+	"pressure":	[97343.796875]
+}
+[0;31mE (83335) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (83335) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (83345) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.174805, y = 0.001465, z = 1.497559 g
+Rotation: x = 498.022888, y = 1.656489, z = 0.755725 degrees/sec
+BMP280 is connected.
+BMP280 is connected.
+Pressure: 97343.80 Pa
+Temperature: 24.90 degrees Celsius
+{
+	"my_timestamp":	["2024-01-30 10:35:21.033"],
+	"user_id":	[287423],
+	"a_x":	[0.1748046875],
+	"a_y":	[0.00146484375],
+	"a_z":	[1.49755859375],
+	"r_x":	[498.02288818359375],
+	"r_y":	[1.6564885377883911],
+	"r_z":	[0.7557252049446106],
+	"temperature":	[24.899999618530273],
+	"pressure":	[97343.796875]
+}
+[0;31mE (88505) esp-tls: [sock=54] delayed connect error: Connection reset by peer[0m
+[0;31mE (88505) transport_base: Failed to open a new connection: 32772[0m
+[0;31mE (88515) HTTP_CLIENT: Connection failed, sock < 0[0m
+MPU6050 is connected.
+Acceleration: x = 0.178223, y = 0.010254, z = 1.520020 g
+Rotation: x = 498.610687, y = 1.045802, z = 1.091603 degrees/sec
+BMP280 is connected.

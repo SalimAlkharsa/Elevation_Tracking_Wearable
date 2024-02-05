@@ -1,0 +1,5 @@
+[0/1] Re-running CMake...
+-- Configuring incomplete, errors occurred!
+See also "/Users/salimalkharsa/esp/sample_project/build/CMakeFiles/CMakeOutput.log".
+FAILED: build.ninja 
+/Users/salimalkharsa/.espressif/tools/cmake/3.24.0/CMake.app/Contents/bin/cmake --regenerate-during-build -S/Users/salimalkharsa/esp/sample_project -B/Users/salimalkharsa/esp/sample_project/build
