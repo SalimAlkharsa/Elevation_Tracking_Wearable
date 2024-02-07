@@ -766,6 +766,10 @@ void app_main(void)
 
             // Now send the window to the queue
             enqueue(myQueue, *myWindow); // TODO: The logic here is not correct so the queue is not gonna work but this is a later problem
+
+            // Print the queue for debugging purposes, goal is to see if a window is being added to the queue
+            printQueue(myQueue);
+
             // Now make a new window called myWindow
             myWindow = createWindow();
         }
