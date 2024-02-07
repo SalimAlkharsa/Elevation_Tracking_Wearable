@@ -35,7 +35,6 @@ but note that the final data transmission will be to the postgreSQL database, wr
 
   Additional modifications and customizations have been made for specific purposes in this code.
 */
-
 #include <stdio.h>
 #include <inttypes.h>
 #include "driver/i2c.h"
@@ -64,26 +63,15 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "freertos/timers.h"
 #include "lwip/apps/sntp.h"
 
-// Defines from sensor classes
+// Imports where the sensors are defined
 #include "MPU6050Sensor.h"
 #include "BMP280Sensor.h"
 
-// Window related imports
+// Imports that control data windowing and queueing
 #include "Window_Queue.c"
 #include "Window.h"
 #include "Observation.h"
 #include "Metrics.h"
-
-// Model related imports
-// #include "my_model.tflite"
-// #include "tensorflow/lite/micro/micro_mutable_op_resolver.h" //h
-// #include "tensorflow/lite/micro/micro_error_reporter.h"
-// #include "tensorflow/lite/micro/micro_interpreter.h" //h
-// #include "tensorflow/lite/schema/schema_generated.h" //h
-// #include "tensorflow/lite/version.h"
-////////////
-// Stuff for inference
-////////////
 
 // Defines for I2C functionality
 // Defines for the SCL and SDA pins on the ESP-32 WROOM
@@ -119,6 +107,7 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 // This WiFi network is open, but the includes below may be used if a different network is needed.
 #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_OPEN
 
+// TODO: Is this code removable?
 // Extra defines not needed for this example because it is an open network
 // If a different network is used, these if statements will need to be implemented
 /*
@@ -144,7 +133,6 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 
 // URL Settings
 #define SERVER_URL "http://i-want-to-pass-capstone-96abfc16411c.herokuapp.com/post_endpoint"
-// #define SERVER_URL "http://127.0.0.1:5000/post_endpoint"
 
 /* The event group allows multiple bits for each event, but we only care about two events:
  * - we are connected to the AP with an IP
@@ -647,6 +635,7 @@ TimestampInfo getTimestampInfo()
     return result;
 }
 
+// Declare the variables for the sensor data
 float a_x;
 float a_y;
 float a_z;
@@ -670,7 +659,7 @@ void app_main(void)
     ESP_ERROR_CHECK(ret);
 
     // Initialize the Wi-Fi connection
-    // wifi_init_sta();
+    wifi_init_sta();
 
     // AT: need to figure out if this delay is still necessary
     vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -682,16 +671,20 @@ void app_main(void)
     // AT: need to figure out if this delay is still necessary
     vTaskDelay(pdMS_TO_TICKS(7500));
 
-    // Sensor Stuff
+    // Declare the sensor object
     MPU6050Sensor mpuSensor;
     BMP280Sensor bmpSensor;
+    // Initialize the sensor objects
     MPU6050Sensor_init(&mpuSensor);
     BMP280Sensor_init(&bmpSensor);
+    // Initialize a variable to check if the sensor is connected
     bool mpuSensorConnected;
     bool bmpSensorConnected;
 
-    // Data windowing stuff
+    // Create a queue to hold data, in case more data is being read than can be processed
     WindowQueue *myQueue = initializeQueue();
+
+    // Data is stored in windows, before being compressed and sent to the model, so create a window to hold it
     Window *myWindow = createWindow();
 
     // Continuously take sensor inputs until power is lost
@@ -706,12 +699,14 @@ void app_main(void)
             vTaskDelay(pdMS_TO_TICKS(5000));
             MPU6050Sensor_init(&mpuSensor);
             mpuSensorConnected = true;
+            // TO DO: Determine if this is the correct way to handle the sensor not being connected
             continue;
         }
         else
         {
             printf("MPU6050 is connected.\n");
         }
+        // Print the data from the MPU6050Sensor for debugging purposes
         MPU6050Sensor_printData(&mpuSensor);
 
         // Read the data from the BMP280Sensor
@@ -723,20 +718,22 @@ void app_main(void)
             vTaskDelay(pdMS_TO_TICKS(5000));
             BMP280Sensor_init(&bmpSensor);
             bmpSensorConnected = true;
+            // TO DO: Determine if this is the correct way to handle the sensor not being connected
             continue;
         }
         else
         {
             printf("BMP280 is connected.\n");
         }
+        // Print the data from the BMP280Sensor for debugging purposes
         BMP280Sensor_printData(&bmpSensor);
-        // Done reading data
+
+        // Data Reads are now done, so we can start processing the data
 
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
 
-        // Send data to model here
-        // First of all check if we can insert the data into the window
+        // Check if we can insert the data into the window
         if (myWindow->observationCount < 12)
         {
             Observation newObservation;
@@ -746,21 +743,27 @@ void app_main(void)
             newObservation.Y_acc = mpuSensor.a_y;
             insertObservation(myWindow, newObservation);
         }
+        // If we can not, that means the window is full so print the window and calculate the metrics (for debgging purposes)
         else
         {
-            // First print the window to see if it is working, do so by printing the observations by looping through the window
+            // Print statements for the observations to ensure the window is correctly working
             for (int i = 0; i < myWindow->observationCount; i++)
             {
                 printf("Observation %d: Pa = %f, Z_rot = %f, Z_acc = %f, Y_acc = %f\n", i, myWindow->observations[i].Pa, myWindow->observations[i].Z_rot, myWindow->observations[i].Z_acc, myWindow->observations[i].Y_acc);
             }
-            // Then calculate the metrics
+            // Calculate the metrics of the window (these metrics will change as the model changes)
+            // Currently these are the valuable metrics from ECEN 403
             Metrics myMetrics = calculateMetrics(myWindow);
-            // Assign the metrics to the window
+
+            // Assign the calculated metrics to the window
             myWindow->metrics = myMetrics;
-            // Now reset the window observations
+
+            // Now reset the window observations, to free space since the model only needs the metrics, not every observation
             clearObservations(myWindow);
-            // Now print the metrics of the window to see if it is working
+
+            // Debugging Print to ensure the metrics are being calculated correctly, cross compare with the observations previously printed
             printf("Metrics: Pa_roc = %f, Z_rot_max_min = %f, Z_g_max = %f, Z_g_min = %f, Y_g_kurtosis = %f\n", myWindow->metrics.Pa_roc, myWindow->metrics.Z_rot_max_min, myWindow->metrics.Z_g_max, myWindow->metrics.Z_g_min, myWindow->metrics.Y_g_kurtosis);
+
             // Now send the window to the queue
             enqueue(myQueue, *myWindow); // TODO: The logic here is not correct so the queue is not gonna work but this is a later problem
             // Now make a new window called myWindow
@@ -781,7 +784,7 @@ void app_main(void)
             r_z = mpuSensor.r_z;
             temp_calibrated = bmpSensor.temperature;
             press_calibrated = bmpSensor.pressure;
-            // send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
+            send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
 
             // Free the allocated memory once done using it
             free(my_timestamp);
