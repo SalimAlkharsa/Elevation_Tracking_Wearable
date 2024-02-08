@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "project_name",
-    "project_version":    "1",
+    "project_version":    "18333d0b-dirty",
     "project_path":       "/Users/salimalkharsa/esp/sample_project",
     "idf_path":           "/Users/salimalkharsa/esp/esp-idf",
     "build_dir":          "/Users/salimalkharsa/esp/sample_project/build",
