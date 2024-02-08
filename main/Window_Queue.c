@@ -114,3 +114,39 @@ void destroyQueue(WindowQueue *queue)
 
     free(queue);
 }
+
+// Function to print the queue
+void printQueue(WindowQueue *queue)
+{
+    if (isEmpty(queue))
+    {
+        printf("Queue is empty.\n");
+        return;
+    }
+
+    Node *currentNode = queue->front;
+
+    printf("Queue contents:\n");
+    while (currentNode != NULL)
+    {
+        Window currentWindow = currentNode->data;
+
+        printf("Window observations:\n");
+        printf("Observation count: %d\n", currentWindow.observationCount);
+        for (int i = 0; i < currentWindow.observationCount; ++i)
+        {
+            Observation currentObservation = currentWindow.observations[i];
+            printf("Observation %d: Pa=%.2f, Z_rot=%.2f, Z_acc=%.2f, Y_acc=%.2f\n",
+                   i + 1, currentObservation.Pa, currentObservation.Z_rot,
+                   currentObservation.Z_acc, currentObservation.Y_acc);
+            Metrics currentMetrics = currentWindow.metrics;
+            printf("Window metrics:\n");
+            printf("Pa_roc: %.2f\n", currentMetrics.Pa_roc);
+            printf("Z_rot_max_min: %.2f\n", currentMetrics.Z_rot_max_min);
+            printf("Z_g_max: %.2f\n", currentMetrics.Z_g_max);
+            printf("Z_g_min: %.2f\n", currentMetrics.Z_g_min);
+            printf("Y_g_kurtosis: %.2f\n", currentMetrics.Y_g_kurtosis);
+        }
+        currentNode = currentNode->next;
+    }
+}

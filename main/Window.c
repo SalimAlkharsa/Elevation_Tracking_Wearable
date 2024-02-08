@@ -116,6 +116,5 @@ void clearObservations(Window *window)
         // Reset observation values to zero (optional)
         memset(&(window->observations[i]), 0, sizeof(Observation));
     }
-
-    window->observationCount = 0;
+    window->observationCount = 1;
 }
