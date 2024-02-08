@@ -36,19 +36,20 @@ void insertObservation(Window *window, Observation observation)
 }
 
 // Function to calculate metrics based on observations in the window
-// Function to calculate metrics based on observations in the window
 Metrics calculateMetrics(const Window *window)
 {
     Metrics metrics;
 
-    // Example calculations (replace with actual formulas)
+    //  Calculations here are proof of concept (replace with actual formulas)
     // I) Pa RoC
     metrics.Pa_roc = (window->observations[window->observationCount - 1].Pa - window->observations[0].Pa) /
                      (float)(55.96); // TODO This is an approximate value, replace with a real measurement!!!!!!
     // II) Z_rot max-min
-    float maxZ_rot = -99999999; // TODO: replace with floor value
-    float minZ_rot = 99999999;  // TODO: replace with ceiling value
-    for (int i = 0; i < window->observationCount; ++i)
+    float maxZ_rot = window->observations[0].Z_rot;
+    float minZ_rot = window->observations[0].Z_rot;
+    // 1 Because we already used the 0th observation
+    // TODO: If we want to optimize the code, we can add a helper function to find the max and min and we can call it instead of writing the same code thrice
+    for (int i = 1; i < window->observationCount; ++i)
     {
         if (window->observations[i].Z_rot > maxZ_rot)
         {
@@ -63,7 +64,9 @@ Metrics calculateMetrics(const Window *window)
 
     // III) Z_g max
     metrics.Z_g_max = window->observations[0].Z_acc;
-    for (int i = 0; i < window->observationCount; ++i)
+    // 1 Because we already used the 0th observation
+    // TODO: If we want to optimize the code, we can add a helper function to find the max and min and we can call it instead of writing the same code thrice
+    for (int i = 1; i < window->observationCount; ++i)
     {
         if (window->observations[i].Z_acc > metrics.Z_g_max)
         {
@@ -72,7 +75,9 @@ Metrics calculateMetrics(const Window *window)
     }
 
     // IV) Z_g min
-    metrics.Z_g_min = 99999999; // TODO: replace with ceiling value
+    metrics.Z_g_min = window->observations[0].Z_acc;
+    // 1 Because we already used the 0th observation
+    // TODO: If we want to optimize the code, we can add a helper function to find the max and min and we can call it instead of writing the same code thrice
     for (int i = 0; i < window->observationCount; ++i)
     {
         if (window->observations[i].Z_acc < metrics.Z_g_min)
@@ -82,7 +87,7 @@ Metrics calculateMetrics(const Window *window)
     }
 
     // V) Y_g kurtosis (example calculation, replace with actual formula)
-    // Note: This is a simplified example; may need to use a more advanced approach for accurate kurtosis calculation
+    // Note: This is a "proof of concept" calculation, replace with actual formula, this is revealed later when we have a real model
     float meanY_g = 0.0;
     for (int i = 0; i < window->observationCount; ++i)
     {
@@ -107,15 +112,8 @@ void clearObservations(Window *window)
 {
     for (int i = 0; i < window->observationCount; ++i)
     {
-        // Assuming observations were dynamically allocated
-        // Free the memory for each observation
-        // Adjust this based on how your Observation structure is allocated
-        // If no dynamic allocation was done, this part can be skipped
-        // free(window->observations[i].someField); // Example, replace with your actual fields
-
         // Reset observation values to zero (optional)
         memset(&(window->observations[i]), 0, sizeof(Observation));
     }
-
-    window->observationCount = 0;
+    window->observationCount = 1;
 }
