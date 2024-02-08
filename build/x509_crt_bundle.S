@@ -1,4 +1,4 @@
-/* * Data converted from /Users/salimalkharsa/esp/sample_project/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from C:/Users/annat/Desktop/esp-idf_VS_CODE_projects/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

@@ -4,19 +4,19 @@
 cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
-  "/Users/salimalkharsa/esp/esp-idf/components/bootloader/subproject"
-  "/Users/salimalkharsa/esp/sample_project/build/bootloader"
-  "/Users/salimalkharsa/esp/sample_project/build/bootloader-prefix"
-  "/Users/salimalkharsa/esp/sample_project/build/bootloader-prefix/tmp"
-  "/Users/salimalkharsa/esp/sample_project/build/bootloader-prefix/src/bootloader-stamp"
-  "/Users/salimalkharsa/esp/sample_project/build/bootloader-prefix/src"
-  "/Users/salimalkharsa/esp/sample_project/build/bootloader-prefix/src/bootloader-stamp"
+  "C:/Espressif/frameworks/esp-idf-v5.0.4/components/bootloader/subproject"
+  "C:/Users/annat/Desktop/esp-idf_VS_CODE_projects/build/bootloader"
+  "C:/Users/annat/Desktop/esp-idf_VS_CODE_projects/build/bootloader-prefix"
+  "C:/Users/annat/Desktop/esp-idf_VS_CODE_projects/build/bootloader-prefix/tmp"
+  "C:/Users/annat/Desktop/esp-idf_VS_CODE_projects/build/bootloader-prefix/src/bootloader-stamp"
+  "C:/Users/annat/Desktop/esp-idf_VS_CODE_projects/build/bootloader-prefix/src"
+  "C:/Users/annat/Desktop/esp-idf_VS_CODE_projects/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "/Users/salimalkharsa/esp/sample_project/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "C:/Users/annat/Desktop/esp-idf_VS_CODE_projects/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "/Users/salimalkharsa/esp/sample_project/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "C:/Users/annat/Desktop/esp-idf_VS_CODE_projects/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()
