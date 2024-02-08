@@ -107,6 +107,11 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 // This WiFi network is open, but the includes below may be used if a different network is needed.
 #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_OPEN
 
+// #define EXAMPLE_ESP_WIFI_SSID "wifisfuneral"
+// #define EXAMPLE_ESP_WIFI_PASS "13bricks"
+
+// #define EXAMPLE_ESP_MAXIMUM_RETRY 5
+
 // TODO: Is this code removable?
 // Extra defines not needed for this example because it is an open network
 // If a different network is used, these if statements will need to be implemented
