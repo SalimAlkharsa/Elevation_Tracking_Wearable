@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include "Window.c"
 
-// Define the maximum capacity of the queue
+// Define the maximum capacity of the queue, this value is arbitrary
 #define MAX_CAPACITY 50
 
 // Define the Node structure for the queue
+// Basically the Node has a Window data and a pointer to the next Node
 typedef struct Node
 {
     Window data;
@@ -60,6 +61,7 @@ void enqueue(WindowQueue *queue, Window window)
         exit(EXIT_FAILURE);
     }
 
+    // Allocate memory for the new node
     Node *newNode = (Node *)malloc(sizeof(Node));
     if (newNode == NULL)
     {
@@ -67,14 +69,17 @@ void enqueue(WindowQueue *queue, Window window)
         exit(EXIT_FAILURE);
     }
 
+    // Assign data to the new node
     newNode->data = window;
     newNode->next = NULL;
 
+    // Handle the edge case of an empty queue, where the front and rear pointers are the same
     if (isEmpty(queue))
     {
         queue->front = newNode;
         queue->rear = newNode;
     }
+    // Otherwise add the new node to the rear of the queue and update the rear pointer
     else
     {
         queue->rear->next = newNode;
@@ -93,9 +98,11 @@ Window dequeue(WindowQueue *queue)
         exit(EXIT_FAILURE);
     }
 
+    // Get the front node and its data
     Node *frontNode = queue->front;
     Window frontWindow = frontNode->data;
 
+    // Update the front pointer to the next node
     queue->front = frontNode->next;
     free(frontNode);
 
@@ -124,8 +131,10 @@ void printQueue(WindowQueue *queue)
         return;
     }
 
+    // Iterate through the queue and print the data of each node
     Node *currentNode = queue->front;
 
+    // Iteration logic to print each window
     printf("Queue contents:\n");
     while (currentNode != NULL)
     {
@@ -133,8 +142,10 @@ void printQueue(WindowQueue *queue)
 
         printf("Window observations:\n");
         printf("Observation count: %d\n", currentWindow.observationCount);
+        // Iteration logic to print each observation (so that is component of the window (should be 1 any time it is not 1 it is a bug in the code somewhere else))
         for (int i = 0; i < currentWindow.observationCount; ++i)
         {
+            // Exctract the current observation's data and print it
             Observation currentObservation = currentWindow.observations[i];
             printf("Observation %d: Pa=%.2f, Z_rot=%.2f, Z_acc=%.2f, Y_acc=%.2f\n",
                    i + 1, currentObservation.Pa, currentObservation.Z_rot,
