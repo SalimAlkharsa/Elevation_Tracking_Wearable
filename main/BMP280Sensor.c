@@ -121,7 +121,7 @@ void BMP280Sensor_init(BMP280Sensor *sensor)
 
     if (bmp280_checkI2COperation(err) && bmp280_who_am_i_value == 0x58)
     {
-        ESP_LOGI(TAG, "BMP280 sensor detected.");
+        // ESP_LOGI(TAG, "BMP280 sensor detected."); //TODO EDIT LATER
     }
     else
     {
@@ -165,16 +165,6 @@ bool BMP280Sensor_readData(BMP280Sensor *sensor)
     bmp280_connected &= bmp280_checkI2COperation(i2c_master_cmd_begin(I2C_NUM_0, cmd, 1000 / portTICK_PERIOD_MS));
 
     i2c_cmd_link_delete(cmd);
-
-    if (!bmp280_connected)
-    {
-        printf("BMP280 sensor not connected!\n");
-        return false;
-    }
-    else
-    {
-        printf("BMP280 is connected.\n");
-    }
 
     int32_t adc_P = (bmp280_data[0] << 12) | (bmp280_data[1] << 4) | (bmp280_data[2] & (0xFF));
     int32_t adc_T = (bmp280_data[3] << 12) | (bmp280_data[4] << 4) | (bmp280_data[5] & (0xFF));

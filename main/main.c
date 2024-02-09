@@ -74,6 +74,7 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "freertos/queue.h"
 #include "freertos/timers.h"
 #include "lwip/apps/sntp.h"
+#include "driver/uart.h"
 
 // Imports where the sensors are defined
 #include "MPU6050Sensor.h"
@@ -84,6 +85,43 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "Window.h"
 #include "Observation.h"
 #include "Metrics.h"
+
+// Port communication defines
+// Used to debug the model's interaction with the sensor data
+#define TXD_PIN (GPIO_NUM_17)
+#define RXD_PIN (GPIO_NUM_16)
+#define BAUD_RATE 115200
+
+// This is the function that initializes the UART communication when in testing mode
+void init_uart()
+{
+    uart_config_t uart_config = {
+        .baud_rate = BAUD_RATE,
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE};
+
+    uart_param_config(UART_NUM_1, &uart_config);
+    uart_set_pin(UART_NUM_1, TXD_PIN, RXD_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+    uart_driver_install(UART_NUM_1, 1024, 0, 0, NULL, 0);
+}
+
+// This is the function that sends the sensor data over UART when in testing mode
+void send_sensor_data(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
+{
+    // Not sure what value to use for the buffer size but 50 is arbitrary and works for now
+    char data[100];
+
+    // Format the data as per the protocol
+    snprintf(data, sizeof(data), "%f, %f, %f, %f, %f, %f, %f, %f", x_acc, y_acc, z_acc, x_rot, y_rot, z_rot, temp, press);
+
+    // Print the data for debugging purposes
+    printf("%s\n", data);
+
+    // Send data over UART
+    uart_write_bytes(UART_NUM_1, data, strlen(data));
+}
 
 // Defines for I2C functionality
 // Defines for the SCL and SDA pins on the ESP-32 WROOM
@@ -158,7 +196,7 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 #define WIFI_FAIL_BIT BIT1
 
 // This is arbitrary, need a tag but the name isn't important
-static const char *TAG = "demo";
+static const char *TAG = ""; // Try an empty string
 
 // FreeRTOS event group to signal when connected
 static EventGroupHandle_t s_wifi_event_group;
@@ -222,9 +260,11 @@ void calculate_elapsed_time(unsigned long long *elapsed_ms, char *strftime_buf)
     elapsed_seconds %= 60;
     elapsed_minutes %= 60;
 
+#ifdef DEBUGGING_MODE
     // Append the elapsed time to the formatted timestamp
     snprintf(strftime_buf + strlen(strftime_buf), sizeof(strftime_buf) - strlen(strftime_buf),
              " | Elapsed time: %02llu:%02llu:%02llu", elapsed_hours, elapsed_minutes, elapsed_seconds);
+#endif
 }
 
 /*
@@ -240,13 +280,17 @@ void initialize_timer()
 
     if (timer == NULL)
     {
+#ifdef DEBUGGING_MODE
         printf("Failed to create timer\n");
+#endif
         return;
     }
 
     if (xTimerStart(timer, 0) != pdPASS)
     {
+#ifdef DEBUGGING_MODE
         printf("Failed to start timer\n");
+#endif
         return;
     }
 }
@@ -665,8 +709,15 @@ float temp_calibrated;
 float press_calibrated;
 void app_main(void)
 {
+#ifdef DEBUGGING_MODE
     // Ensure it is properly reading from the microcontroller
     print_chip_info();
+#endif DEBUGGING_MODE
+
+#ifdef TESTING_MODE
+    // Initialize the UART
+    init_uart();
+#endif
 
     // Initialize non-volatile storage
     esp_err_t ret = nvs_flash_init();
@@ -729,15 +780,13 @@ void app_main(void)
             printf("MPU6050 is connected.\n");
 #endif
         }
+
 #ifdef DEBUGGING_MODE
         // Print the data from the MPU6050Sensor for debugging purposes
         MPU6050Sensor_printData(&mpuSensor);
 #endif
-
-#ifdef DEBUGGING_MODE
         // Read the data from the BMP280Sensor
         bmpSensorConnected = BMP280Sensor_readData(&bmpSensor);
-#endif
 
         if (!bmpSensorConnected)
         {
@@ -802,7 +851,6 @@ void app_main(void)
             // Debugging Print to ensure the metrics are being calculated correctly, cross compare with the observations previously printed
             printf("Metrics: Pa_roc = %f, Z_rot_max_min = %f, Z_g_max = %f, Z_g_min = %f, Y_g_kurtosis = %f\n", myWindow->metrics.Pa_roc, myWindow->metrics.Z_rot_max_min, myWindow->metrics.Z_g_max, myWindow->metrics.Z_g_min, myWindow->metrics.Y_g_kurtosis);
 #endif
-
             // Now send the window to the queue
             enqueue(myQueue, *myWindow); // TODO: The logic here is not correct so the queue is not gonna work but this is a later problem
 
@@ -830,6 +878,11 @@ void app_main(void)
             temp_calibrated = bmpSensor.temperature;
             press_calibrated = bmpSensor.pressure;
             // send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
+
+#ifdef TESTING_MODE
+            // Send the sensor data over UART
+            send_sensor_data(a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
+#endif
 
             // Free the allocated memory once done using it
             free(my_timestamp);
