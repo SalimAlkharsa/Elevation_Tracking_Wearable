@@ -732,14 +732,14 @@ void app_main(void)
     // wifi_init_sta();
 
     // AT: need to figure out if this delay is still necessary
-    vTaskDelay(500 / portTICK_PERIOD_MS);
+    // vTaskDelay(500 / portTICK_PERIOD_MS);
 
     // Intialize the I2C port
     ESP_ERROR_CHECK(i2c_master_init());
 
     initialize_timer();
     // AT: need to figure out if this delay is still necessary
-    vTaskDelay(pdMS_TO_TICKS(7500));
+    // vTaskDelay(pdMS_TO_TICKS(7500));
 
     // Declare the sensor object
     MPU6050Sensor mpuSensor;
