@@ -35,6 +35,18 @@ but note that the final data transmission will be to the postgreSQL database, wr
 
   Additional modifications and customizations have been made for specific purposes in this code.
 */
+
+// PRIOR TO RUNNING CONTROL THIS TOGGLE
+/*
+    This is to control for how the code is being outputted.
+    If you are testing the code, uncomment the TESTING_MODE define.
+    If you are debugging the code, uncomment the DEBUGGING_MODE define.
+    When we are fully operational, neither of these should be defined and the code should be cleaned.
+    For now, Salim needs a way to control the output of the code to see how the data interacts with the model using a debugger.
+*/
+#define TESTING_MODE
+// #define DEBUGGING_MODE
+
 #include <stdio.h>
 #include <inttypes.h>
 #include "driver/i2c.h"
@@ -518,7 +530,9 @@ void send_post_request(char *my_timestamp, float user_id, float a_x, float a_y, 
 
     // Print the JSON object
     char *post_data = cJSON_Print(json_root);
+#ifdef DEBUGGING_MODE
     printf("%s\n", post_data);
+#endif
 
     // Initialize the HTTP client configuration
     esp_http_client_config_t config = {
@@ -664,7 +678,7 @@ void app_main(void)
     ESP_ERROR_CHECK(ret);
 
     // Initialize the Wi-Fi connection
-    wifi_init_sta();
+    // wifi_init_sta();
 
     // AT: need to figure out if this delay is still necessary
     vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -699,7 +713,9 @@ void app_main(void)
         mpuSensorConnected = MPU6050Sensor_readData(&mpuSensor);
         if (!mpuSensorConnected)
         {
+#ifdef DEBUGGING_MODE
             printf("MPU6050 sensor not connected!\n");
+#endif
             // Apply actual handling procedure here...
             vTaskDelay(pdMS_TO_TICKS(5000));
             MPU6050Sensor_init(&mpuSensor);
@@ -709,16 +725,25 @@ void app_main(void)
         }
         else
         {
+#ifdef DEBUGGING_MODE
             printf("MPU6050 is connected.\n");
+#endif
         }
+#ifdef DEBUGGING_MODE
         // Print the data from the MPU6050Sensor for debugging purposes
         MPU6050Sensor_printData(&mpuSensor);
+#endif
 
+#ifdef DEBUGGING_MODE
         // Read the data from the BMP280Sensor
         bmpSensorConnected = BMP280Sensor_readData(&bmpSensor);
+#endif
+
         if (!bmpSensorConnected)
         {
+#ifdef DEBUGGING_MODE
             printf("BMP280 sensor not connected!\n");
+#endif
             // Apply actual handling procedure here...
             vTaskDelay(pdMS_TO_TICKS(5000));
             BMP280Sensor_init(&bmpSensor);
@@ -728,10 +753,15 @@ void app_main(void)
         }
         else
         {
+#ifdef DEBUGGING_MODE
             printf("BMP280 is connected.\n");
+#endif
         }
+
+#ifdef DEBUGGING_MODE
         // Print the data from the BMP280Sensor for debugging purposes
         BMP280Sensor_printData(&bmpSensor);
+#endif
 
         // Data Reads are now done, so we can start processing the data
 
@@ -751,11 +781,13 @@ void app_main(void)
         // If we can not, that means the window is full so print the window and calculate the metrics (for debgging purposes)
         else
         {
+#ifdef DEBUGGING_MODE
             // Print statements for the observations to ensure the window is correctly working
             for (int i = 0; i < myWindow->observationCount; i++)
             {
                 printf("Observation %d: Pa = %f, Z_rot = %f, Z_acc = %f, Y_acc = %f\n", i, myWindow->observations[i].Pa, myWindow->observations[i].Z_rot, myWindow->observations[i].Z_acc, myWindow->observations[i].Y_acc);
             }
+#endif
             // Calculate the metrics of the window (these metrics will change as the model changes)
             // Currently these are the valuable metrics from ECEN 403
             Metrics myMetrics = calculateMetrics(myWindow);
@@ -766,14 +798,18 @@ void app_main(void)
             // Now reset the window observations, to free space since the model only needs the metrics, not every observation
             clearObservations(myWindow);
 
+#ifdef DEBUGGING_MODE
             // Debugging Print to ensure the metrics are being calculated correctly, cross compare with the observations previously printed
             printf("Metrics: Pa_roc = %f, Z_rot_max_min = %f, Z_g_max = %f, Z_g_min = %f, Y_g_kurtosis = %f\n", myWindow->metrics.Pa_roc, myWindow->metrics.Z_rot_max_min, myWindow->metrics.Z_g_max, myWindow->metrics.Z_g_min, myWindow->metrics.Y_g_kurtosis);
+#endif
 
             // Now send the window to the queue
             enqueue(myQueue, *myWindow); // TODO: The logic here is not correct so the queue is not gonna work but this is a later problem
 
+#ifdef DEBUGGING_MODE
             // Print the queue for debugging purposes, goal is to see if a window is being added to the queue
             printQueue(myQueue);
+#endif
 
             // Now make a new window called myWindow
             myWindow = createWindow();
@@ -793,7 +829,7 @@ void app_main(void)
             r_z = mpuSensor.r_z;
             temp_calibrated = bmpSensor.temperature;
             press_calibrated = bmpSensor.pressure;
-            send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
+            // send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
 
             // Free the allocated memory once done using it
             free(my_timestamp);
