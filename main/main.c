@@ -118,9 +118,6 @@ void send_sensor_data(float x_acc, float y_acc, float z_acc, float x_rot, float 
 
     // Print the data for debugging purposes
     printf("%s\n", data);
-
-    // Send data over UART
-    uart_write_bytes(UART_NUM_1, data, strlen(data));
 }
 
 // Defines for I2C functionality
@@ -185,6 +182,7 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 
 // Define for timestamp data
 #define PRINT_INTERVAL_MILLISECONDS 40
+#define configTICK_RATE_HZ 1000
 
 // URL Settings
 #define SERVER_URL "http://i-want-to-pass-capstone-96abfc16411c.herokuapp.com/post_endpoint"
@@ -714,11 +712,6 @@ void app_main(void)
     print_chip_info();
 #endif DEBUGGING_MODE
 
-#ifdef TESTING_MODE
-    // Initialize the UART
-    init_uart();
-#endif
-
     // Initialize non-volatile storage
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
@@ -760,6 +753,8 @@ void app_main(void)
     // Continuously take sensor inputs until power is lost
     while (1)
     {
+        TickType_t tickBeforePrint = xTaskGetTickCount(); ///////////////////
+
         // Read the data from the MPU6050Sensor
         mpuSensorConnected = MPU6050Sensor_readData(&mpuSensor);
         if (!mpuSensorConnected)
@@ -813,7 +808,6 @@ void app_main(void)
 #endif
 
         // Data Reads are now done, so we can start processing the data
-
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
 
@@ -887,6 +881,10 @@ void app_main(void)
             // Free the allocated memory once done using it
             free(my_timestamp);
         }
+
+        /////////////////////////s
+        TickType_t tickAfterPrint = xTaskGetTickCount();
+        printf("Time taken for printf: %lu ticks\n", tickAfterPrint - tickBeforePrint);
     }
 
     // Delete i2c driver installs
