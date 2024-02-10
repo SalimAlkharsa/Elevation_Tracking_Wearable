@@ -14,14 +14,14 @@ class LoginPage extends StatelessWidget {
       ),
       body: Center(
         child: FloatingActionButton.extended(
+          heroTag: "Main",
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/main');
           },
-          icon: Icon(Icons.security, color: style.backgroundColor),
-          label: Text("Sign in with Google", style: style.buttonTextStyle,),
+          label: Text("Go to main...", style: style.buttonTextStyle),
           backgroundColor: style.mainColor,
           foregroundColor: style.backgroundColor,
-        )
+        ),
       ),
     );
   }
