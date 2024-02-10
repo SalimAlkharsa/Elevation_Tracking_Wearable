@@ -41,7 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget buildBody() {
     if (db.connection.isClosed) {
-      return Center(child: Text("No connection.", style: style.textStyle,),);
+      return Center(child: Text("No connection. Please reconnect to the WiFi and restart the app. If this issue persists, contact support.", style: style.textStyle,),);
     } else {
       return ListView(
         children: <Widget>[

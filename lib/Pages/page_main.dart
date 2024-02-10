@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> {
 
   Widget buildBody() {
     if (db.connection.isClosed) {
-      return Center(child: Text("No connection.", style: style.textStyle,),);
+      return Center(child: Text("No connection. Please reconnect to the WiFi and restart the app. If this issue persists, contact support.", style: style.textStyle,),);
     } else {
       return Center(
         child: Column(
@@ -106,9 +106,9 @@ class _MainPageState extends State<MainPage> {
                                             bottom: BorderSide(color: style.iconColor),
                                           ),
                                         ),
-                                        child: Text("8", style: style.textStyle),
+                                        child: Text("8 climbed today", style: style.textStyle),
                                       ),
-                                      Text("$floorGoal", style: style.textStyle),
+                                      Text("$floorGoal daily goal", style: style.textStyle),
                                     ]
                                 )
                             ),
@@ -222,8 +222,37 @@ class _MainPageState extends State<MainPage> {
   }
 
   void testFunc () {
-    populateSensors();
-    populateClimbs();
+    // populateSensors();
+    // populateClimbs();
+    populateOrders();
+  }
+
+  void populateOrders() async {
+    var rng = Random();
+    DateTime timestamp = DateTime.now();
+    int pid = 0;
+    String desc = "Desc";
+    double price = 0.0;
+    int quantity = 0;
+    int oid = 0;
+
+    print("Begin...");
+    for (int i = 0; i < 20; i++) {
+      pid = i;
+      price = 2.1 * (i + 1);
+      quantity = 100;
+      await db.connection.query("INSERT INTO Products (productid, description, price, quantityonhand) VALUES ($pid, '$desc', $price, $quantity)");
+    }
+
+    for (int i = 0; i < 100; i++) {
+      pid = rng.nextInt(18);
+      oid = i + 1;
+      quantity = rng.nextInt(4) + 1;
+      timestamp = timestamp.subtract(const Duration(hours: 1));
+      price = 2.1 * (pid + 1) * quantity;
+      await db.connection.query("INSERT INTO Orders (orderid, productid, quantityordered, orderdate, totalorderamount) VALUES ($oid, $pid, '$quantity', '$timestamp', $price)");
+    }
+    print("Done!");
   }
 
   void populateClimbs () async {

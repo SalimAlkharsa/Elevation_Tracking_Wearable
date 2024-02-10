@@ -87,8 +87,10 @@ class _TrackerPageState extends State<TrackerPage> {
               backgroundColor: style.mainColor,
               onPressed: () async {
                 final newName = await openTextEntryDialog();
-                if (newName == null || newName.isEmpty || !checkName(newName)) {
+                if (newName == null || newName.isEmpty) {
                   errorNameDialog();
+                  return;
+                } else if (!checkName(newName)) {
                   return;
                 }
 
@@ -268,7 +270,24 @@ class _TrackerPageState extends State<TrackerPage> {
     context: context,
     builder: (context) => AlertDialog(
       backgroundColor: style.backgroundColor,
-      title: Text("Error: Not a valid name", style: style.textStyle),
+      title: Text("Error: User is not in the database", style: style.textStyle),
+      actions: [
+        TextButton(
+          onPressed: close,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("OK"),
+        )
+      ],
+    ),
+  );
+
+  void errorDuplicateDialog() => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: style.backgroundColor,
+      title: Text("Error: User is already in the chart", style: style.textStyle),
       actions: [
         TextButton(
           onPressed: close,
@@ -291,13 +310,20 @@ class _TrackerPageState extends State<TrackerPage> {
     for (int i = 0; i < validNameList.length; i++) {
       if (name == validNameList[i]) {
         isValid = true;
+        break;
       }
     }
 
-    for (int i = 0; i < nameList.length; i++) {
-      if (name == nameList[i]) {
-        isValid = false;
+    if (isValid) {
+      for (int i = 0; i < nameList.length; i++) {
+        if (name == nameList[i]) {
+          isValid = false;
+          errorDuplicateDialog();
+          break;
+        }
       }
+    } else {
+      errorNameDialog();
     }
 
     return isValid;
