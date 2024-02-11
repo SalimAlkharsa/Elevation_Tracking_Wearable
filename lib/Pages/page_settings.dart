@@ -45,12 +45,11 @@ class _SettingsPageState extends State<SettingsPage> {
     } else {
       return ListView(
         children: <Widget>[
-          // TODO: Explain sign out
+          // TODO: Explain log out
           ListTile(
-              title: Text("Sign Out", style: style.textStyle),
+              title: Text("Log Out", style: style.textStyle),
               trailing: IconButton (
                 icon: Icon(Icons.logout, color: style.iconColor),
-                // TODO: Implement sign out
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/');
                 },
