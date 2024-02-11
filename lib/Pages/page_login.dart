@@ -28,55 +28,71 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Form(
               child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          decoration: const InputDecoration(
-                            labelText: 'Username',
-                            hintText: 'Enter username',
-                            prefixIcon: Icon(Icons.person),
-                          ),
-                          onChanged: (String value) {
-                            setState(() {
-                              username = value;
-                            });
-                          },
-                          validator: (value) {
-                            return value!.isEmpty ? 'Please enter a username' : null;
-                          }
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                          labelText: 'Username',
+                          hintText: 'Enter username',
+                          prefixIcon: Icon(Icons.person),
+                        ),
+                        onChanged: (String value) {
+                          setState(() {
+                            username = value;
+                          });
+                        },
+                        validator: (value) {
+                          return value!.isEmpty ? 'Please enter a username' : null;
+                        }
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                          hintText: 'Enter password',
+                          prefixIcon: Icon(Icons.lock),
+                        ),
+                        onChanged: (String value) {
+                          setState(() {
+                            password = value;
+                          });
+                        },
+                        validator: (value) {
+                          return value!.isEmpty ? 'Please enter a username' : null;
+                        }
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      FloatingActionButton.extended(
+                        heroTag: "Login",
+                        onPressed: verifyLogin,
+                        label: Text("Login", style: style.buttonTextStyle),
+                        backgroundColor: style.mainColor,
+                        foregroundColor: style.backgroundColor,
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          decoration: const InputDecoration(
-                            labelText: 'Password',
-                            hintText: 'Enter password',
-                            prefixIcon: Icon(Icons.lock),
-                          ),
-                          onChanged: (String value) {
-                            setState(() {
-                              password = value;
-                            });
-                          },
-                          validator: (value) {
-                            return value!.isEmpty ? 'Please enter a username' : null;
-                          }
+                      const SizedBox(width: 30),
+                      FloatingActionButton.extended(
+                        heroTag: "Back",
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/');
+                        },
+                        label: Text("Back", style: style.buttonTextStyle),
+                        backgroundColor: style.mainColor,
+                        foregroundColor: style.backgroundColor,
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    FloatingActionButton.extended(
-                      heroTag: "Login",
-                      onPressed: verifyLogin,
-                      label: Text("Login", style: style.buttonTextStyle),
-                      backgroundColor: style.mainColor,
-                      foregroundColor: style.backgroundColor,
-                    ),
-                  ]
+                    ]
+                  ),
+                ]
               ),
             ),
           ],
