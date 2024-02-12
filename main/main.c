@@ -86,27 +86,6 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "Observation.h"
 #include "Metrics.h"
 
-// Port communication defines
-// Used to debug the model's interaction with the sensor data
-#define TXD_PIN (GPIO_NUM_17)
-#define RXD_PIN (GPIO_NUM_16)
-#define BAUD_RATE 115200
-
-// This is the function that initializes the UART communication when in testing mode
-void init_uart()
-{
-    uart_config_t uart_config = {
-        .baud_rate = BAUD_RATE,
-        .data_bits = UART_DATA_8_BITS,
-        .parity = UART_PARITY_DISABLE,
-        .stop_bits = UART_STOP_BITS_1,
-        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE};
-
-    uart_param_config(UART_NUM_1, &uart_config);
-    uart_set_pin(UART_NUM_1, TXD_PIN, RXD_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
-    uart_driver_install(UART_NUM_1, 1024, 0, 0, NULL, 0);
-}
-
 // This is the function that sends the sensor data over UART when in testing mode
 void send_sensor_data(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
 {
@@ -182,7 +161,6 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 
 // Define for timestamp data
 #define PRINT_INTERVAL_MILLISECONDS 40
-#define configTICK_RATE_HZ 1000
 
 // URL Settings
 #define SERVER_URL "http://i-want-to-pass-capstone-96abfc16411c.herokuapp.com/post_endpoint"
@@ -750,10 +728,12 @@ void app_main(void)
     // Data is stored in windows, before being compressed and sent to the model, so create a window to hold it
     Window *myWindow = createWindow();
 
+    TickType_t tickBeforePrint, tickAfterPrint;
+    double sampling_rate, elapsed_time;
     // Continuously take sensor inputs until power is lost
     while (1)
     {
-        TickType_t tickBeforePrint = xTaskGetTickCount(); ///////////////////
+        tickBeforePrint = xTaskGetTickCount(); ///////////////////
 
         // Read the data from the MPU6050Sensor
         mpuSensorConnected = MPU6050Sensor_readData(&mpuSensor);
@@ -763,7 +743,7 @@ void app_main(void)
             printf("MPU6050 sensor not connected!\n");
 #endif
             // Apply actual handling procedure here...
-            vTaskDelay(pdMS_TO_TICKS(5000));
+            // vTaskDelay(pdMS_TO_TICKS(5000));
             MPU6050Sensor_init(&mpuSensor);
             mpuSensorConnected = true;
             // TO DO: Determine if this is the correct way to handle the sensor not being connected
@@ -789,7 +769,7 @@ void app_main(void)
             printf("BMP280 sensor not connected!\n");
 #endif
             // Apply actual handling procedure here...
-            vTaskDelay(pdMS_TO_TICKS(5000));
+            // vTaskDelay(pdMS_TO_TICKS(5000));
             BMP280Sensor_init(&bmpSensor);
             bmpSensorConnected = true;
             // TO DO: Determine if this is the correct way to handle the sensor not being connected
@@ -883,8 +863,13 @@ void app_main(void)
         }
 
         /////////////////////////s
-        TickType_t tickAfterPrint = xTaskGetTickCount();
-        printf("Time taken for printf: %lu ticks\n", tickAfterPrint - tickBeforePrint);
+        tickAfterPrint = xTaskGetTickCount();
+        // Stop timing
+        elapsed_time = (double)(tickAfterPrint - tickBeforePrint) * portTICK_PERIOD_MS / 100.0;
+
+        // Calculate sampling rate
+        sampling_rate = 1 / elapsed_time;
+        // printf("Sampling rate: %f Hz\n", sampling_rate);
     }
 
     // Delete i2c driver installs
