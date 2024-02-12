@@ -86,6 +86,9 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "Observation.h"
 #include "Metrics.h"
 
+// Imports related to the model
+#include "edge-impulse-sdk/classifier/ei_run_classifier_c.h"
+
 // This is the function that sends the sensor data over UART when in testing mode
 void send_sensor_data(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
 {
