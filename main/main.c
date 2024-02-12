@@ -87,7 +87,7 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "Metrics.h"
 
 // Imports related to the model
-#include "edge-impulse-sdk/classifier/ei_run_classifier_c.h"
+#include "cpp_code.h"
 
 // This is the function that sends the sensor data over UART when in testing mode
 void send_sensor_data(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
@@ -686,8 +686,19 @@ float r_y;
 float r_z;
 float temp_calibrated;
 float press_calibrated;
-void app_main(void)
+int app_main(void)
 {
+    ////////////////////////// ML Stuff //////////////////////////
+    int result = check_feature_array_size(200); // I think lol
+    if (result == 0)
+    {
+        printf("Feature array size is correct\n");
+    }
+    else
+    {
+        printf("Feature array size is incorrect\n");
+    }
+    ////////////////////////// ML Stuff //////////////////////////
 #ifdef DEBUGGING_MODE
     // Ensure it is properly reading from the microcontroller
     print_chip_info();
@@ -873,6 +884,10 @@ void app_main(void)
         // Calculate sampling rate
         sampling_rate = 1 / elapsed_time;
         // printf("Sampling rate: %f Hz\n", sampling_rate);
+
+        // More ML Stuff //////
+        classifier_loop();
+        //////////////////////
     }
 
     // Delete i2c driver installs
