@@ -117,7 +117,7 @@ class _AccountRegisterPageState extends State<AccountRegisterPage> {
                       children: [
                         FloatingActionButton.extended(
                           heroTag: "Create Account",
-                          onPressed: verifyAccount,
+                          onPressed: handleAccount,
                           label: Text("Create Account", style: style.buttonTextStyle),
                           backgroundColor: style.mainColor,
                           foregroundColor: style.backgroundColor,
@@ -143,6 +143,20 @@ class _AccountRegisterPageState extends State<AccountRegisterPage> {
     );
   }
 
+  void handleAccount() {
+    if (username.isEmpty) {
+      errorEmpty("username");
+    } else if (password.isEmpty) {
+      errorEmpty("password");
+    } else if (first_name.isEmpty) {
+      errorEmpty("first name");
+    } else if (last_name.isEmpty) {
+      errorEmpty("last name");
+    } else {
+      verifyAccount();
+    }
+  }
+
   Future<void> verifyAccount() async {
     List<List<dynamic>> results = await db.connection.query("SELECT * FROM login WHERE username='$username'");
 
@@ -155,7 +169,7 @@ class _AccountRegisterPageState extends State<AccountRegisterPage> {
   }
 
   Future<void> createUser() async {
-    await db.connection.query("INSERT INTO users (username, first_name, last_name, daily_steps, daily_floors) VALUES ('$username', '$first_name', '$last_name', 0, 0)");
+    await db.connection.query("INSERT INTO users (username, first_name, last_name, daily_floors) VALUES ('$username', '$first_name', '$last_name', 0)");
     await db.connection.query("INSERT INTO login (username, password) VALUES ('$username', '$password')");
   }
 
@@ -183,5 +197,24 @@ class _AccountRegisterPageState extends State<AccountRegisterPage> {
       ],
     ),
   );
+
+  void errorEmpty(String type) => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: style.backgroundColor,
+      title: Text("Error: Please enter a $type", style: style.textStyle),
+      actions: [
+        TextButton(
+          onPressed: close,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("OK"),
+        )
+      ],
+    ),
+  );
 }
+
+
 
