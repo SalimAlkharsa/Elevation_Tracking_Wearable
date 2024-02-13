@@ -81,10 +81,6 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "BMP280Sensor.h"
 
 // Imports that control data windowing and queueing
-#include "Window_Queue.c"
-#include "Window.h"
-#include "Observation.h"
-#include "Metrics.h"
 
 // Imports related to the model
 #include "cpp_code.h"
@@ -689,7 +685,7 @@ float press_calibrated;
 int app_main(void)
 {
     ////////////////////////// ML Stuff //////////////////////////
-    int result = check_feature_array_size(200); // I think lol
+    int result = check_feature_array_size(200); // TODO: This needs to be refactored to be more dynamic
     if (result == 0)
     {
         printf("Feature array size is correct\n");
@@ -736,12 +732,6 @@ int app_main(void)
     bool mpuSensorConnected;
     bool bmpSensorConnected;
 
-    // Create a queue to hold data, in case more data is being read than can be processed
-    WindowQueue *myQueue = initializeQueue();
-
-    // Data is stored in windows, before being compressed and sent to the model, so create a window to hold it
-    Window *myWindow = createWindow();
-
     TickType_t tickBeforePrint, tickAfterPrint;
     double sampling_rate, elapsed_time;
     // Continuously take sensor inputs until power is lost
@@ -757,7 +747,7 @@ int app_main(void)
             printf("MPU6050 sensor not connected!\n");
 #endif
             // Apply actual handling procedure here...
-            // vTaskDelay(pdMS_TO_TICKS(5000));
+            vTaskDelay(pdMS_TO_TICKS(5000));
             MPU6050Sensor_init(&mpuSensor);
             mpuSensorConnected = true;
             // TO DO: Determine if this is the correct way to handle the sensor not being connected
@@ -783,7 +773,7 @@ int app_main(void)
             printf("BMP280 sensor not connected!\n");
 #endif
             // Apply actual handling procedure here...
-            // vTaskDelay(pdMS_TO_TICKS(5000));
+            vTaskDelay(pdMS_TO_TICKS(5000));
             BMP280Sensor_init(&bmpSensor);
             bmpSensorConnected = true;
             // TO DO: Determine if this is the correct way to handle the sensor not being connected
@@ -802,55 +792,9 @@ int app_main(void)
 #endif
 
         // Data Reads are now done, so we can start processing the data
+
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
-
-        // Check if we can insert the data into the window
-        if (myWindow->observationCount < 12)
-        {
-            Observation newObservation;
-            newObservation.Pa = bmpSensor.pressure;
-            newObservation.Z_rot = mpuSensor.r_z;
-            newObservation.Z_acc = mpuSensor.a_z;
-            newObservation.Y_acc = mpuSensor.a_y;
-            insertObservation(myWindow, newObservation);
-        }
-        // If we can not, that means the window is full so print the window and calculate the metrics (for debgging purposes)
-        else
-        {
-#ifdef DEBUGGING_MODE
-            // Print statements for the observations to ensure the window is correctly working
-            for (int i = 0; i < myWindow->observationCount; i++)
-            {
-                printf("Observation %d: Pa = %f, Z_rot = %f, Z_acc = %f, Y_acc = %f\n", i, myWindow->observations[i].Pa, myWindow->observations[i].Z_rot, myWindow->observations[i].Z_acc, myWindow->observations[i].Y_acc);
-            }
-#endif
-            // Calculate the metrics of the window (these metrics will change as the model changes)
-            // Currently these are the valuable metrics from ECEN 403
-            Metrics myMetrics = calculateMetrics(myWindow);
-
-            // Assign the calculated metrics to the window
-            myWindow->metrics = myMetrics;
-
-            // Now reset the window observations, to free space since the model only needs the metrics, not every observation
-            clearObservations(myWindow);
-
-#ifdef DEBUGGING_MODE
-            // Debugging Print to ensure the metrics are being calculated correctly, cross compare with the observations previously printed
-            printf("Metrics: Pa_roc = %f, Z_rot_max_min = %f, Z_g_max = %f, Z_g_min = %f, Y_g_kurtosis = %f\n", myWindow->metrics.Pa_roc, myWindow->metrics.Z_rot_max_min, myWindow->metrics.Z_g_max, myWindow->metrics.Z_g_min, myWindow->metrics.Y_g_kurtosis);
-#endif
-            // Now send the window to the queue
-            enqueue(myQueue, *myWindow); // TODO: The logic here is not correct so the queue is not gonna work but this is a later problem
-
-#ifdef DEBUGGING_MODE
-            // Print the queue for debugging purposes, goal is to see if a window is being added to the queue
-            printQueue(myQueue);
-#endif
-
-            // Now make a new window called myWindow
-            myWindow = createWindow();
-        }
-        // Handle queue later here after the windows and pass to the model (whatever that entails)
 
         // Check if timestamp was successfully allocated
         if (my_timestamp != NULL)
@@ -867,11 +811,6 @@ int app_main(void)
             press_calibrated = bmpSensor.pressure;
             // send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
 
-#ifdef TESTING_MODE
-            // Send the sensor data over UART
-            send_sensor_data(a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
-#endif
-
             // Free the allocated memory once done using it
             free(my_timestamp);
         }
@@ -883,7 +822,7 @@ int app_main(void)
 
         // Calculate sampling rate
         sampling_rate = 1 / elapsed_time;
-        // printf("Sampling rate: %f Hz\n", sampling_rate);
+        printf("Sampling rate: %f Hz\n", sampling_rate);
 
         // More ML Stuff //////
         classifier_loop();
