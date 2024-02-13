@@ -35,18 +35,6 @@ but note that the final data transmission will be to the postgreSQL database, wr
 
   Additional modifications and customizations have been made for specific purposes in this code.
 */
-
-// PRIOR TO RUNNING CONTROL THIS TOGGLE
-/*
-    This is to control for how the code is being outputted.
-    If you are testing the code, uncomment the TESTING_MODE define.
-    If you are debugging the code, uncomment the DEBUGGING_MODE define.
-    When we are fully operational, neither of these should be defined and the code should be cleaned.
-    For now, Salim needs a way to control the output of the code to see how the data interacts with the model using a debugger.
-*/
-#define TESTING_MODE
-// #define DEBUGGING_MODE
-
 #include <stdio.h>
 #include <inttypes.h>
 #include "driver/i2c.h"
@@ -80,13 +68,14 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "MPU6050Sensor.h"
 #include "BMP280Sensor.h"
 
-// Imports that control data windowing and queueing
+// Imports that control model windows
+#include "slice.c"
 
 // Imports related to the model
 #include "cpp_code.h"
 
 // This is the function that sends the sensor data over UART when in testing mode
-void send_sensor_data(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
+void process_sensor_data_into_model(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
 {
     // Not sure what value to use for the buffer size but 50 is arbitrary and works for now
     char data[100];
@@ -235,11 +224,9 @@ void calculate_elapsed_time(unsigned long long *elapsed_ms, char *strftime_buf)
     elapsed_seconds %= 60;
     elapsed_minutes %= 60;
 
-#ifdef DEBUGGING_MODE
     // Append the elapsed time to the formatted timestamp
     snprintf(strftime_buf + strlen(strftime_buf), sizeof(strftime_buf) - strlen(strftime_buf),
              " | Elapsed time: %02llu:%02llu:%02llu", elapsed_hours, elapsed_minutes, elapsed_seconds);
-#endif
 }
 
 /*
@@ -549,9 +536,7 @@ void send_post_request(char *my_timestamp, float user_id, float a_x, float a_y, 
 
     // Print the JSON object
     char *post_data = cJSON_Print(json_root);
-#ifdef DEBUGGING_MODE
     printf("%s\n", post_data);
-#endif
 
     // Initialize the HTTP client configuration
     esp_http_client_config_t config = {
@@ -682,6 +667,7 @@ float r_y;
 float r_z;
 float temp_calibrated;
 float press_calibrated;
+
 int app_main(void)
 {
     ////////////////////////// ML Stuff //////////////////////////
@@ -695,10 +681,8 @@ int app_main(void)
         printf("Feature array size is incorrect\n");
     }
     ////////////////////////// ML Stuff //////////////////////////
-#ifdef DEBUGGING_MODE
     // Ensure it is properly reading from the microcontroller
     print_chip_info();
-#endif DEBUGGING_MODE
 
     // Initialize non-volatile storage
     esp_err_t ret = nvs_flash_init();
@@ -734,6 +718,17 @@ int app_main(void)
 
     TickType_t tickBeforePrint, tickAfterPrint;
     double sampling_rate, elapsed_time;
+
+    // This is where the sensor data is stored
+    float values[5] = {};
+    // define the big window of data where the slices will be stored
+    // also define the slices that will be used to store the sensor data
+    Slice slices[5];
+    for (int i = 0; i < 5; i++)
+    {
+        slices[i] = initializeSlice();
+    }
+
     // Continuously take sensor inputs until power is lost
     while (1)
     {
@@ -743,9 +738,7 @@ int app_main(void)
         mpuSensorConnected = MPU6050Sensor_readData(&mpuSensor);
         if (!mpuSensorConnected)
         {
-#ifdef DEBUGGING_MODE
             printf("MPU6050 sensor not connected!\n");
-#endif
             // Apply actual handling procedure here...
             vTaskDelay(pdMS_TO_TICKS(5000));
             MPU6050Sensor_init(&mpuSensor);
@@ -755,23 +748,17 @@ int app_main(void)
         }
         else
         {
-#ifdef DEBUGGING_MODE
             printf("MPU6050 is connected.\n");
-#endif
         }
 
-#ifdef DEBUGGING_MODE
         // Print the data from the MPU6050Sensor for debugging purposes
         MPU6050Sensor_printData(&mpuSensor);
-#endif
         // Read the data from the BMP280Sensor
         bmpSensorConnected = BMP280Sensor_readData(&bmpSensor);
 
         if (!bmpSensorConnected)
         {
-#ifdef DEBUGGING_MODE
             printf("BMP280 sensor not connected!\n");
-#endif
             // Apply actual handling procedure here...
             vTaskDelay(pdMS_TO_TICKS(5000));
             BMP280Sensor_init(&bmpSensor);
@@ -781,17 +768,30 @@ int app_main(void)
         }
         else
         {
-#ifdef DEBUGGING_MODE
             printf("BMP280 is connected.\n");
-#endif
         }
 
-#ifdef DEBUGGING_MODE
         // Print the data from the BMP280Sensor for debugging purposes
         BMP280Sensor_printData(&bmpSensor);
-#endif
+        //////////////////////////////////////////////////////////////////
+        // Data Reads are now done, so we can start processing the data//
+        /////////////////////////////////////////////////////////////////
 
-        // Data Reads are now done, so we can start processing the data
+        // Go through the process of adding the sensor data to the slices for the model
+        // Define the collected data that will be added to the slices
+        values[0] = mpuSensor.a_y;
+        values[1] = mpuSensor.a_z;
+        values[2] = mpuSensor.r_y;
+        values[3] = mpuSensor.r_z;
+        values[4] = bmpSensor.pressure;
+        // Add the data to the slices
+        addSensorDataToSlices(slices, 5, values, 5);
+        // print the slices for debugging purposes
+        for (int i = 0; i < 5; i++)
+        {
+            printf("Slice %d: ", i);
+            printSlice(slices[i]);
+        }
 
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
@@ -818,14 +818,14 @@ int app_main(void)
         /////////////////////////s
         tickAfterPrint = xTaskGetTickCount();
         // Stop timing
-        elapsed_time = (double)(tickAfterPrint - tickBeforePrint) * portTICK_PERIOD_MS / 100.0;
+        elapsed_time = (double)(tickAfterPrint - tickBeforePrint) * portTICK_PERIOD_MS / 1000.0;
 
         // Calculate sampling rate
         sampling_rate = 1 / elapsed_time;
         printf("Sampling rate: %f Hz\n", sampling_rate);
 
         // More ML Stuff //////
-        classifier_loop();
+        // classifier_loop();
         //////////////////////
     }
 
