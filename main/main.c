@@ -793,6 +793,14 @@ int app_main(void)
             printSlice(slices[i]);
         }
 
+        // If all the slices are full, then we can start processing the data into the model
+        if (slices[4].length == MAX_CAPACITY)
+        {
+            // This means that the slices are full and we can start processing the data
+            // Print full to check
+            printf("All slices are full\n");
+        }
+
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
 
