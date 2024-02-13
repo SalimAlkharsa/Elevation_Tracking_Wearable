@@ -73,6 +73,7 @@ but note that the final data transmission will be to the postgreSQL database, wr
 
 // Imports related to the model
 #include "cpp_code.h"
+float features[];
 
 // This is the function that sends the sensor data over UART when in testing mode
 void process_sensor_data_into_model(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
@@ -728,6 +729,7 @@ int app_main(void)
     {
         slices[i] = initializeSlice();
     }
+    // float features[200];
 
     // Continuously take sensor inputs until power is lost
     while (1)
@@ -797,8 +799,26 @@ int app_main(void)
         if (slices[4].length == MAX_CAPACITY)
         {
             // This means that the slices are full and we can start processing the data
-            // Print full to check
-            printf("All slices are full\n");
+            printf("All slices are full, data will now be processed into the model! \n \n \n");
+            // Load the features array to store the data from the all the slices
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < slices[i].length; j++)
+                {
+                    features[i * 40 + j] = slices[i].data[j];
+                }
+            }
+
+            // Pass the features array to the C++ code
+            if (check_feature_array_size(200) == 1)
+            {
+                printf("Feature array size is incorrect\n");
+            }
+            else
+            {
+                printf("Feature array size is correct\n");
+                classifier_loop();
+            }
         }
 
         // Allocate timestamp

@@ -5,7 +5,8 @@
     "micro_interpreter.h": "c",
     "schema_generated.h": "c",
     "ratio": "c",
-    "*.tflite": "c"
+    "*.tflite": "c",
+    "cpp_code.h": "c"
   },
   "idf.adapterTargetName": "esp32",
   "idf.flashType": "UART",
