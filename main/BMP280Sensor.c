@@ -121,7 +121,7 @@ void BMP280Sensor_init(BMP280Sensor *sensor)
 
     if (bmp280_checkI2COperation(err) && bmp280_who_am_i_value == 0x58)
     {
-        // ESP_LOGI(TAG, "BMP280 sensor detected."); //TODO EDIT LATER
+        ESP_LOGI(TAG, "BMP280 sensor detected.");
     }
     else
     {
