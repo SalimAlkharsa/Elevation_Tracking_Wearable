@@ -243,17 +243,13 @@ void initialize_timer()
 
     if (timer == NULL)
     {
-#ifdef DEBUGGING_MODE
         printf("Failed to create timer\n");
-#endif
         return;
     }
 
     if (xTimerStart(timer, 0) != pdPASS)
     {
-#ifdef DEBUGGING_MODE
         printf("Failed to start timer\n");
-#endif
         return;
     }
 }
@@ -672,7 +668,7 @@ float press_calibrated;
 int app_main(void)
 {
     ////////////////////////// ML Stuff //////////////////////////
-    int result = check_feature_array_size(200); // TODO: This needs to be refactored to be more dynamic
+    int result = check_feature_array_size(40 * 5); // Features in splice x splices
     if (result == 0)
     {
         printf("Feature array size is correct\n");
@@ -695,7 +691,7 @@ int app_main(void)
     ESP_ERROR_CHECK(ret);
 
     // Initialize the Wi-Fi connection
-    // wifi_init_sta();
+    wifi_init_sta();
 
     // AT: need to figure out if this delay is still necessary
     // vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -729,7 +725,6 @@ int app_main(void)
     {
         slices[i] = initializeSlice();
     }
-    // float features[200];
 
     // Continuously take sensor inputs until power is lost
     while (1)
@@ -762,7 +757,7 @@ int app_main(void)
         {
             printf("BMP280 sensor not connected!\n");
             // Apply actual handling procedure here...
-            vTaskDelay(pdMS_TO_TICKS(5000));
+            vTaskDelay(pdMS_TO_TICKS(1000));
             BMP280Sensor_init(&bmpSensor);
             bmpSensorConnected = true;
             // TO DO: Determine if this is the correct way to handle the sensor not being connected
@@ -837,7 +832,7 @@ int app_main(void)
             r_z = mpuSensor.r_z;
             temp_calibrated = bmpSensor.temperature;
             press_calibrated = bmpSensor.pressure;
-            // send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
+            send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
 
             // Free the allocated memory once done using it
             free(my_timestamp);
@@ -851,10 +846,6 @@ int app_main(void)
         // Calculate sampling rate
         sampling_rate = 1 / elapsed_time;
         printf("Sampling rate: %f Hz\n", sampling_rate);
-
-        // More ML Stuff //////
-        // classifier_loop();
-        //////////////////////
     }
 
     // Delete i2c driver installs
