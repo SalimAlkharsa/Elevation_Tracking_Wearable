@@ -169,9 +169,6 @@ bool BMP280Sensor_readData(BMP280Sensor *sensor)
     int32_t adc_P = (bmp280_data[0] << 12) | (bmp280_data[1] << 4) | (bmp280_data[2] & (0xFF));
     int32_t adc_T = (bmp280_data[3] << 12) | (bmp280_data[4] << 4) | (bmp280_data[5] & (0xFF));
 
-    // Allow time for adc calculations
-    // vTaskDelay(500 / portTICK_PERIOD_MS);
-
     // Adjust start register to read the calibrations
     start_register = 0x88;
     end_register = 0x9F;
