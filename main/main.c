@@ -62,16 +62,31 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "freertos/queue.h"
 #include "freertos/timers.h"
 #include "lwip/apps/sntp.h"
+#include "driver/uart.h"
 
 // Imports where the sensors are defined
 #include "MPU6050Sensor.h"
 #include "BMP280Sensor.h"
 
-// Imports that control data windowing and queueing
-#include "Window_Queue.c"
-#include "Window.h"
-#include "Observation.h"
-#include "Metrics.h"
+// Imports that control model windows
+#include "slice.c"
+
+// Imports related to the model
+#include "cpp_code.h"
+float features[];
+
+// This is the function that sends the sensor data over UART when in testing mode
+void process_sensor_data_into_model(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
+{
+    // Not sure what value to use for the buffer size but 50 is arbitrary and works for now
+    char data[100];
+
+    // Format the data as per the protocol
+    snprintf(data, sizeof(data), "%f, %f, %f, %f, %f, %f, %f, %f", x_acc, y_acc, z_acc, x_rot, y_rot, z_rot, temp, press);
+
+    // Print the data for debugging purposes
+    printf("%s\n", data);
+}
 
 // Defines for I2C functionality
 // Defines for the SCL and SDA pins on the ESP-32 WROOM
@@ -146,7 +161,7 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 #define WIFI_FAIL_BIT BIT1
 
 // This is arbitrary, need a tag but the name isn't important
-static const char *TAG = "demo";
+static const char *TAG = ""; // Try an empty string
 
 // FreeRTOS event group to signal when connected
 static EventGroupHandle_t s_wifi_event_group;
@@ -649,8 +664,20 @@ float r_y;
 float r_z;
 float temp_calibrated;
 float press_calibrated;
-void app_main(void)
+
+int app_main(void)
 {
+    ////////////////////////// ML Stuff //////////////////////////
+    int result = check_feature_array_size(40 * 5); // Features in splice x splices
+    if (result == 0)
+    {
+        printf("Feature array size is correct\n");
+    }
+    else
+    {
+        printf("Feature array size is incorrect\n");
+    }
+    ////////////////////////// ML Stuff //////////////////////////
     // Ensure it is properly reading from the microcontroller
     print_chip_info();
 
@@ -667,14 +694,14 @@ void app_main(void)
     wifi_init_sta();
 
     // AT: need to figure out if this delay is still necessary
-    vTaskDelay(500 / portTICK_PERIOD_MS);
+    // vTaskDelay(500 / portTICK_PERIOD_MS);
 
     // Intialize the I2C port
     ESP_ERROR_CHECK(i2c_master_init());
 
     initialize_timer();
     // AT: need to figure out if this delay is still necessary
-    vTaskDelay(pdMS_TO_TICKS(7500));
+    // vTaskDelay(pdMS_TO_TICKS(7500));
 
     // Declare the sensor object
     MPU6050Sensor mpuSensor;
@@ -686,15 +713,24 @@ void app_main(void)
     bool mpuSensorConnected;
     bool bmpSensorConnected;
 
-    // Create a queue to hold data, in case more data is being read than can be processed
-    WindowQueue *myQueue = initializeQueue();
+    TickType_t tickBeforePrint, tickAfterPrint;
+    double sampling_rate, elapsed_time;
 
-    // Data is stored in windows, before being compressed and sent to the model, so create a window to hold it
-    Window *myWindow = createWindow();
+    // This is where the sensor data is stored
+    float values[5] = {};
+    // define the big window of data where the slices will be stored
+    // also define the slices that will be used to store the sensor data
+    Slice slices[5];
+    for (int i = 0; i < 5; i++)
+    {
+        slices[i] = initializeSlice();
+    }
 
     // Continuously take sensor inputs until power is lost
     while (1)
     {
+        tickBeforePrint = xTaskGetTickCount(); ///////////////////
+
         // Read the data from the MPU6050Sensor
         mpuSensorConnected = MPU6050Sensor_readData(&mpuSensor);
         if (!mpuSensorConnected)
@@ -711,16 +747,17 @@ void app_main(void)
         {
             printf("MPU6050 is connected.\n");
         }
+
         // Print the data from the MPU6050Sensor for debugging purposes
         MPU6050Sensor_printData(&mpuSensor);
-
         // Read the data from the BMP280Sensor
         bmpSensorConnected = BMP280Sensor_readData(&bmpSensor);
+
         if (!bmpSensorConnected)
         {
             printf("BMP280 sensor not connected!\n");
             // Apply actual handling procedure here...
-            vTaskDelay(pdMS_TO_TICKS(5000));
+            vTaskDelay(pdMS_TO_TICKS(1000));
             BMP280Sensor_init(&bmpSensor);
             bmpSensorConnected = true;
             // TO DO: Determine if this is the correct way to handle the sensor not being connected
@@ -730,55 +767,57 @@ void app_main(void)
         {
             printf("BMP280 is connected.\n");
         }
+
         // Print the data from the BMP280Sensor for debugging purposes
         BMP280Sensor_printData(&bmpSensor);
+        //////////////////////////////////////////////////////////////////
+        // Data Reads are now done, so we can start processing the data//
+        /////////////////////////////////////////////////////////////////
 
-        // Data Reads are now done, so we can start processing the data
+        // Go through the process of adding the sensor data to the slices for the model
+        // Define the collected data that will be added to the slices
+        values[0] = mpuSensor.a_y;
+        values[1] = mpuSensor.a_z;
+        values[2] = mpuSensor.r_y;
+        values[3] = mpuSensor.r_z;
+        values[4] = bmpSensor.pressure;
+        // Add the data to the slices
+        addSensorDataToSlices(slices, 5, values, 5);
+        // print the slices for debugging purposes
+        for (int i = 0; i < 5; i++)
+        {
+            printf("Slice %d: ", i);
+            printSlice(slices[i]);
+        }
+
+        // If all the slices are full, then we can start processing the data into the model
+        if (slices[4].length == MAX_CAPACITY)
+        {
+            // This means that the slices are full and we can start processing the data
+            printf("All slices are full, data will now be processed into the model! \n \n \n");
+            // Load the features array to store the data from the all the slices
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < slices[i].length; j++)
+                {
+                    features[i * 40 + j] = slices[i].data[j];
+                }
+            }
+
+            // Pass the features array to the C++ code
+            if (check_feature_array_size(200) == 1)
+            {
+                printf("Feature array size is incorrect\n");
+            }
+            else
+            {
+                printf("Feature array size is correct\n");
+                classifier_loop();
+            }
+        }
 
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
-
-        // Check if we can insert the data into the window
-        if (myWindow->observationCount < 12)
-        {
-            Observation newObservation;
-            newObservation.Pa = bmpSensor.pressure;
-            newObservation.Z_rot = mpuSensor.r_z;
-            newObservation.Z_acc = mpuSensor.a_z;
-            newObservation.Y_acc = mpuSensor.a_y;
-            insertObservation(myWindow, newObservation);
-        }
-        // If we can not, that means the window is full so print the window and calculate the metrics (for debgging purposes)
-        else
-        {
-            // Print statements for the observations to ensure the window is correctly working
-            for (int i = 0; i < myWindow->observationCount; i++)
-            {
-                printf("Observation %d: Pa = %f, Z_rot = %f, Z_acc = %f, Y_acc = %f\n", i, myWindow->observations[i].Pa, myWindow->observations[i].Z_rot, myWindow->observations[i].Z_acc, myWindow->observations[i].Y_acc);
-            }
-            // Calculate the metrics of the window (these metrics will change as the model changes)
-            // Currently these are the valuable metrics from ECEN 403
-            Metrics myMetrics = calculateMetrics(myWindow);
-
-            // Assign the calculated metrics to the window
-            myWindow->metrics = myMetrics;
-
-            // Now reset the window observations, to free space since the model only needs the metrics, not every observation
-            clearObservations(myWindow);
-
-            // Debugging Print to ensure the metrics are being calculated correctly, cross compare with the observations previously printed
-            printf("Metrics: Pa_roc = %f, Z_rot_max_min = %f, Z_g_max = %f, Z_g_min = %f, Y_g_kurtosis = %f\n", myWindow->metrics.Pa_roc, myWindow->metrics.Z_rot_max_min, myWindow->metrics.Z_g_max, myWindow->metrics.Z_g_min, myWindow->metrics.Y_g_kurtosis);
-
-            // Now send the window to the queue
-            enqueue(myQueue, *myWindow); // TODO: The logic here is not correct so the queue is not gonna work but this is a later problem
-
-            // Print the queue for debugging purposes, goal is to see if a window is being added to the queue
-            printQueue(myQueue);
-
-            // Now make a new window called myWindow
-            myWindow = createWindow();
-        }
-        // Handle queue later here after the windows and pass to the model (whatever that entails)
 
         // Check if timestamp was successfully allocated
         if (my_timestamp != NULL)
@@ -798,6 +837,15 @@ void app_main(void)
             // Free the allocated memory once done using it
             free(my_timestamp);
         }
+
+        /////////////////////////s
+        tickAfterPrint = xTaskGetTickCount();
+        // Stop timing
+        elapsed_time = (double)(tickAfterPrint - tickBeforePrint) * portTICK_PERIOD_MS / 1000.0;
+
+        // Calculate sampling rate
+        sampling_rate = 1 / elapsed_time;
+        printf("Sampling rate: %f Hz\n", sampling_rate);
     }
 
     // Delete i2c driver installs

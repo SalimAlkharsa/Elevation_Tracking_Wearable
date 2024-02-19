@@ -4,7 +4,7 @@
 #define BMP280_SENSOR_ADDR 0x77
 #define BMP280_WHO_AM_I_REG_ADDR 0xD0
 #define I2C_MASTER_NUM 0
-#define I2C_MASTER_TIMEOUT_MS 1000
+#define I2C_MASTER_TIMEOUT_MS 100
 // This is arbitrary, need a tag but the name isn't important
 static const char *TAG = "demo";
 
@@ -99,9 +99,9 @@ void BMP280Sensor_init(BMP280Sensor *sensor)
     i2c_master_write_byte(cmd, 0xF5, 1);
 
     // Pulled these opmode select sets from the BMP280 datasheet
-    i2c_master_write_byte(cmd, 0b10010000, 1);
+    i2c_master_write_byte(cmd, 0b00011100, 1);
     bmp280_checkI2COperation(i2c_master_stop(cmd));
-    bmp280_checkI2COperation(i2c_master_cmd_begin(I2C_NUM_0, cmd, 1000 / portTICK_PERIOD_MS));
+    bmp280_checkI2COperation(i2c_master_cmd_begin(I2C_NUM_0, cmd, 100 / portTICK_PERIOD_MS));
 
     i2c_cmd_link_delete(cmd);
 
@@ -112,10 +112,10 @@ void BMP280Sensor_init(BMP280Sensor *sensor)
     i2c_master_write_byte(cmd, 0xF4, 1);
 
     // Pulled these opmode select sets from the BMP280 datasheet
-    i2c_master_write_byte(cmd, 0b00100111, 1);
+    i2c_master_write_byte(cmd, 0b11101011, 1);
     // i2c_master_write_byte(cmd, 0b01010111, 1);
     bmp280_checkI2COperation(i2c_master_stop(cmd));
-    bmp280_checkI2COperation(i2c_master_cmd_begin(I2C_NUM_0, cmd, 1000 / portTICK_PERIOD_MS));
+    bmp280_checkI2COperation(i2c_master_cmd_begin(I2C_NUM_0, cmd, 100 / portTICK_PERIOD_MS));
 
     esp_err_t err = bmp280_register_read_byte(BMP280_WHO_AM_I_REG_ADDR, &bmp280_who_am_i_value, 1);
 
@@ -162,25 +162,12 @@ bool BMP280Sensor_readData(BMP280Sensor *sensor)
     // Read 6 bytes for the pressure and temperature data
     bmp280_connected &= bmp280_checkI2COperation(i2c_master_read(cmd, bmp280_data, 6, I2C_MASTER_LAST_NACK));
     bmp280_connected &= bmp280_checkI2COperation(i2c_master_stop(cmd));
-    bmp280_connected &= bmp280_checkI2COperation(i2c_master_cmd_begin(I2C_NUM_0, cmd, 1000 / portTICK_PERIOD_MS));
+    bmp280_connected &= bmp280_checkI2COperation(i2c_master_cmd_begin(I2C_NUM_0, cmd, 100 / portTICK_PERIOD_MS));
 
     i2c_cmd_link_delete(cmd);
 
-    if (!bmp280_connected)
-    {
-        printf("BMP280 sensor not connected!\n");
-        return false;
-    }
-    else
-    {
-        printf("BMP280 is connected.\n");
-    }
-
     int32_t adc_P = (bmp280_data[0] << 12) | (bmp280_data[1] << 4) | (bmp280_data[2] & (0xFF));
     int32_t adc_T = (bmp280_data[3] << 12) | (bmp280_data[4] << 4) | (bmp280_data[5] & (0xFF));
-
-    // Allow time for adc calculations
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
 
     // Adjust start register to read the calibrations
     start_register = 0x88;
@@ -209,7 +196,7 @@ bool BMP280Sensor_readData(BMP280Sensor *sensor)
     bmp280_calibration_success &= bmp280_checkI2COperation(i2c_master_write_byte(cmd, (BMP280_SENSOR_ADDR << 1) | I2C_MASTER_READ, 1));
     bmp280_calibration_success &= bmp280_checkI2COperation(i2c_master_read(cmd, calibration_bmp280_data, 24, I2C_MASTER_LAST_NACK));
     bmp280_calibration_success &= bmp280_checkI2COperation(i2c_master_stop(cmd));
-    bmp280_calibration_success &= bmp280_checkI2COperation(i2c_master_cmd_begin(I2C_NUM_0, cmd, 1000 / portTICK_PERIOD_MS));
+    bmp280_calibration_success &= bmp280_checkI2COperation(i2c_master_cmd_begin(I2C_NUM_0, cmd, 100 / portTICK_PERIOD_MS));
 
     i2c_cmd_link_delete(cmd);
 
