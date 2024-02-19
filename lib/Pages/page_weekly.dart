@@ -27,6 +27,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
   String type = "";
   double min = 0;
   double max = 0;
+  String username = db.user;
 
   void initializeDate() {
     if (!isInitialized) {
@@ -95,7 +96,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
 
       for (int d = 0; d < 7; d++) {
         List<List<dynamic>> results = await db.connection.query(
-            "SELECT hr FROM sensors WHERE user_id=0 AND timestamp>'$dateStart' AND timestamp<'$dateNext' ORDER BY timestamp");
+            "SELECT hr FROM sensors WHERE username='$username' AND timestamp>'$dateStart' AND timestamp<'$dateNext' ORDER BY timestamp");
         for (int i = 0; i < results.length; i++) {
           total_hr += results[i][0];
         }
@@ -118,7 +119,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
 
       for (int d = 0; d < 7; d++) {
         List<List<dynamic>> results = await db.connection.query(
-            "SELECT amt, direction FROM climbs WHERE user_id=0 AND timestamp>'$dateStart' AND timestamp<'$dateNext' ORDER BY timestamp");
+            "SELECT amt, direction FROM climbs WHERE username='$username' AND timestamp>'$dateStart' AND timestamp<'$dateNext' ORDER BY timestamp");
 
         for (int i = 0; i < results.length; i++) {
           curr_amt = results[i][0];

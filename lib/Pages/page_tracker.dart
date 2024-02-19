@@ -29,6 +29,8 @@ class _TrackerPageState extends State<TrackerPage> {
 
   bool initialized = false;
 
+  String username = db.user;
+
   // The text editing controller is used to capture user input and pass it into
   // local copies of data through dialog boxes
   late TextEditingController controller;
@@ -158,7 +160,7 @@ class _TrackerPageState extends State<TrackerPage> {
 
   void initializeData () async {
 
-    List<List<dynamic>> results = await db.connection.query("SELECT first_name FROM users ORDER BY user_id");
+    List<List<dynamic>> results = await db.connection.query("SELECT username FROM users ORDER BY username");
 
     setState(() {
       dateCursor = dateCursor.subtract(const Duration(hours: 5));
@@ -173,7 +175,7 @@ class _TrackerPageState extends State<TrackerPage> {
 
   void updateData () async {
 
-    String curr_name = "";
+    String curr_user = "";
     String curr_direction = "";
     int curr_amt = 0;
     int tot_amt = 0;
@@ -200,9 +202,9 @@ class _TrackerPageState extends State<TrackerPage> {
 
     for (int i = 0; i < nameList.length; i++) {
 
-      curr_name = nameList[i];
+      curr_user = nameList[i];
       List<List<dynamic>> results = await db.connection.query(
-          "SELECT amt, direction FROM climbs INNER JOIN users ON climbs.user_id = users.user_id WHERE first_name='$curr_name' AND timestamp>'$dateCursor'");
+          "SELECT amt, direction FROM climbs INNER JOIN users ON climbs.username = users.username WHERE username='$curr_user' AND timestamp>'$dateCursor'");
 
       for (int i = 0; i < results.length; i++) {
         curr_amt = results[i][0];

@@ -174,6 +174,7 @@ class _AccountRegisterPageState extends State<AccountRegisterPage> {
   }
 
   void creationSuccess() {
+    db.user = username;
     Navigator.pushReplacementNamed(context, '/main');
   }
 

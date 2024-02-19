@@ -26,6 +26,7 @@ class _DailyPageState extends State<DailyPage> {
   String currentDate = ""; // String form of the date for display
   bool isInitialized = false; // Tracks whether data has been initialized
   String mode = ""; // A string to contain the type of data being compared
+  String username = db.user;
 
   // This function initializes the data members to their required values
   void initializeDate() {
@@ -102,7 +103,7 @@ class _DailyPageState extends State<DailyPage> {
 
       // The database is queried for climb data which happened on the given date
       List<List<dynamic>> results = await db.connection.query(
-          "SELECT amt, direction, timestamp FROM climbs WHERE user_id=0 AND timestamp>'$dateSelected' AND timestamp<'$nextDate' ORDER BY timestamp");
+          "SELECT amt, direction, timestamp FROM climbs WHERE username='$username' AND timestamp>'$dateSelected' AND timestamp<'$nextDate' ORDER BY timestamp");
 
       for (int i = 0; i < results.length; i++) {
 
@@ -137,7 +138,7 @@ class _DailyPageState extends State<DailyPage> {
 
       // The database is queried for heart rate sensor data which happened on the given date
       List<List<dynamic>> results = await db.connection.query(
-          "SELECT hr, timestamp FROM sensors WHERE user_id=0 AND timestamp>'$dateSelected' AND timestamp<'$nextDate' ORDER BY timestamp");
+          "SELECT hr, timestamp FROM sensors WHERE username='$username' AND timestamp>'$dateSelected' AND timestamp<'$nextDate' ORDER BY timestamp");
 
       for (int i = 0; i < results.length; i++) {
 
