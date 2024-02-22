@@ -83,9 +83,6 @@ void process_sensor_data_into_model(float x_acc, float y_acc, float z_acc, float
 
     // Format the data as per the protocol
     snprintf(data, sizeof(data), "%f, %f, %f, %f, %f, %f, %f, %f", x_acc, y_acc, z_acc, x_rot, y_rot, z_rot, temp, press);
-
-    // Print the data for debugging purposes
-    printf("%s\n", data);
 }
 
 // Defines for I2C functionality
@@ -463,6 +460,16 @@ void wifi_init_sta(void)
     }
 }
 
+// Function to check WiFi connection status
+bool isWiFiConnected()
+{
+    wifi_ap_record_t ap_info;
+    esp_err_t result = esp_wifi_sta_get_ap_info(&ap_info);
+
+    // If ESP_OK, then connected to WiFi
+    return result == ESP_OK;
+}
+
 /*
    Handles events occurring during an HTTP client operation:
    - Switches over different events and performs appropriate actions if needed.
@@ -533,7 +540,7 @@ void send_post_request(char *my_timestamp, float user_id, float a_x, float a_y, 
 
     // Print the JSON object
     char *post_data = cJSON_Print(json_root);
-    printf("%s\n", post_data);
+    // printf("%s\n", post_data); // Comment for time
 
     // Initialize the HTTP client configuration
     esp_http_client_config_t config = {
@@ -691,7 +698,12 @@ int app_main(void)
     ESP_ERROR_CHECK(ret);
 
     // Initialize the Wi-Fi connection
+    // Time this function
+    // TickType_t ticks, new_ticks;
+    // ticks = xTaskGetTickCount();
     wifi_init_sta();
+    // new_ticks = xTaskGetTickCount();
+    // printf("Time to connect to Wi-Fi: %d\n", new_ticks - ticks);
 
     // AT: need to figure out if this delay is still necessary
     // vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -729,7 +741,7 @@ int app_main(void)
     // Continuously take sensor inputs until power is lost
     while (1)
     {
-        tickBeforePrint = xTaskGetTickCount(); ///////////////////
+        // tickBeforePrint = xTaskGetTickCount(); ///////////////////
 
         // Read the data from the MPU6050Sensor
         mpuSensorConnected = MPU6050Sensor_readData(&mpuSensor);
@@ -745,11 +757,11 @@ int app_main(void)
         }
         else
         {
-            printf("MPU6050 is connected.\n");
+            // printf("MPU6050 is connected.\n"); // Comment for time
         }
 
         // Print the data from the MPU6050Sensor for debugging purposes
-        MPU6050Sensor_printData(&mpuSensor);
+        // MPU6050Sensor_printData(&mpuSensor); // Comment for time
         // Read the data from the BMP280Sensor
         bmpSensorConnected = BMP280Sensor_readData(&bmpSensor);
 
@@ -765,11 +777,11 @@ int app_main(void)
         }
         else
         {
-            printf("BMP280 is connected.\n");
+            // printf("BMP280 is connected.\n"); // Comment for time
         }
 
         // Print the data from the BMP280Sensor for debugging purposes
-        BMP280Sensor_printData(&bmpSensor);
+        // BMP280Sensor_printData(&bmpSensor); // Comment for time
         //////////////////////////////////////////////////////////////////
         // Data Reads are now done, so we can start processing the data//
         /////////////////////////////////////////////////////////////////
@@ -786,8 +798,8 @@ int app_main(void)
         // print the slices for debugging purposes
         for (int i = 0; i < 5; i++)
         {
-            printf("Slice %d: ", i);
-            printSlice(slices[i]);
+            // printf("Slice %d: ", i); // Comment for time
+            // printSlice(slices[i]); // Comment for time
         }
 
         // If all the slices are full, then we can start processing the data into the model
@@ -819,6 +831,16 @@ int app_main(void)
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
 
+        // Check if the ESP is connected to Wi-Fi
+        if (!isWiFiConnected())
+        {
+            printf("Not connected to Wi-Fi\n");
+        }
+        else
+        {
+            printf("Connected to Wi-Fi\n");
+        }
+
         // Check if timestamp was successfully allocated
         if (my_timestamp != NULL)
         {
@@ -839,13 +861,13 @@ int app_main(void)
         }
 
         /////////////////////////s
-        tickAfterPrint = xTaskGetTickCount();
-        // Stop timing
-        elapsed_time = (double)(tickAfterPrint - tickBeforePrint) * portTICK_PERIOD_MS / 1000.0;
+        // tickAfterPrint = xTaskGetTickCount();
+        //  Stop timing
+        // elapsed_time = (double)(tickAfterPrint - tickBeforePrint) * portTICK_PERIOD_MS / 1000.0;
 
         // Calculate sampling rate
-        sampling_rate = 1 / elapsed_time;
-        printf("Sampling rate: %f Hz\n", sampling_rate);
+        // sampling_rate = 1 / elapsed_time;
+        // printf("Sampling rate: %f Hz\n", sampling_rate);
     }
 
     // Delete i2c driver installs
