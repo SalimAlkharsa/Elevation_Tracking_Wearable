@@ -113,14 +113,14 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 */
 
 // Wi-Fi Settings
-#define EXAMPLE_ESP_WIFI_SSID "TAMU_IoT"
-#define EXAMPLE_ESP_WIFI_PASS ""
+// #define EXAMPLE_ESP_WIFI_SSID "TAMU_IoT"
+// #define EXAMPLE_ESP_WIFI_PASS ""
 
 // This WiFi network is open, but the includes below may be used if a different network is needed.
 #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_OPEN
 
-// #define EXAMPLE_ESP_WIFI_SSID "wifisfuneral"
-// #define EXAMPLE_ESP_WIFI_PASS "13bricks"
+#define EXAMPLE_ESP_WIFI_SSID "wifisfuneral"
+#define EXAMPLE_ESP_WIFI_PASS "13bricks"
 
 // #define EXAMPLE_ESP_MAXIMUM_RETRY 5
 
@@ -738,11 +738,17 @@ int app_main(void)
         slices[i] = initializeSlice();
     }
 
+    // Debug section
+    uint32_t free_heap;
+    size_t sizeOfSlice;
+    // End of debug section
+
     // Continuously take sensor inputs until power is lost
     while (1)
     {
         // tickBeforePrint = xTaskGetTickCount(); ///////////////////
-
+        free_heap = esp_get_free_heap_size();
+        printf("\n Free Heap at point 0: %u bytes\n", free_heap);
         // Read the data from the MPU6050Sensor
         mpuSensorConnected = MPU6050Sensor_readData(&mpuSensor);
         if (!mpuSensorConnected)
@@ -759,7 +765,6 @@ int app_main(void)
         {
             // printf("MPU6050 is connected.\n"); // Comment for time
         }
-
         // Print the data from the MPU6050Sensor for debugging purposes
         // MPU6050Sensor_printData(&mpuSensor); // Comment for time
         // Read the data from the BMP280Sensor
@@ -779,7 +784,6 @@ int app_main(void)
         {
             // printf("BMP280 is connected.\n"); // Comment for time
         }
-
         // Print the data from the BMP280Sensor for debugging purposes
         // BMP280Sensor_printData(&bmpSensor); // Comment for time
         //////////////////////////////////////////////////////////////////
@@ -798,10 +802,10 @@ int app_main(void)
         // print the slices for debugging purposes
         for (int i = 0; i < 5; i++)
         {
-            // printf("Slice %d: ", i); // Comment for time
-            // printSlice(slices[i]); // Comment for time
+            printf("Slice %d: ", i); // Comment for time
+            printf("%p", slices[i]); // Get the addy of the slices
+            // printSlice(slices[i]);   // Comment for time
         }
-
         // If all the slices are full, then we can start processing the data into the model
         if (slices[4].length == MAX_CAPACITY)
         {
@@ -826,20 +830,25 @@ int app_main(void)
                 printf("Feature array size is correct\n");
                 classifier_loop();
             }
+            //////
         }
-
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
-
-        // Check if the ESP is connected to Wi-Fi
-        if (!isWiFiConnected())
-        {
-            printf("Not connected to Wi-Fi\n");
-        }
-        else
-        {
-            printf("Connected to Wi-Fi\n");
-        }
+        // // Check if the ESP is connected to Wi-Fi
+        // if (!isWiFiConnected())
+        // {
+        //     // Keep trying to connect to Wi-Fi in a loop
+        //     while (!isWiFiConnected())
+        //     {
+        //         printf("Not connected to Wi-Fi\n");
+        //         wifi_init_sta();
+        //     }
+        //     printf("Reconnected to Wi-Fi\n");
+        // }
+        // else
+        // {
+        //     printf("Connected to Wi-Fi\n");
+        // }
 
         // Check if timestamp was successfully allocated
         if (my_timestamp != NULL)
@@ -854,12 +863,11 @@ int app_main(void)
             r_z = mpuSensor.r_z;
             temp_calibrated = bmpSensor.temperature;
             press_calibrated = bmpSensor.pressure;
-            send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
+            // send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
 
             // Free the allocated memory once done using it
             free(my_timestamp);
         }
-
         /////////////////////////s
         // tickAfterPrint = xTaskGetTickCount();
         //  Stop timing
@@ -867,6 +875,8 @@ int app_main(void)
 
         // Calculate sampling rate
         // sampling_rate = 1 / elapsed_time;
+        free_heap = esp_get_free_heap_size();
+        printf("\n Free Heap at final point: %u bytes\n", free_heap);
         // printf("Sampling rate: %f Hz\n", sampling_rate);
     }
 
