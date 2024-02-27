@@ -232,6 +232,8 @@ bool BMP280Sensor_readData(BMP280Sensor *sensor)
     sensor->temperature = temp_calibrated;
     sensor->pressure = press_calibrated;
 
+    i2c_cmd_link_delete(sensor->cmd);
+
     return bmp280_connected;
 }
 
