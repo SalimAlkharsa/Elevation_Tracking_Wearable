@@ -358,8 +358,8 @@ void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id
             printf("Retrying to connect to the AP\n");
             ESP_LOGI(TAG, "retry to connect to the AP");
             // Do an exponential backoff
-            printf("Back off time: %d\n", (10000 * s_retry_num) / portTICK_PERIOD_MS);
-            vTaskDelay((10000 * s_retry_num) / portTICK_PERIOD_MS);
+            printf("Back off time: %d\n", (10000 * s_retry_num));
+            vTaskDelay((10000 * s_retry_num));
         }
         else
         {
