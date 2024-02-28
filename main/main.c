@@ -351,15 +351,13 @@ void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id
     {
         if (s_retry_num < 10) // TO DO SEE HOW THIS RESPONDS
         {
-            // Attempt to reconnect if disconnected, up to 5 retries // TO DO CONTROL THIS
-            printf("Lost wifi connection\n");
-            esp_wifi_connect();
-            s_retry_num++;
-            printf("Retrying to connect to the AP\n");
-            ESP_LOGI(TAG, "retry to connect to the AP");
             // Do an exponential backoff
+            s_retry_num++;
             printf("Back off time: %d\n", (10000 * s_retry_num));
             vTaskDelay((10000 * s_retry_num));
+            // Attempt to reconnect if disconnected, up to 5 retries // TO DO CONTROL THIS
+            printf("Reconnecting\n");
+            esp_wifi_connect();
         }
         else
         {
