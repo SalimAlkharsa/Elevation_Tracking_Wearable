@@ -113,14 +113,14 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 */
 
 // Wi-Fi Settings
-// #define EXAMPLE_ESP_WIFI_SSID "TAMU_IoT"
-// #define EXAMPLE_ESP_WIFI_PASS ""
+#define EXAMPLE_ESP_WIFI_SSID "TAMU_IoT"
+#define EXAMPLE_ESP_WIFI_PASS ""
 
 // This WiFi network is open, but the includes below may be used if a different network is needed.
 #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_OPEN
 
-#define EXAMPLE_ESP_WIFI_SSID "wifisfuneral"
-#define EXAMPLE_ESP_WIFI_PASS "13bricks"
+// #define EXAMPLE_ESP_WIFI_SSID "wifisfuneral"
+// #define EXAMPLE_ESP_WIFI_PASS "13bricks"
 
 // #define EXAMPLE_ESP_MAXIMUM_RETRY 5
 
@@ -349,15 +349,17 @@ void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id
     }
     else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED)
     {
-        if (s_retry_num < 5)
+        if (s_retry_num < 10) // TO DO SEE HOW THIS RESPONDS
         {
-            // Attempt to reconnect if disconnected, up to 5 retries
+            // Attempt to reconnect if disconnected, up to 5 retries // TO DO CONTROL THIS
+            printf("Lost wifi connection\n");
             esp_wifi_connect();
             s_retry_num++;
+            printf("Retrying to connect to the AP\n");
             ESP_LOGI(TAG, "retry to connect to the AP");
-
-            // Delay 2 seconds before next retry
-            vTaskDelay(pdMS_TO_TICKS(2000));
+            // Do an exponential backoff
+            printf("Back off time: %d\n", (10000 * s_retry_num) / portTICK_PERIOD_MS);
+            vTaskDelay((10000 * s_retry_num) / portTICK_PERIOD_MS);
         }
         else
         {
@@ -460,14 +462,19 @@ void wifi_init_sta(void)
     }
 }
 
-// Function to check WiFi connection status
-bool isWiFiConnected()
+// Function to check WiFi connection status, used for debugging mostly
+bool isWifiConnected()
 {
     wifi_ap_record_t ap_info;
-    esp_err_t result = esp_wifi_sta_get_ap_info(&ap_info);
+    esp_err_t ret = esp_wifi_sta_get_ap_info(&ap_info);
 
-    // If ESP_OK, then connected to WiFi
-    return result == ESP_OK;
+    if (ret == ESP_OK)
+    {
+        // WiFi is connected
+        return true;
+    }
+    // WiFi is not connected
+    return false;
 }
 
 /*
@@ -550,7 +557,7 @@ void send_post_request(char *my_timestamp, float user_id, float a_x, float a_y, 
         .cert_pem = NULL,
         .event_handler = client_event_post_handler,
         .transport_type = HTTP_TRANSPORT_OVER_TCP,
-        .crt_bundle_attach = esp_crt_bundle_attach,
+        .crt_bundle_attach = esp_crt_bundle_attach, // TODO: Look into the async option at some point, refer to docs
     };
 
     // Initialize the HTTP client handle
@@ -724,6 +731,7 @@ int app_main(void)
     // Initialize a variable to check if the sensor is connected
     bool mpuSensorConnected;
     bool bmpSensorConnected;
+    bool wifiConnected;
 
     TickType_t tickBeforePrint, tickAfterPrint;
     double sampling_rate, elapsed_time;
@@ -834,21 +842,17 @@ int app_main(void)
         }
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
-        // // Check if the ESP is connected to Wi-Fi
-        // if (!isWiFiConnected())
-        // {
-        //     // Keep trying to connect to Wi-Fi in a loop
-        //     while (!isWiFiConnected())
-        //     {
-        //         printf("Not connected to Wi-Fi\n");
-        //         wifi_init_sta();
-        //     }
-        //     printf("Reconnected to Wi-Fi\n");
-        // }
-        // else
-        // {
-        //     printf("Connected to Wi-Fi\n");
-        // }
+        // Check if the ESP is connected to Wi-Fi, this sequence is for debugging
+        wifiConnected = isWifiConnected();
+        if (wifiConnected)
+        {
+            // Send the data to the server
+            printf("Connected to Wi-Fi, \n");
+        }
+        else
+        {
+            printf("Not connected to Wi-Fi, data will not be sent to the server. \n\n\n\n\n");
+        }
 
         // Check if timestamp was successfully allocated
         if (my_timestamp != NULL)
