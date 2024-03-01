@@ -62,16 +62,28 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "freertos/queue.h"
 #include "freertos/timers.h"
 #include "lwip/apps/sntp.h"
+#include "driver/uart.h"
 
 // Imports where the sensors are defined
 #include "MPU6050Sensor.h"
 #include "BMP280Sensor.h"
 
-// Imports that control data windowing and queueing
-#include "Window_Queue.c"
-#include "Window.h"
-#include "Observation.h"
-#include "Metrics.h"
+// Imports that control model windows
+#include "slice.c"
+
+// Imports related to the model
+#include "cpp_code.h"
+float features[];
+
+// This is the function that sends the sensor data over UART when in testing mode
+void process_sensor_data_into_model(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
+{
+    // Not sure what value to use for the buffer size but 50 is arbitrary and works for now
+    char data[100];
+
+    // Format the data as per the protocol
+    snprintf(data, sizeof(data), "%f, %f, %f, %f, %f, %f, %f, %f", x_acc, y_acc, z_acc, x_rot, y_rot, z_rot, temp, press);
+}
 
 // Defines for I2C functionality
 // Defines for the SCL and SDA pins on the ESP-32 WROOM
@@ -146,7 +158,7 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 #define WIFI_FAIL_BIT BIT1
 
 // This is arbitrary, need a tag but the name isn't important
-static const char *TAG = "demo";
+static const char *TAG = ""; // Try an empty string
 
 // FreeRTOS event group to signal when connected
 static EventGroupHandle_t s_wifi_event_group;
@@ -337,15 +349,15 @@ void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id
     }
     else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED)
     {
-        if (s_retry_num < 5)
+        if (s_retry_num < 10) // TO DO SEE HOW THIS RESPONDS
         {
-            // Attempt to reconnect if disconnected, up to 5 retries
-            esp_wifi_connect();
+            // Do an exponential backoff
+            printf("Back off time: %d\n", (10000 * s_retry_num));
+            vTaskDelay(pdMS_TO_TICKS(10000 * s_retry_num));
             s_retry_num++;
-            ESP_LOGI(TAG, "retry to connect to the AP");
-
-            // Delay 2 seconds before next retry
-            vTaskDelay(pdMS_TO_TICKS(2000));
+            // Attempt to reconnect if disconnected, up to 5 retries // TO DO CONTROL THIS
+            printf("Reconnecting\n");
+            esp_wifi_connect();
         }
         else
         {
@@ -448,6 +460,21 @@ void wifi_init_sta(void)
     }
 }
 
+// Function to check WiFi connection status, used for debugging mostly
+bool isWifiConnected()
+{
+    wifi_ap_record_t ap_info;
+    esp_err_t ret = esp_wifi_sta_get_ap_info(&ap_info);
+
+    if (ret == ESP_OK)
+    {
+        // WiFi is connected
+        return true;
+    }
+    // WiFi is not connected
+    return false;
+}
+
 /*
    Handles events occurring during an HTTP client operation:
    - Switches over different events and performs appropriate actions if needed.
@@ -473,9 +500,9 @@ esp_err_t client_event_post_handler(esp_http_client_event_handle_t evt)
    - Initializes an HTTP client, configures it with server details and POSTs the JSON data.
    - Cleans up resources after the request is performed.
 */
-void send_post_request(char *my_timestamp, float user_id, float a_x, float a_y, float a_z,
-                       float r_x, float r_y, float r_z,
-                       float temp_calibrated, float press_calibrated)
+void send_post_request(char *my_timestamp, float user_id) /* float a_x, float a_y, float a_z,
+    float r_x, float r_y, float r_z,
+    float temp_calibrated, float press_calibrated */
 {
     // Create a JSON object
     cJSON *json_root = cJSON_CreateObject();
@@ -483,42 +510,42 @@ void send_post_request(char *my_timestamp, float user_id, float a_x, float a_y, 
     // Create arrays for each variable
     cJSON *timestampArray = cJSON_CreateArray();
     cJSON *userIDArray = cJSON_CreateArray();
-    cJSON *axArray = cJSON_CreateArray();
-    cJSON *ayArray = cJSON_CreateArray();
-    cJSON *azArray = cJSON_CreateArray();
-    cJSON *rxArray = cJSON_CreateArray();
-    cJSON *ryArray = cJSON_CreateArray();
-    cJSON *rzArray = cJSON_CreateArray();
-    cJSON *temperatureArray = cJSON_CreateArray();
-    cJSON *pressureArray = cJSON_CreateArray();
+    // cJSON *axArray = cJSON_CreateArray();
+    // cJSON *ayArray = cJSON_CreateArray();
+    // cJSON *azArray = cJSON_CreateArray();
+    // cJSON *rxArray = cJSON_CreateArray();
+    // cJSON *ryArray = cJSON_CreateArray();
+    // cJSON *rzArray = cJSON_CreateArray();
+    // cJSON *temperatureArray = cJSON_CreateArray();
+    // cJSON *pressureArray = cJSON_CreateArray();
 
     // Add arrays to the root object
     cJSON_AddItemToObject(json_root, "my_timestamp", timestampArray);
     cJSON_AddItemToObject(json_root, "user_id", userIDArray);
-    cJSON_AddItemToObject(json_root, "a_x", axArray);
-    cJSON_AddItemToObject(json_root, "a_y", ayArray);
-    cJSON_AddItemToObject(json_root, "a_z", azArray);
-    cJSON_AddItemToObject(json_root, "r_x", rxArray);
-    cJSON_AddItemToObject(json_root, "r_y", ryArray);
-    cJSON_AddItemToObject(json_root, "r_z", rzArray);
-    cJSON_AddItemToObject(json_root, "temperature", temperatureArray);
-    cJSON_AddItemToObject(json_root, "pressure", pressureArray);
+    // cJSON_AddItemToObject(json_root, "a_x", axArray);
+    // cJSON_AddItemToObject(json_root, "a_y", ayArray);
+    // cJSON_AddItemToObject(json_root, "a_z", azArray);
+    // cJSON_AddItemToObject(json_root, "r_x", rxArray);
+    // cJSON_AddItemToObject(json_root, "r_y", ryArray);
+    // cJSON_AddItemToObject(json_root, "r_z", rzArray);
+    // cJSON_AddItemToObject(json_root, "temperature", temperatureArray);
+    // cJSON_AddItemToObject(json_root, "pressure", pressureArray);
 
     // Add an element to each array
     cJSON_AddItemToArray(timestampArray, cJSON_CreateString(my_timestamp));
     cJSON_AddItemToArray(userIDArray, cJSON_CreateNumber(user_id));
-    cJSON_AddItemToArray(axArray, cJSON_CreateNumber(a_x));
-    cJSON_AddItemToArray(ayArray, cJSON_CreateNumber(a_y));
-    cJSON_AddItemToArray(azArray, cJSON_CreateNumber(a_z));
-    cJSON_AddItemToArray(rxArray, cJSON_CreateNumber(r_x));
-    cJSON_AddItemToArray(ryArray, cJSON_CreateNumber(r_y));
-    cJSON_AddItemToArray(rzArray, cJSON_CreateNumber(r_z));
-    cJSON_AddItemToArray(temperatureArray, cJSON_CreateNumber(temp_calibrated));
-    cJSON_AddItemToArray(pressureArray, cJSON_CreateNumber(press_calibrated));
+    // cJSON_AddItemToArray(axArray, cJSON_CreateNumber(a_x));
+    // cJSON_AddItemToArray(ayArray, cJSON_CreateNumber(a_y));
+    // cJSON_AddItemToArray(azArray, cJSON_CreateNumber(a_z));
+    // cJSON_AddItemToArray(rxArray, cJSON_CreateNumber(r_x));
+    // cJSON_AddItemToArray(ryArray, cJSON_CreateNumber(r_y));
+    // cJSON_AddItemToArray(rzArray, cJSON_CreateNumber(r_z));
+    // cJSON_AddItemToArray(temperatureArray, cJSON_CreateNumber(temp_calibrated));
+    // cJSON_AddItemToArray(pressureArray, cJSON_CreateNumber(press_calibrated));
 
     // Print the JSON object
     char *post_data = cJSON_Print(json_root);
-    printf("%s\n", post_data);
+    // printf("%s\n", post_data); // Comment for time
 
     // Initialize the HTTP client configuration
     esp_http_client_config_t config = {
@@ -528,7 +555,7 @@ void send_post_request(char *my_timestamp, float user_id, float a_x, float a_y, 
         .cert_pem = NULL,
         .event_handler = client_event_post_handler,
         .transport_type = HTTP_TRANSPORT_OVER_TCP,
-        .crt_bundle_attach = esp_crt_bundle_attach,
+        .crt_bundle_attach = esp_crt_bundle_attach, // TODO: Look into the async option at some point, refer to docs
     };
 
     // Initialize the HTTP client handle
@@ -649,8 +676,20 @@ float r_y;
 float r_z;
 float temp_calibrated;
 float press_calibrated;
-void app_main(void)
+
+int app_main(void)
 {
+    ////////////////////////// ML Stuff //////////////////////////
+    int result = check_feature_array_size(40 * 5); // Features in splice x splices
+    if (result == 0)
+    {
+        printf("Feature array size is correct\n");
+    }
+    else
+    {
+        printf("Feature array size is incorrect\n");
+    }
+    ////////////////////////// ML Stuff //////////////////////////
     // Ensure it is properly reading from the microcontroller
     print_chip_info();
 
@@ -664,17 +703,22 @@ void app_main(void)
     ESP_ERROR_CHECK(ret);
 
     // Initialize the Wi-Fi connection
+    // Time this function
+    // TickType_t ticks, new_ticks;
+    // ticks = xTaskGetTickCount();
     wifi_init_sta();
+    // new_ticks = xTaskGetTickCount();
+    // printf("Time to connect to Wi-Fi: %d\n", new_ticks - ticks);
 
     // AT: need to figure out if this delay is still necessary
-    vTaskDelay(500 / portTICK_PERIOD_MS);
+    // vTaskDelay(500 / portTICK_PERIOD_MS);
 
     // Intialize the I2C port
     ESP_ERROR_CHECK(i2c_master_init());
 
     initialize_timer();
     // AT: need to figure out if this delay is still necessary
-    vTaskDelay(pdMS_TO_TICKS(7500));
+    // vTaskDelay(pdMS_TO_TICKS(7500));
 
     // Declare the sensor object
     MPU6050Sensor mpuSensor;
@@ -685,16 +729,32 @@ void app_main(void)
     // Initialize a variable to check if the sensor is connected
     bool mpuSensorConnected;
     bool bmpSensorConnected;
+    bool wifiConnected;
 
-    // Create a queue to hold data, in case more data is being read than can be processed
-    WindowQueue *myQueue = initializeQueue();
+    TickType_t tickBeforePrint, tickAfterPrint;
+    double sampling_rate, elapsed_time;
 
-    // Data is stored in windows, before being compressed and sent to the model, so create a window to hold it
-    Window *myWindow = createWindow();
+    // This is where the sensor data is stored
+    float values[5] = {};
+    // define the big window of data where the slices will be stored
+    // also define the slices that will be used to store the sensor data
+    Slice slices[5];
+    for (int i = 0; i < 5; i++)
+    {
+        slices[i] = initializeSlice();
+    }
+
+    // Debug section
+    uint32_t free_heap;
+    size_t sizeOfSlice;
+    // End of debug section
 
     // Continuously take sensor inputs until power is lost
     while (1)
     {
+        tickBeforePrint = xTaskGetTickCount(); ///////////////////
+        free_heap = esp_get_free_heap_size();
+        printf("\n Free Heap at point 0: %u bytes\n", free_heap);
         // Read the data from the MPU6050Sensor
         mpuSensorConnected = MPU6050Sensor_readData(&mpuSensor);
         if (!mpuSensorConnected)
@@ -709,18 +769,18 @@ void app_main(void)
         }
         else
         {
-            printf("MPU6050 is connected.\n");
+            // printf("MPU6050 is connected.\n"); // Comment for time
         }
         // Print the data from the MPU6050Sensor for debugging purposes
-        MPU6050Sensor_printData(&mpuSensor);
-
+        // MPU6050Sensor_printData(&mpuSensor); // Comment for time
         // Read the data from the BMP280Sensor
         bmpSensorConnected = BMP280Sensor_readData(&bmpSensor);
+
         if (!bmpSensorConnected)
         {
             printf("BMP280 sensor not connected!\n");
             // Apply actual handling procedure here...
-            vTaskDelay(pdMS_TO_TICKS(5000));
+            vTaskDelay(pdMS_TO_TICKS(1000));
             BMP280Sensor_init(&bmpSensor);
             bmpSensorConnected = true;
             // TO DO: Determine if this is the correct way to handle the sensor not being connected
@@ -728,76 +788,102 @@ void app_main(void)
         }
         else
         {
-            printf("BMP280 is connected.\n");
+            // printf("BMP280 is connected.\n"); // Comment for time
         }
         // Print the data from the BMP280Sensor for debugging purposes
-        BMP280Sensor_printData(&bmpSensor);
+        // BMP280Sensor_printData(&bmpSensor); // Comment for time
+        //////////////////////////////////////////////////////////////////
+        // Data Reads are now done, so we can start processing the data//
+        /////////////////////////////////////////////////////////////////
 
-        // Data Reads are now done, so we can start processing the data
+        // Go through the process of adding the sensor data to the slices for the model
+        // Define the collected data that will be added to the slices
+        values[0] = mpuSensor.a_y;
+        values[1] = mpuSensor.a_z;
+        values[2] = mpuSensor.r_y;
+        values[3] = mpuSensor.r_z;
+        values[4] = bmpSensor.pressure;
+        // Add the data to the slices
+        addSensorDataToSlices(slices, 5, values, 5);
+        // print the slices for debugging purposes
+        for (int i = 0; i < 5; i++)
+        {
+            printf("Slice %d: ", i); // Comment for time
+            printf("%p", slices[i]); // Get the addy of the slices
+            // printSlice(slices[i]);   // Comment for time
+        }
+        // If all the slices are full, then we can start processing the data into the model
+        if (slices[4].length == MAX_CAPACITY)
+        {
+            // This means that the slices are full and we can start processing the data
+            printf("All slices are full, data will now be processed into the model! \n \n \n");
+            // Load the features array to store the data from the all the slices
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < slices[i].length; j++)
+                {
+                    features[i * 40 + j] = slices[i].data[j];
+                }
+            }
 
+            // Pass the features array to the C++ code
+            if (check_feature_array_size(200) == 1)
+            {
+                printf("Feature array size is incorrect\n");
+            }
+            else
+            {
+                printf("Feature array size is correct\n");
+                classifier_loop();
+            }
+            //////
+        }
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
-
-        // Check if we can insert the data into the window
-        if (myWindow->observationCount < 12)
+        // Check if the ESP is connected to Wi-Fi, this sequence is for debugging
+        wifiConnected = isWifiConnected();
+        if (wifiConnected)
         {
-            Observation newObservation;
-            newObservation.Pa = bmpSensor.pressure;
-            newObservation.Z_rot = mpuSensor.r_z;
-            newObservation.Z_acc = mpuSensor.a_z;
-            newObservation.Y_acc = mpuSensor.a_y;
-            insertObservation(myWindow, newObservation);
+            // Send the data to the server
+            printf("Connected to Wi-Fi, \n");
         }
-        // If we can not, that means the window is full so print the window and calculate the metrics (for debgging purposes)
         else
         {
-            // Print statements for the observations to ensure the window is correctly working
-            for (int i = 0; i < myWindow->observationCount; i++)
-            {
-                printf("Observation %d: Pa = %f, Z_rot = %f, Z_acc = %f, Y_acc = %f\n", i, myWindow->observations[i].Pa, myWindow->observations[i].Z_rot, myWindow->observations[i].Z_acc, myWindow->observations[i].Y_acc);
-            }
-            // Calculate the metrics of the window (these metrics will change as the model changes)
-            // Currently these are the valuable metrics from ECEN 403
-            Metrics myMetrics = calculateMetrics(myWindow);
-
-            // Assign the calculated metrics to the window
-            myWindow->metrics = myMetrics;
-
-            // Now reset the window observations, to free space since the model only needs the metrics, not every observation
-            clearObservations(myWindow);
-
-            // Debugging Print to ensure the metrics are being calculated correctly, cross compare with the observations previously printed
-            printf("Metrics: Pa_roc = %f, Z_rot_max_min = %f, Z_g_max = %f, Z_g_min = %f, Y_g_kurtosis = %f\n", myWindow->metrics.Pa_roc, myWindow->metrics.Z_rot_max_min, myWindow->metrics.Z_g_max, myWindow->metrics.Z_g_min, myWindow->metrics.Y_g_kurtosis);
-
-            // Now send the window to the queue
-            enqueue(myQueue, *myWindow); // TODO: The logic here is not correct so the queue is not gonna work but this is a later problem
-
-            // Print the queue for debugging purposes, goal is to see if a window is being added to the queue
-            printQueue(myQueue);
-
-            // Now make a new window called myWindow
-            myWindow = createWindow();
+            printf("Not connected to Wi-Fi, data will not be sent to the server. \n\n\n\n\n");
         }
-        // Handle queue later here after the windows and pass to the model (whatever that entails)
 
         // Check if timestamp was successfully allocated
         if (my_timestamp != NULL)
         {
             // Use the stored timestamp or perform operations
             // Note that user_id is currently hard coded and will be fully implemented in 404
-            a_x = mpuSensor.a_x;
-            a_y = mpuSensor.a_y;
-            a_z = mpuSensor.a_z;
-            r_x = mpuSensor.r_x;
-            r_y = mpuSensor.r_y;
-            r_z = mpuSensor.r_z;
-            temp_calibrated = bmpSensor.temperature;
-            press_calibrated = bmpSensor.pressure;
-            send_post_request(my_timestamp, 287423, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated);
-
+            // a_x = mpuSensor.a_x;
+            // a_y = mpuSensor.a_y;
+            // a_z = mpuSensor.a_z;
+            // r_x = mpuSensor.r_x;
+            // r_y = mpuSensor.r_y;
+            // r_z = mpuSensor.r_z;
+            // temp_calibrated = bmpSensor.temperature;
+            // press_calibrated = bmpSensor.pressure;
+            free_heap = esp_get_free_heap_size();
+            printf("\n Free Heap at point 1: %u bytes\n", free_heap);
+            send_post_request(my_timestamp, 287423 /*, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated */);
+            // vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
+            free_heap = esp_get_free_heap_size();
+            printf("\n Free Heap at point 2: %u bytes\n", free_heap);
             // Free the allocated memory once done using it
             free(my_timestamp);
         }
+        /////////////////////////s
+        tickAfterPrint = xTaskGetTickCount();
+        //  Stop timing
+        elapsed_time = (double)(tickAfterPrint - tickBeforePrint) * portTICK_PERIOD_MS / 1000.0;
+
+        // Calculate sampling rate
+        sampling_rate = 1 / elapsed_time;
+        // free_heap = esp_get_free_heap_size();
+        printf("\n Free Heap at final point: %u bytes\n", free_heap);
+        printf("Sampling rate: %f Hz\n", sampling_rate);
     }
 
     // Delete i2c driver installs

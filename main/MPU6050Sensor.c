@@ -63,7 +63,7 @@ void MPU6050Sensor_init(MPU6050Sensor *sensor)
     // Check if sensor initialization is successful and if the correct sensor is detected
     if (MPU6050Sensor_checkI2COperation(err) && mpu6050_who_am_i_value == MPU6050_SENSOR_ADDR)
     {
-        ESP_LOGI(TAG, "MPU6050 sensor detected.");
+        // ESP_LOGI(TAG, "MPU6050 sensor detected."); // TODO: UNCOMMENT THIS LINE
     }
     else
     {
@@ -125,6 +125,7 @@ bool MPU6050Sensor_readData(MPU6050Sensor *sensor)
     sensor->r_y = sensor->r_y / 131.0;
     sensor->r_z = sensor->r_z / 131.0;
 
+    i2c_cmd_link_delete(sensor->cmd);
     return mpu6050_connected;
 }
 
