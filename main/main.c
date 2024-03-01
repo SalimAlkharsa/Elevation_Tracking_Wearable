@@ -500,7 +500,7 @@ esp_err_t client_event_post_handler(esp_http_client_event_handle_t evt)
    - Initializes an HTTP client, configures it with server details and POSTs the JSON data.
    - Cleans up resources after the request is performed.
 */
-void send_post_request(char *my_timestamp, float user_id) /* float a_x, float a_y, float a_z,
+void send_post_request(char *my_timestamp, char *user_id) /* float a_x, float a_y, float a_z,
     float r_x, float r_y, float r_z,
     float temp_calibrated, float press_calibrated */
 {
@@ -533,7 +533,7 @@ void send_post_request(char *my_timestamp, float user_id) /* float a_x, float a_
 
     // Add an element to each array
     cJSON_AddItemToArray(timestampArray, cJSON_CreateString(my_timestamp));
-    cJSON_AddItemToArray(userIDArray, cJSON_CreateNumber(user_id));
+    cJSON_AddItemToArray(userIDArray, cJSON_CreateString(user_id));
     // cJSON_AddItemToArray(axArray, cJSON_CreateNumber(a_x));
     // cJSON_AddItemToArray(ayArray, cJSON_CreateNumber(a_y));
     // cJSON_AddItemToArray(azArray, cJSON_CreateNumber(a_z));
@@ -704,14 +704,18 @@ int app_main(void)
 
     // Initialize the Wi-Fi connection
     // Time this function
-    // TickType_t ticks, new_ticks;
-    // ticks = xTaskGetTickCount();
     wifi_init_sta();
-    // new_ticks = xTaskGetTickCount();
-    // printf("Time to connect to Wi-Fi: %d\n", new_ticks - ticks);
 
-    // AT: need to figure out if this delay is still necessary
-    // vTaskDelay(500 / portTICK_PERIOD_MS);
+    // Get the MAC address
+    uint8_t mac_addr[6];
+    esp_wifi_get_mac(ESP_IF_WIFI_STA, mac_addr);
+
+    // Convert MAC address to a string
+    char mac_str[18]; // 12 characters for MAC address and 5 for colons
+    sprintf(mac_str, "%02X:%02X:%02X:%02X:%02X:%02X", mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+
+    // Print the MAC address as a string
+    // printf("MAC Address as String: %s\n", mac_str);
 
     // Intialize the I2C port
     ESP_ERROR_CHECK(i2c_master_init());
@@ -723,6 +727,7 @@ int app_main(void)
     // Declare the sensor object
     MPU6050Sensor mpuSensor;
     BMP280Sensor bmpSensor;
+    char *user_id;
     // Initialize the sensor objects
     MPU6050Sensor_init(&mpuSensor);
     BMP280Sensor_init(&bmpSensor);
@@ -865,9 +870,11 @@ int app_main(void)
             // r_z = mpuSensor.r_z;
             // temp_calibrated = bmpSensor.temperature;
             // press_calibrated = bmpSensor.pressure;
+            user_id = mac_str;
+
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 1: %u bytes\n", free_heap);
-            send_post_request(my_timestamp, 287423 /*, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated */);
+            send_post_request(my_timestamp, user_id /*, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated */);
             // vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 2: %u bytes\n", free_heap);
