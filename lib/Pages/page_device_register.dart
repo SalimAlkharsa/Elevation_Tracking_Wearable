@@ -13,56 +13,54 @@ class _DeviceRegisterPageState extends State<DeviceRegisterPage> {
   @override
 
   String username = db.user;
+  List<String> testList = ["Wally", "peaches", "e24f0665ab", "EXTRA EXTRA"];
 
   Widget build(BuildContext context) {
-    print("Reg Username: $username");
     return Scaffold(
       backgroundColor: style.backgroundColor,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text("Stats"),
+        title: const Text("Register Device"),
         backgroundColor: style.mainColor,
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            FloatingActionButton.extended(
-              heroTag: "Weekly",
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/weekly');
-              },
-              label: Text("Weekly Report", style: style.buttonTextStyle),
-              backgroundColor: style.mainColor,
-              foregroundColor: style.backgroundColor,
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: FloatingActionButton.extended(
+                heroTag: "Add",
+                onPressed: () {
+
+                },
+                label: Text("Add Device", style: style.buttonTextStyle),
+                backgroundColor: style.mainColor,
+                foregroundColor: style.backgroundColor,
+              ),
             ),
-            FloatingActionButton.extended(
-              heroTag: "Daily",
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/daily');
-              },
-              label: Text("Daily Report", style: style.buttonTextStyle),
-              backgroundColor: style.mainColor,
-              foregroundColor: style.backgroundColor,
-            ),
-            FloatingActionButton.extended(
-              heroTag: "Compare",
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/compare');
-              },
-              label: Text("Compare Values", style: style.buttonTextStyle),
-              backgroundColor: style.mainColor,
-              foregroundColor: style.backgroundColor,
-            ),
-            FloatingActionButton.extended(
-              heroTag: "Tracker",
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/metrics/tracker');
-              },
-              label: Text("Floor Tracker", style: style.buttonTextStyle),
-              backgroundColor: style.mainColor,
-              foregroundColor: style.backgroundColor,
+            const Text("Devices:"),
+            Expanded(
+              child: ListView.builder(
+                itemCount: testList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  String text = testList[index];
+                  return Card(
+                    child: ListTile(
+                      title: Text("Name: $text"),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () => {
+                          setState(() {
+                            testList.removeAt(index);
+                          })
+                        },
+                      ),
+                    )
+                  );
+                }
+              ),
             ),
           ],
         ),
