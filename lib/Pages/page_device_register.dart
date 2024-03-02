@@ -10,12 +10,113 @@ class DeviceRegisterPage extends StatefulWidget {
 }
 
 class _DeviceRegisterPageState extends State<DeviceRegisterPage> {
-  @override
-
+  
   String username = db.user;
-  List<String> testList = ["Wally", "peaches", "e24f0665ab", "EXTRA EXTRA"];
+  List<String> deviceList = [];
+  
+  // The text editing controller is used to capture user input and pass it into
+  // local copies of data through dialog boxes
+  late TextEditingController controller;
 
+  @override
+  void initState() {
+    super.initState();
+
+    initializeDevices();
+
+    controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
+  void initializeDevices() async {
+    List<List<dynamic>> results = await db.connection.query("SELECT mcu_id FROM registry WHERE username='$username'");
+    
+    setState(() {
+      deviceList.clear();
+      
+      for (final row in results) {
+        deviceList.add(row[0]);
+      }
+    });
+  }
+  
+  void addDevice(String newDevice) async {
+    print("Adding device $newDevice");
+
+    await db.connection.query("INSERT INTO registry (mcu_id, username) VALUES ('$newDevice', '$username')");
+    
+    setState(() {
+      deviceList.add(newDevice);
+    });
+    
+  }
+  
+  void removeDevice(String device) async {
+    await db.connection.query("DELETE FROM registry WHERE mcu_id='$device'");
+  }
+
+  Future<String?> openTextEntryDialog() => showDialog<String>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Enter MAC Address", style: style.textStyle),
+      backgroundColor: style.backgroundAccent,
+      content: TextField(
+        decoration: InputDecoration(
+          hintText: "Enter MAC address here",
+          hintStyle: style.subtextStyle,
+        ),
+        controller: controller,
+        onSubmitted: (_) => submitText(),
+        style: style.textStyle,
+      ),
+      actions: [
+        TextButton(
+          onPressed: submitText,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("ADD DEVICE"),
+        )
+      ],
+    ),
+  );
+
+  void submitText() {
+    Navigator.of(context).pop(controller.text);
+
+    controller.clear();
+  }
+
+  void errorNullDialog() => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: style.backgroundColor,
+      title: Text("Error: Please enter a value", style: style.textStyle),
+      actions: [
+        TextButton(
+          onPressed: close,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("OK"),
+        )
+      ],
+    ),
+  );
+
+  void close() {
+    Navigator.of(context).pop(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: style.backgroundColor,
       appBar: AppBar(
@@ -32,8 +133,14 @@ class _DeviceRegisterPageState extends State<DeviceRegisterPage> {
               padding: const EdgeInsets.all(20.0),
               child: FloatingActionButton.extended(
                 heroTag: "Add",
-                onPressed: () {
+                onPressed: () async {
+                  final newDevice = await openTextEntryDialog();
+                  if (newDevice == null || newDevice.isEmpty) {
+                    errorNullDialog();
+                    return;
+                  }
 
+                  addDevice(newDevice);
                 },
                 label: Text("Add Device", style: style.buttonTextStyle),
                 backgroundColor: style.mainColor,
@@ -43,18 +150,21 @@ class _DeviceRegisterPageState extends State<DeviceRegisterPage> {
             const Text("Devices:"),
             Expanded(
               child: ListView.builder(
-                itemCount: testList.length,
+                itemCount: deviceList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  String text = testList[index];
+                  String text = deviceList[index];
                   return Card(
                     child: ListTile(
                       title: Text("Name: $text"),
                       trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () => {
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+
+                          removeDevice(deviceList[index]);
+
                           setState(() {
-                            testList.removeAt(index);
-                          })
+                            deviceList.removeAt(index);
+                          });
                         },
                       ),
                     )
