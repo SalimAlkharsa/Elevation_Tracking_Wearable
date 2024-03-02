@@ -13,10 +13,9 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
 
-  int stepGoal = 0;
   int floorGoal = 0;
-  double stepFraction = 0.0;
   double floorFraction = 0.0;
+  String username = db.user;
 
   @override
   void initState() {
@@ -39,44 +38,6 @@ class _MainPageState extends State<MainPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.all(5.0),
-                  //   child: Column(
-                  //     children: [
-                  //       Transform.scale(
-                  //         scale: 0.5,
-                  //         child: Text("Steps", style: style.textStyle),
-                  //       ),
-                  //       Stack(
-                  //           alignment: Alignment.center,
-                  //           children: [
-                  //             Icon(Icons.directions_run, color: style.iconColor),
-                  //             CircularProgressIndicator(
-                  //               value: stepFraction,
-                  //               color: style.mainColor,
-                  //               strokeWidth: 4.0,
-                  //             ),
-                  //           ]
-                  //       ),
-                  //       Transform.scale(
-                  //           scale: 0.4,
-                  //           child: Column(
-                  //               children: [
-                  //                 Container(
-                  //                   decoration: BoxDecoration(
-                  //                     border: Border(
-                  //                       bottom: BorderSide(color: style.iconColor),
-                  //                     ),
-                  //                   ),
-                  //                   child: Text("250", style: style.textStyle),
-                  //                 ),
-                  //                 Text("$stepGoal", style: style.textStyle),
-                  //               ]
-                  //           )
-                  //       ),
-                  //     ]
-                  //   )
-                  // ),
                   Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Column(
@@ -134,7 +95,7 @@ class _MainPageState extends State<MainPage> {
               padding: const EdgeInsets.all(5.0),
               child: Transform.scale(
                 scale: 1.7,
-                child: Text("Welcome, Seth", style: style.textStyle),
+                child: Text("Welcome, $username", style: style.textStyle),
               ),
             ),
           ],
@@ -198,17 +159,10 @@ class _MainPageState extends State<MainPage> {
   Future<void> initializeGoals() async {
     // await db.connection.open();
 
-    List<List<dynamic>> results = await db.connection.query("SELECT daily_steps, daily_floors FROM users WHERE user_id=0");
+    List<List<dynamic>> results = await db.connection.query("SELECT daily_floors FROM users WHERE username='$username'");
 
     setState(() {
-      stepGoal = results[0][0];
-      floorGoal = results[0][1];
-
-      if (stepGoal != 0) {
-        stepFraction = 250 / stepGoal;
-      } else {
-        stepFraction = 0.0;
-      }
+      floorGoal = results[0][0];
 
       if (floorGoal != 0) {
         floorFraction = 8 / floorGoal;
@@ -224,35 +178,6 @@ class _MainPageState extends State<MainPage> {
   void testFunc () {
     // populateSensors();
     // populateClimbs();
-    populateOrders();
-  }
-
-  void populateOrders() async {
-    var rng = Random();
-    DateTime timestamp = DateTime.now();
-    int pid = 0;
-    String desc = "Desc";
-    double price = 0.0;
-    int quantity = 0;
-    int oid = 0;
-
-    print("Begin...");
-    for (int i = 0; i < 20; i++) {
-      pid = i;
-      price = 2.1 * (i + 1);
-      quantity = 100;
-      await db.connection.query("INSERT INTO Products (productid, description, price, quantityonhand) VALUES ($pid, '$desc', $price, $quantity)");
-    }
-
-    for (int i = 0; i < 100; i++) {
-      pid = rng.nextInt(18);
-      oid = i + 1;
-      quantity = rng.nextInt(4) + 1;
-      timestamp = timestamp.subtract(const Duration(hours: 1));
-      price = 2.1 * (pid + 1) * quantity;
-      await db.connection.query("INSERT INTO Orders (orderid, productid, quantityordered, orderdate, totalorderamount) VALUES ($oid, $pid, '$quantity', '$timestamp', $price)");
-    }
-    print("Done!");
   }
 
   void populateClimbs () async {

@@ -27,6 +27,7 @@ class _ComparePageState extends State<ComparePage> {
   String rightDateStr = ""; // A string to contain the formatted right date
   String type = ""; // A string to contain the type of data being compared
   bool isInitialized = false; // Prevents the page from continuously initializing
+  String username = db.user;
 
   // This function initializes the data members to their required values
   void initializeDate() {
@@ -84,7 +85,7 @@ class _ComparePageState extends State<ComparePage> {
       double total_hr = 0.0; // Sum of heart rates used for the average
 
       // The database is queried for all heart rate data which happened on the left date
-      List<List<dynamic>> results = await db.connection.query("SELECT hr FROM sensors WHERE user_id=0 AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
+      List<List<dynamic>> results = await db.connection.query("SELECT hr FROM sensors WHERE username='$username' AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
 
       // We calculate the average heart rate which occurred on the left date
       // and add it to the new compare list
@@ -97,7 +98,7 @@ class _ComparePageState extends State<ComparePage> {
       total_hr = 0;
 
       // The database is queried for all heart rate data which happened on the right date
-      results = await db.connection.query("SELECT hr FROM sensors WHERE user_id=0 AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
+      results = await db.connection.query("SELECT hr FROM sensors WHERE username='$username' AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
 
       // We calculate the average heart rate which occurred on the left date
       // and add it to the new compare list
@@ -113,7 +114,7 @@ class _ComparePageState extends State<ComparePage> {
       String curr_direction = ""; // Stores the direction of the given climb
 
       // The database is queried for all climb data which happened on the left date
-      List<List<dynamic>> results = await db.connection.query("SELECT amt, direction FROM climbs WHERE user_id=0 AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
+      List<List<dynamic>> results = await db.connection.query("SELECT amt, direction FROM climbs WHERE username='$username' AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
 
       for (int i = 0; i < results.length; i++) {
 
@@ -135,7 +136,7 @@ class _ComparePageState extends State<ComparePage> {
       floors_climbed = 0;
 
       // The database is queried for all climb data which happened on the right date
-      results = await db.connection.query("SELECT amt, direction FROM climbs WHERE user_id=0 AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
+      results = await db.connection.query("SELECT amt, direction FROM climbs WHERE username='$username' AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
 
       for (int i = 0; i < results.length; i++) {
         curr_amt = results[i][0]; // Get the magnitude of the climb for the entry in the database

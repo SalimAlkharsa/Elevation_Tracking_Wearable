@@ -114,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void loginSuccess() {
+    db.user = username;
     Navigator.pushReplacementNamed(context, '/main');
   }
 

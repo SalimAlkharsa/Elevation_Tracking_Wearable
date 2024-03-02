@@ -11,10 +11,10 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   // Initialize local data
-  double userHeight = 0.0;
-  double userWeight = 0.0;
-  int stepGoal = 0;
+  // double userHeight = 0.0;
+  // double userWeight = 0.0;
   int floorGoal = 0;
+  String username = db.user;
 
   // The text editing controller is used to capture user input and pass it into
   // local copies of data through dialog boxes
@@ -51,6 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
               trailing: IconButton (
                 icon: Icon(Icons.logout, color: style.iconColor),
                 onPressed: () {
+                  db.user = "";
                   Navigator.pushReplacementNamed(context, '/');
                 },
               )
@@ -81,41 +82,42 @@ class _SettingsPageState extends State<SettingsPage> {
           // and returning from the function to prevent from updating with bad data both locally and to the database
           // If the error check passes, the local copy is updated, and so is the entry in the database
           // TODO: Explain database entry
-          ListTile(
-            title: Text("Set Height (in)", style: style.textStyle),
-            subtitle: Text("$userHeight", style: style.subtextStyle),
-            onTap: () async {
-              final newHeight = await openTextEntryDialog();
-              if (newHeight == null || newHeight.isEmpty || double.tryParse(newHeight) == null) {
-                errorDoubleDialog();
-                return;
-              } else if (double.parse(newHeight) < 0) {
-                errorSmallDialog(0);
-                return;
-              }
-
-              setState(() => userHeight = double.parse(newHeight));
-            },
-          ),
-          Divider(
-            color: style.subtextStyle.color,
-          ),
-          ListTile(
-            title: Text("Set Weight (lbs)", style: style.textStyle),
-            subtitle: Text("$userWeight", style: style.subtextStyle),
-            onTap: () async {
-              final newWeight = await openTextEntryDialog();
-              if (newWeight == null || newWeight.isEmpty || (double.tryParse(newWeight) == null)) {
-                errorDoubleDialog();
-                return;
-              } else if (double.parse(newWeight) < 0) {
-                errorSmallDialog(0);
-                return;
-              }
-
-              setState(() => userWeight = double.parse(newWeight));
-            },
-          ),
+          // TODO: Update this comment to reflect new data
+          // ListTile(
+          //   title: Text("Set Height (in)", style: style.textStyle),
+          //   subtitle: Text("$userHeight", style: style.subtextStyle),
+          //   onTap: () async {
+          //     final newHeight = await openTextEntryDialog();
+          //     if (newHeight == null || newHeight.isEmpty || double.tryParse(newHeight) == null) {
+          //       errorDoubleDialog();
+          //       return;
+          //     } else if (double.parse(newHeight) < 0) {
+          //       errorSmallDialog(0);
+          //       return;
+          //     }
+          //
+          //     setState(() => userHeight = double.parse(newHeight));
+          //   },
+          // ),
+          // Divider(
+          //   color: style.subtextStyle.color,
+          // ),
+          // ListTile(
+          //   title: Text("Set Weight (lbs)", style: style.textStyle),
+          //   subtitle: Text("$userWeight", style: style.subtextStyle),
+          //   onTap: () async {
+          //     final newWeight = await openTextEntryDialog();
+          //     if (newWeight == null || newWeight.isEmpty || (double.tryParse(newWeight) == null)) {
+          //       errorDoubleDialog();
+          //       return;
+          //     } else if (double.parse(newWeight) < 0) {
+          //       errorSmallDialog(0);
+          //       return;
+          //     }
+          //
+          //     setState(() => userWeight = double.parse(newWeight));
+          //   },
+          // ),
           // Divider(
           //   color: style.subtextStyle.color,
           // ),
@@ -132,9 +134,9 @@ class _SettingsPageState extends State<SettingsPage> {
           //     setState(() => stepGoal = int.parse(newGoal));
           //   },
           // ),
-          Divider(
-            color: style.subtextStyle.color,
-          ),
+          // Divider(
+          //   color: style.subtextStyle.color,
+          // ),
           ListTile(
             title: Text("Set Floor Daily Goal", style: style.textStyle),
             subtitle: Text("$floorGoal", style: style.subtextStyle),
@@ -342,22 +344,20 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> initializeSettings() async {
     // await db.connection.open();
 
-    List<List<dynamic>> results = await db.connection.query("SELECT * FROM users WHERE user_id=0");
+    List<List<dynamic>> results = await db.connection.query("SELECT * FROM users WHERE username='$username'");
 
     for (final row in results) {
+      print(row[0]);
       print(row[1]);
       print(row[2]);
       print(row[3]);
-      print(row[4]);
-      print(row[5]);
-      print(row[6]);
     }
 
     setState(() {
-      userHeight = results[0][1];
-      userWeight = results[0][2];
-      stepGoal = results[0][5];
-      floorGoal = results[0][6];
+      // userHeight = results[0][1];
+      // userWeight = results[0][2];
+      // stepGoal = results[0][5];
+      floorGoal = results[0][2];
     });
 
     // db.connection.close();
@@ -366,7 +366,9 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> finalizeSettings() async {
     // await db.connection.open();
 
-    await db.connection.query("UPDATE users SET height=$userHeight, weight=$userWeight, daily_steps=$stepGoal, daily_floors=$floorGoal WHERE user_id=0");
+    print("Setting floor goal to $floorGoal");
+
+    await db.connection.query("UPDATE users SET daily_floors=$floorGoal WHERE username='$username'");
 
     // db.connection.close();
   }
