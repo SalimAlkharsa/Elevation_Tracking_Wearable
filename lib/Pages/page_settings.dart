@@ -56,6 +56,19 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               )
           ),
+          // TODO: Explain registration
+          Divider(
+            color: style.subtextStyle.color,
+          ),
+          ListTile(
+              title: Text("Register Device", style: style.textStyle),
+              trailing: IconButton (
+                icon: Icon(Icons.link, color: style.iconColor),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/settings/register');
+                },
+              )
+          ),
           Divider(
             color: style.subtextStyle.color,
           ),
@@ -345,6 +358,8 @@ class _SettingsPageState extends State<SettingsPage> {
     // await db.connection.open();
 
     List<List<dynamic>> results = await db.connection.query("SELECT * FROM users WHERE username='$username'");
+
+    print("Username: $username");
 
     for (final row in results) {
       print(row[0]);
