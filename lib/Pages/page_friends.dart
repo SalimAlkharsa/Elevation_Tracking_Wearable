@@ -14,6 +14,7 @@ class _FriendsPageState extends State<FriendsPage> {
   String username = db.user;
   List<String> friendList = [];
   List<String> requestsList = [];
+  List<String> userList = [];
 
   // The text editing controller is used to capture user input and pass it into
   // local copies of data through dialog boxes
@@ -54,16 +55,46 @@ class _FriendsPageState extends State<FriendsPage> {
       requestsList.clear();
 
       for (final row in results) {
-        print(row[0]);
         requestsList.add(row[0]);
+      }
+    });
+
+    results = await db.connection.query("SELECT username FROM users");
+
+    print("initializing users...");
+    setState(() {
+      userList.clear();
+
+      for (final row in results) {
+        userList.add(row[0]);
       }
     });
   }
 
   void sendFriendRequest(String newFriend) async {
-    print("Adding friend $newFriend");
+    List<List<dynamic>> results = await db.connection.query("SELECT * FROM requests WHERE from_user='$username' AND to_user='$newFriend'");
 
-    await db.connection.query("INSERT INTO requests (from_user, to_user) VALUES ('$username', '$newFriend')");
+    if (results.isEmpty) {
+      print("Request doesn't exist!");
+      await db.connection.query("INSERT INTO requests (from_user, to_user) VALUES ('$username', '$newFriend')");
+    }
+  }
+
+  void acceptFriendRequest(String newFriend) async {
+
+    await db.connection.query("UPDATE friends SET friends=ARRAY_APPEND(friends,'$newFriend') WHERE username='$username'");
+    await db.connection.query("UPDATE friends SET friends=ARRAY_APPEND(friends,'$username') WHERE username='$newFriend'");
+
+    setState(() {
+      friendList.add(newFriend);
+    });
+
+  }
+
+  void rejectFriendRequest(String friend) async {
+
+    await db.connection.query("DELETE FROM requests WHERE to_user='$username'");
+
   }
 
   void removeFriend(String friend) async {
@@ -137,6 +168,40 @@ class _FriendsPageState extends State<FriendsPage> {
     ),
   );
 
+  void errorRequestExistsDialog() => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: style.backgroundColor,
+      title: Text("Error: This friend has already requested to be added", style: style.textStyle),
+      actions: [
+        TextButton(
+          onPressed: close,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("OK"),
+        )
+      ],
+    ),
+  );
+
+  void errorNonexistentUserDialog() => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: style.backgroundColor,
+      title: Text("Error: User doesn't exist", style: style.textStyle),
+      actions: [
+        TextButton(
+          onPressed: close,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("OK"),
+        )
+      ],
+    ),
+  );
+
   void close() {
     Navigator.of(context).pop(context);
   }
@@ -145,6 +210,28 @@ class _FriendsPageState extends State<FriendsPage> {
 
     for (String friend in friendList) {
       if (friend == newFriend) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool requestExists(String newRequest) {
+
+    for (String request in requestsList) {
+      if (request == newRequest) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool userExists(String user) {
+
+    for (String name in userList) {
+      if (name == user) {
         return true;
       }
     }
@@ -183,13 +270,21 @@ class _FriendsPageState extends State<FriendsPage> {
                                 IconButton(
                                   icon: const Icon(Icons.check),
                                   onPressed: () {
+                                    acceptFriendRequest(requestsList[index]);
 
+                                    setState(() {
+                                      requestsList.removeAt(index);
+                                    });
                                   },
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.close),
                                   onPressed: () {
+                                    rejectFriendRequest(requestsList[index]);
 
+                                    setState(() {
+                                      requestsList.removeAt(index);
+                                    });
                                   },
                                 ),
                               ],
@@ -211,6 +306,12 @@ class _FriendsPageState extends State<FriendsPage> {
                     return;
                   } else if (friendExists(newFriend)) {
                     errorFriendExistsDialog();
+                    return;
+                  } else if (requestExists(newFriend)) {
+                    errorRequestExistsDialog();
+                    return;
+                  } else if (!userExists(newFriend)) {
+                    errorNonexistentUserDialog();
                     return;
                   }
 
