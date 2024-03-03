@@ -152,10 +152,9 @@ class _DeviceRegisterPageState extends State<DeviceRegisterPage> {
               child: ListView.builder(
                 itemCount: deviceList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  String text = deviceList[index];
                   return Card(
                     child: ListTile(
-                      title: Text("Name: $text"),
+                      title: Text(deviceList[index]),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {

@@ -13,6 +13,7 @@ class _FriendsPageState extends State<FriendsPage> {
 
   String username = db.user;
   List<String> friendList = [];
+  List<String> requestsList = [];
 
   // The text editing controller is used to capture user input and pass it into
   // local copies of data through dialog boxes
@@ -22,7 +23,7 @@ class _FriendsPageState extends State<FriendsPage> {
   void initState() {
     super.initState();
 
-    initializeDevices();
+    initializeLists();
 
     controller = TextEditingController();
   }
@@ -34,14 +35,27 @@ class _FriendsPageState extends State<FriendsPage> {
     super.dispose();
   }
 
-  void initializeDevices() async {
+  void initializeLists() async {
     List<List<dynamic>> results = await db.connection.query("SELECT UNNEST(friends) AS friends FROM friends WHERE username='$username'");
 
+    print("initializing friends...");
     setState(() {
       friendList.clear();
 
       for (final row in results) {
         friendList.add(row[0]);
+      }
+    });
+
+    results = await db.connection.query("SELECT from_user FROM requests WHERE to_user='$username'");
+
+    print("initializing requests...");
+    setState(() {
+      requestsList.clear();
+
+      for (final row in results) {
+        print(row[0]);
+        requestsList.add(row[0]);
       }
     });
   }
@@ -153,6 +167,39 @@ class _FriendsPageState extends State<FriendsPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            const Text("Requests:"),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: requestsList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
+                        child: ListTile(
+                          title: Text(requestsList[index]),
+                          trailing: SizedBox(
+                            height: 80,
+                            width: 80,
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.check),
+                                  onPressed: () {
+
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {
+
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                    );
+                  }
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: FloatingActionButton.extended(
@@ -179,10 +226,9 @@ class _FriendsPageState extends State<FriendsPage> {
               child: ListView.builder(
                   itemCount: friendList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    String text = friendList[index];
                     return Card(
                         child: ListTile(
-                          title: Text("Name: $text"),
+                          title: Text(friendList[index]),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete),
                             onPressed: () {
