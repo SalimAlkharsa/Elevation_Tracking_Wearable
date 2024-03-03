@@ -85,6 +85,8 @@ class _FriendsPageState extends State<FriendsPage> {
     await db.connection.query("UPDATE friends SET friends=ARRAY_APPEND(friends,'$newFriend') WHERE username='$username'");
     await db.connection.query("UPDATE friends SET friends=ARRAY_APPEND(friends,'$username') WHERE username='$newFriend'");
 
+    await db.connection.query("DELETE FROM requests WHERE to_user='$username' AND from_user='$newFriend'");
+
     setState(() {
       friendList.add(newFriend);
     });
@@ -93,7 +95,7 @@ class _FriendsPageState extends State<FriendsPage> {
 
   void rejectFriendRequest(String friend) async {
 
-    await db.connection.query("DELETE FROM requests WHERE to_user='$username'");
+    await db.connection.query("DELETE FROM requests WHERE to_user='$username' AND from_user='$friend'");
 
   }
 
