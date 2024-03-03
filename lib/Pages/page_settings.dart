@@ -14,6 +14,7 @@ class _SettingsPageState extends State<SettingsPage> {
   // double userHeight = 0.0;
   // double userWeight = 0.0;
   int floorGoal = 0;
+  int requestCount = 0;
   String username = db.user;
 
   // The text editing controller is used to capture user input and pass it into
@@ -67,6 +68,27 @@ class _SettingsPageState extends State<SettingsPage> {
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/settings/register');
                 },
+              )
+          ),
+          Divider(
+            color: style.subtextStyle.color,
+          ),
+          ListTile(
+              title: Text("Friends List", style: style.textStyle),
+              trailing: SizedBox(
+                height: 80,
+                width: 48,
+                child: Row(
+                  children: [
+                    pendingRequests(),
+                    IconButton (
+                      icon: Icon(Icons.person, color: style.iconColor),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/settings/friends');
+                      },
+                    ),
+                  ],
+                ),
               )
           ),
           Divider(
@@ -359,23 +381,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
     List<List<dynamic>> results = await db.connection.query("SELECT * FROM users WHERE username='$username'");
 
-    print("Username: $username");
-
-    for (final row in results) {
-      print(row[0]);
-      print(row[1]);
-      print(row[2]);
-      print(row[3]);
-    }
-
     setState(() {
-      // userHeight = results[0][1];
-      // userWeight = results[0][2];
-      // stepGoal = results[0][5];
       floorGoal = results[0][2];
     });
 
-    // db.connection.close();
+    results = await db.connection.query("SELECT * FROM requests WHERE to_user='$username'");
+
+    setState(() {
+      requestCount = results.length;
+    });
   }
 
   Future<void> finalizeSettings() async {
@@ -386,6 +400,13 @@ class _SettingsPageState extends State<SettingsPage> {
     await db.connection.query("UPDATE users SET daily_floors=$floorGoal WHERE username='$username'");
 
     // db.connection.close();
+  }
+
+  Widget pendingRequests() {
+    if (requestCount > 0) {
+      return Text("$requestCount");
+    }
+    return SizedBox(width: 8);
   }
 }
 

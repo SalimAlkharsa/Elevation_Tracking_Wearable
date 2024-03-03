@@ -2,6 +2,7 @@ import 'package:application/Pages/page_account_register.dart';
 import 'package:application/Pages/page_compare.dart';
 import 'package:application/Pages/page_daily.dart';
 import 'package:application/Pages/page_device_register.dart';
+import 'package:application/Pages/page_friends.dart';
 import 'package:application/Pages/page_login.dart';
 import 'package:application/Pages/page_startup.dart';
 import 'package:application/Pages/page_weekly.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/startup/register' : (BuildContext context) => const AccountRegisterPage(),
         '/settings' : (BuildContext context) => const SettingsPage(),
         '/settings/register' : (BuildContext context) => const DeviceRegisterPage(),
+        '/settings/friends' : (BuildContext context) => const FriendsPage(),
         '/metrics' : (BuildContext context) => const MetricsPage(),
         '/metrics/weekly' : (BuildContext context) => const WeeklyPage(),
         '/metrics/daily' : (BuildContext context) => const DailyPage(),
