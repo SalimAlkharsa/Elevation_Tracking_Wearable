@@ -72,6 +72,18 @@ class _SettingsPageState extends State<SettingsPage> {
           Divider(
             color: style.subtextStyle.color,
           ),
+          ListTile(
+              title: Text("Friends List", style: style.textStyle),
+              trailing: IconButton (
+                icon: Icon(Icons.person, color: style.iconColor),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/settings/friends');
+                },
+              )
+          ),
+          Divider(
+            color: style.subtextStyle.color,
+          ),
           // A simple switch widget for turning dark mode on and off
           // TODO: Explain handling dark mode
           ListTile(
