@@ -71,6 +71,8 @@ but note that the final data transmission will be to the postgreSQL database, wr
 // Imports that control model windows
 #include "slice.c"
 
+#include "PolarH7.c"
+
 // Imports related to the model
 #include "cpp_code.h"
 float features[];
@@ -753,6 +755,71 @@ int app_main(void)
     uint32_t free_heap;
     size_t sizeOfSlice;
     // End of debug section
+    // Initialize NVS.
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+
+    ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
+
+    esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
+    ret = esp_bt_controller_init(&bt_cfg);
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s initialize controller failed: %s\n", __func__, esp_err_to_name(ret));
+        return -1;
+    }
+
+    ret = esp_bt_controller_enable(ESP_BT_MODE_BLE);
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s enable controller failed: %s\n", __func__, esp_err_to_name(ret));
+        return -1;
+    }
+
+    ret = esp_bluedroid_init();
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s init bluetooth failed: %s\n", __func__, esp_err_to_name(ret));
+        return -1;
+    }
+
+    ret = esp_bluedroid_enable();
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s enable bluetooth failed: %s\n", __func__, esp_err_to_name(ret));
+        return -1;
+    }
+
+    // register the  callback function to the gap module
+    ret = esp_ble_gap_register_callback(esp_gap_cb);
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s gap register failed, error code = %x\n", __func__, ret);
+        return -1;
+    }
+
+    // register the callback function to the gattc module
+    ret = esp_ble_gattc_register_callback(esp_gattc_cb);
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s gattc register failed, error code = %x\n", __func__, ret);
+        return -1;
+    }
+
+    ret = esp_ble_gattc_app_register(PROFILE_A_APP_ID);
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s gattc app register failed, error code = %x\n", __func__, ret);
+    }
+    esp_err_t local_mtu_ret = esp_ble_gatt_set_local_mtu(500);
+    if (local_mtu_ret)
+    {
+        ESP_LOGE(GATTC_TAG, "set local  MTU failed, error code = %x", local_mtu_ret);
+    }
 
     // Continuously take sensor inputs until power is lost
     while (1)
@@ -870,12 +937,13 @@ int app_main(void)
             // r_z = mpuSensor.r_z;
             // temp_calibrated = bmpSensor.temperature;
             // press_calibrated = bmpSensor.pressure;
+
             user_id = mac_str;
 
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 1: %u bytes\n", free_heap);
             send_post_request(my_timestamp, user_id /*, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated */);
-            // vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
+            //  vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 2: %u bytes\n", free_heap);
             // Free the allocated memory once done using it
