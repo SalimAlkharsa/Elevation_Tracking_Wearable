@@ -38,6 +38,9 @@
 #define PROFILE_A_APP_ID 0
 #define INVALID_HANDLE 0
 
+// Define a global heart rate variable to store the heart rate value
+uint8_t polar_heart_rate = 0;
+
 static const char remote_device_name[] = "Polar H7 2F38442";
 static bool polar_connect = false;
 static bool get_server = false;
@@ -323,24 +326,24 @@ static int gattc_profile_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t
         if (p_data->notify.is_notify)
         {
             ESP_LOGI(GATTC_TAG, "ESP_GATTC_NOTIFY_EVT, receive notify value:");
+            // Ensure that there is at least one byte in the data
+            if (p_data->notify.value_len >= 2)
+            {
+                polar_heart_rate = p_data->notify.value[1];
+                printf("The notification value is: %u\n", p_data->notify.value);
+                printf("Value of the second byte: %u\n", polar_heart_rate);
+                // You can use or print this value as needed.
+            }
+            else
+            {
+                ESP_LOGE(GATTC_TAG, "ESP_GATTC_NOTIFY_EVT, receive indicate value:");
+            }
         }
         else
         {
-            ESP_LOGI(GATTC_TAG, "ESP_GATTC_NOTIFY_EVT, receive indicate value:");
+            ESP_LOGE(GATTC_TAG, "ESP_GATTC_NOTIFY_EVT, receive indicate value:");
         }
         esp_log_buffer_hex(GATTC_TAG, p_data->notify.value, p_data->notify.value_len);
-
-        // Ensure that there is at least one byte in the data
-        if (p_data->notify.value_len >= 2)
-        {
-            uint8_t secondByte = p_data->notify.value[1];
-            printf("Value of the second byte: %u\n", secondByte);
-            // You can use or print this value as needed.
-        }
-        else
-        {
-            // Handle the case where there are not enough bytes in the data.
-        }
 
         break;
     case ESP_GATTC_WRITE_DESCR_EVT:

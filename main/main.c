@@ -678,6 +678,7 @@ float r_y;
 float r_z;
 float temp_calibrated;
 float press_calibrated;
+int prev_heart_rate;
 
 int app_main(void)
 {
@@ -864,6 +865,17 @@ int app_main(void)
         }
         // Print the data from the BMP280Sensor for debugging purposes
         // BMP280Sensor_printData(&bmpSensor); // Comment for time
+
+        // Now read the heart rate data
+        if (polar_heart_rate != prev_heart_rate)
+        {
+            printf("Heart rate (new reading): %d\n", polar_heart_rate);
+            prev_heart_rate = polar_heart_rate;
+        }
+        else
+        {
+            printf("Heart rate (repeat reading): %d\n", prev_heart_rate);
+        }
         //////////////////////////////////////////////////////////////////
         // Data Reads are now done, so we can start processing the data//
         /////////////////////////////////////////////////////////////////
