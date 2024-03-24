@@ -40,7 +40,7 @@ list(APPEND SOURCE_FILES ${CC_FILES})
 list(APPEND SOURCE_FILES ${MODEL_FILES})
 
 
-idf_component_register(SRCS "main.c" "MPU6050Sensor.c" "BMP280Sensor.c" "slice.c" "edge_impulse.cpp" "${SOURCE_FILES}"
+idf_component_register(SRCS "main.c" "MPU6050Sensor.c" "BMP280Sensor.c" "slice.c" "edge_impulse.cpp" "PolarH7.c" "${SOURCE_FILES}"
                        INCLUDE_DIRS "." "${include_dirs}")
 
 target_compile_options(${COMPONENT_LIB} PRIVATE -std=gnu++17)

@@ -71,6 +71,8 @@ but note that the final data transmission will be to the postgreSQL database, wr
 // Imports that control model windows
 #include "slice.c"
 
+#include "PolarH7.c"
+
 // Imports related to the model
 #include "cpp_code.h"
 float features[];
@@ -500,7 +502,7 @@ esp_err_t client_event_post_handler(esp_http_client_event_handle_t evt)
    - Initializes an HTTP client, configures it with server details and POSTs the JSON data.
    - Cleans up resources after the request is performed.
 */
-void send_post_request(char *my_timestamp, float user_id) /* float a_x, float a_y, float a_z,
+void send_post_request(char *my_timestamp, char *user_id) /* float a_x, float a_y, float a_z,
     float r_x, float r_y, float r_z,
     float temp_calibrated, float press_calibrated */
 {
@@ -533,7 +535,7 @@ void send_post_request(char *my_timestamp, float user_id) /* float a_x, float a_
 
     // Add an element to each array
     cJSON_AddItemToArray(timestampArray, cJSON_CreateString(my_timestamp));
-    cJSON_AddItemToArray(userIDArray, cJSON_CreateNumber(user_id));
+    cJSON_AddItemToArray(userIDArray, cJSON_CreateString(user_id));
     // cJSON_AddItemToArray(axArray, cJSON_CreateNumber(a_x));
     // cJSON_AddItemToArray(ayArray, cJSON_CreateNumber(a_y));
     // cJSON_AddItemToArray(azArray, cJSON_CreateNumber(a_z));
@@ -676,6 +678,7 @@ float r_y;
 float r_z;
 float temp_calibrated;
 float press_calibrated;
+int prev_heart_rate;
 
 int app_main(void)
 {
@@ -704,14 +707,18 @@ int app_main(void)
 
     // Initialize the Wi-Fi connection
     // Time this function
-    // TickType_t ticks, new_ticks;
-    // ticks = xTaskGetTickCount();
     wifi_init_sta();
-    // new_ticks = xTaskGetTickCount();
-    // printf("Time to connect to Wi-Fi: %d\n", new_ticks - ticks);
 
-    // AT: need to figure out if this delay is still necessary
-    // vTaskDelay(500 / portTICK_PERIOD_MS);
+    // Get the MAC address
+    uint8_t mac_addr[6];
+    esp_wifi_get_mac(ESP_IF_WIFI_STA, mac_addr);
+
+    // Convert MAC address to a string
+    char mac_str[18]; // 12 characters for MAC address and 5 for colons
+    sprintf(mac_str, "%02X:%02X:%02X:%02X:%02X:%02X", mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+
+    // Print the MAC address as a string
+    // printf("MAC Address as String: %s\n", mac_str);
 
     // Intialize the I2C port
     ESP_ERROR_CHECK(i2c_master_init());
@@ -723,6 +730,7 @@ int app_main(void)
     // Declare the sensor object
     MPU6050Sensor mpuSensor;
     BMP280Sensor bmpSensor;
+    char *user_id;
     // Initialize the sensor objects
     MPU6050Sensor_init(&mpuSensor);
     BMP280Sensor_init(&bmpSensor);
@@ -748,6 +756,71 @@ int app_main(void)
     uint32_t free_heap;
     size_t sizeOfSlice;
     // End of debug section
+    // Initialize NVS.
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+
+    ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
+
+    esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
+    ret = esp_bt_controller_init(&bt_cfg);
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s initialize controller failed: %s\n", __func__, esp_err_to_name(ret));
+        return -1;
+    }
+
+    ret = esp_bt_controller_enable(ESP_BT_MODE_BLE);
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s enable controller failed: %s\n", __func__, esp_err_to_name(ret));
+        return -1;
+    }
+
+    ret = esp_bluedroid_init();
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s init bluetooth failed: %s\n", __func__, esp_err_to_name(ret));
+        return -1;
+    }
+
+    ret = esp_bluedroid_enable();
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s enable bluetooth failed: %s\n", __func__, esp_err_to_name(ret));
+        return -1;
+    }
+
+    // register the  callback function to the gap module
+    ret = esp_ble_gap_register_callback(esp_gap_cb);
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s gap register failed, error code = %x\n", __func__, ret);
+        return -1;
+    }
+
+    // register the callback function to the gattc module
+    ret = esp_ble_gattc_register_callback(esp_gattc_cb);
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s gattc register failed, error code = %x\n", __func__, ret);
+        return -1;
+    }
+
+    ret = esp_ble_gattc_app_register(PROFILE_A_APP_ID);
+    if (ret)
+    {
+        ESP_LOGE(GATTC_TAG, "%s gattc app register failed, error code = %x\n", __func__, ret);
+    }
+    esp_err_t local_mtu_ret = esp_ble_gatt_set_local_mtu(500);
+    if (local_mtu_ret)
+    {
+        ESP_LOGE(GATTC_TAG, "set local  MTU failed, error code = %x", local_mtu_ret);
+    }
 
     // Continuously take sensor inputs until power is lost
     while (1)
@@ -792,6 +865,17 @@ int app_main(void)
         }
         // Print the data from the BMP280Sensor for debugging purposes
         // BMP280Sensor_printData(&bmpSensor); // Comment for time
+
+        // Now read the heart rate data
+        if (polar_heart_rate != prev_heart_rate)
+        {
+            printf("Heart rate (new reading): %d\n", polar_heart_rate);
+            prev_heart_rate = polar_heart_rate;
+        }
+        else
+        {
+            printf("Heart rate (repeat reading): %d\n", prev_heart_rate);
+        }
         //////////////////////////////////////////////////////////////////
         // Data Reads are now done, so we can start processing the data//
         /////////////////////////////////////////////////////////////////
@@ -865,10 +949,13 @@ int app_main(void)
             // r_z = mpuSensor.r_z;
             // temp_calibrated = bmpSensor.temperature;
             // press_calibrated = bmpSensor.pressure;
+
+            user_id = mac_str;
+
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 1: %u bytes\n", free_heap);
-            send_post_request(my_timestamp, 287423 /*, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated */);
-            // vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
+            send_post_request(my_timestamp, user_id /*, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated */);
+            //  vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 2: %u bytes\n", free_heap);
             // Free the allocated memory once done using it
