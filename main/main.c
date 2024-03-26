@@ -502,52 +502,55 @@ esp_err_t client_event_post_handler(esp_http_client_event_handle_t evt)
    - Initializes an HTTP client, configures it with server details and POSTs the JSON data.
    - Cleans up resources after the request is performed.
 */
-void send_post_request(char *my_timestamp, char *user_id) /* float a_x, float a_y, float a_z,
-    float r_x, float r_y, float r_z,
-    float temp_calibrated, float press_calibrated */
+void send_post_request(char *my_timestamp, float a_x, float a_y, float a_z,
+                       float r_x, float r_y, float r_z, float temp_calibrated,
+                       float press_calibrated, int hr, char *user_id)
 {
     // Create a JSON object
     cJSON *json_root = cJSON_CreateObject();
 
     // Create arrays for each variable
     cJSON *timestampArray = cJSON_CreateArray();
+    cJSON *axArray = cJSON_CreateArray();
+    cJSON *ayArray = cJSON_CreateArray();
+    cJSON *azArray = cJSON_CreateArray();
+    cJSON *rxArray = cJSON_CreateArray();
+    cJSON *ryArray = cJSON_CreateArray();
+    cJSON *rzArray = cJSON_CreateArray();
+    cJSON *temperatureArray = cJSON_CreateArray();
+    cJSON *pressureArray = cJSON_CreateArray();
+    cJSON *hrArray = cJSON_CreateArray();
     cJSON *userIDArray = cJSON_CreateArray();
-    // cJSON *axArray = cJSON_CreateArray();
-    // cJSON *ayArray = cJSON_CreateArray();
-    // cJSON *azArray = cJSON_CreateArray();
-    // cJSON *rxArray = cJSON_CreateArray();
-    // cJSON *ryArray = cJSON_CreateArray();
-    // cJSON *rzArray = cJSON_CreateArray();
-    // cJSON *temperatureArray = cJSON_CreateArray();
-    // cJSON *pressureArray = cJSON_CreateArray();
 
     // Add arrays to the root object
     cJSON_AddItemToObject(json_root, "my_timestamp", timestampArray);
+    cJSON_AddItemToObject(json_root, "a_x", axArray);
+    cJSON_AddItemToObject(json_root, "a_y", ayArray);
+    cJSON_AddItemToObject(json_root, "a_z", azArray);
+    cJSON_AddItemToObject(json_root, "r_x", rxArray);
+    cJSON_AddItemToObject(json_root, "r_y", ryArray);
+    cJSON_AddItemToObject(json_root, "r_z", rzArray);
+    cJSON_AddItemToObject(json_root, "temperature", temperatureArray);
+    cJSON_AddItemToObject(json_root, "pressure", pressureArray);
+    cJSON_AddItemToObject(json_root, "hr", hrArray);
     cJSON_AddItemToObject(json_root, "user_id", userIDArray);
-    // cJSON_AddItemToObject(json_root, "a_x", axArray);
-    // cJSON_AddItemToObject(json_root, "a_y", ayArray);
-    // cJSON_AddItemToObject(json_root, "a_z", azArray);
-    // cJSON_AddItemToObject(json_root, "r_x", rxArray);
-    // cJSON_AddItemToObject(json_root, "r_y", ryArray);
-    // cJSON_AddItemToObject(json_root, "r_z", rzArray);
-    // cJSON_AddItemToObject(json_root, "temperature", temperatureArray);
-    // cJSON_AddItemToObject(json_root, "pressure", pressureArray);
 
     // Add an element to each array
     cJSON_AddItemToArray(timestampArray, cJSON_CreateString(my_timestamp));
+    cJSON_AddItemToArray(axArray, cJSON_CreateNumber(a_x));
+    cJSON_AddItemToArray(ayArray, cJSON_CreateNumber(a_y));
+    cJSON_AddItemToArray(azArray, cJSON_CreateNumber(a_z));
+    cJSON_AddItemToArray(rxArray, cJSON_CreateNumber(r_x));
+    cJSON_AddItemToArray(ryArray, cJSON_CreateNumber(r_y));
+    cJSON_AddItemToArray(rzArray, cJSON_CreateNumber(r_z));
+    cJSON_AddItemToArray(temperatureArray, cJSON_CreateNumber(temp_calibrated));
+    cJSON_AddItemToArray(pressureArray, cJSON_CreateNumber(press_calibrated));
+    cJSON_AddItemToArray(hrArray, cJSON_CreateNumber(hr));
     cJSON_AddItemToArray(userIDArray, cJSON_CreateString(user_id));
-    // cJSON_AddItemToArray(axArray, cJSON_CreateNumber(a_x));
-    // cJSON_AddItemToArray(ayArray, cJSON_CreateNumber(a_y));
-    // cJSON_AddItemToArray(azArray, cJSON_CreateNumber(a_z));
-    // cJSON_AddItemToArray(rxArray, cJSON_CreateNumber(r_x));
-    // cJSON_AddItemToArray(ryArray, cJSON_CreateNumber(r_y));
-    // cJSON_AddItemToArray(rzArray, cJSON_CreateNumber(r_z));
-    // cJSON_AddItemToArray(temperatureArray, cJSON_CreateNumber(temp_calibrated));
-    // cJSON_AddItemToArray(pressureArray, cJSON_CreateNumber(press_calibrated));
 
     // Print the JSON object
     char *post_data = cJSON_Print(json_root);
-    // printf("%s\n", post_data); // Comment for time
+    printf("%s\n", post_data); // Comment for time
 
     // Initialize the HTTP client configuration
     esp_http_client_config_t config = {
@@ -679,6 +682,7 @@ float r_z;
 float temp_calibrated;
 float press_calibrated;
 int prev_heart_rate;
+int hr = -1;
 
 int app_main(void)
 {
@@ -876,6 +880,7 @@ int app_main(void)
         {
             printf("Heart rate (repeat reading): %d\n", prev_heart_rate);
         }
+        hr = prev_heart_rate;
         //////////////////////////////////////////////////////////////////
         // Data Reads are now done, so we can start processing the data//
         /////////////////////////////////////////////////////////////////
@@ -940,21 +945,19 @@ int app_main(void)
         if (my_timestamp != NULL)
         {
             // Use the stored timestamp or perform operations
-            // Note that user_id is currently hard coded and will be fully implemented in 404
-            // a_x = mpuSensor.a_x;
-            // a_y = mpuSensor.a_y;
-            // a_z = mpuSensor.a_z;
-            // r_x = mpuSensor.r_x;
-            // r_y = mpuSensor.r_y;
-            // r_z = mpuSensor.r_z;
-            // temp_calibrated = bmpSensor.temperature;
-            // press_calibrated = bmpSensor.pressure;
-
+            a_x = mpuSensor.a_x;
+            a_y = mpuSensor.a_y;
+            a_z = mpuSensor.a_z;
+            r_x = mpuSensor.r_x;
+            r_y = mpuSensor.r_y;
+            r_z = mpuSensor.r_z;
+            temp_calibrated = bmpSensor.temperature;
+            press_calibrated = bmpSensor.pressure;
             user_id = mac_str;
 
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 1: %u bytes\n", free_heap);
-            send_post_request(my_timestamp, user_id /*, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated */);
+            send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id);
             //  vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 2: %u bytes\n", free_heap);
