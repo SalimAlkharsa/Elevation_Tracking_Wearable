@@ -496,6 +496,40 @@ esp_err_t client_event_post_handler(esp_http_client_event_handle_t evt)
 }
 
 /*
+Creates a connection to the server.
+*/
+esp_http_client_handle_t create_client()
+{
+    // Initialize the HTTP client configuration
+    esp_http_client_config_t config = {
+        .url = SERVER_URL,
+        .method = HTTP_METHOD_POST,
+        .timeout_ms = 6000,
+        .cert_pem = NULL,
+        .event_handler = client_event_post_handler,
+        .transport_type = HTTP_TRANSPORT_OVER_TCP,
+        .crt_bundle_attach = esp_crt_bundle_attach, // TODO: Look into the async option at some point, refer to docs
+    };
+
+    // Initialize the HTTP client handle
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+
+    return client;
+}
+
+// Function to check if the client is connected
+bool is_client_connected(esp_http_client_handle_t client)
+{
+    // Check if the client handle is valid
+    if (client == NULL)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+/*
    Sends a POST request to a server with sensor data in JSON format:
    - Creates a JSON object and arrays for each sensor data variable.
    - Adds sensor data to respective arrays within the JSON object.
@@ -504,7 +538,7 @@ esp_err_t client_event_post_handler(esp_http_client_event_handle_t evt)
 */
 void send_post_request(char *my_timestamp, float a_x, float a_y, float a_z,
                        float r_x, float r_y, float r_z, float temp_calibrated,
-                       float press_calibrated, int hr, char *user_id)
+                       float press_calibrated, int hr, char *user_id, esp_http_client_handle_t *client)
 {
     // Create a JSON object
     cJSON *json_root = cJSON_CreateObject();
@@ -552,28 +586,28 @@ void send_post_request(char *my_timestamp, float a_x, float a_y, float a_z,
     char *post_data = cJSON_Print(json_root);
     printf("%s\n", post_data); // Comment for time
 
-    // Initialize the HTTP client configuration
-    esp_http_client_config_t config = {
-        .url = SERVER_URL,
-        .method = HTTP_METHOD_POST,
-        .timeout_ms = 6000,
-        .cert_pem = NULL,
-        .event_handler = client_event_post_handler,
-        .transport_type = HTTP_TRANSPORT_OVER_TCP,
-        .crt_bundle_attach = esp_crt_bundle_attach, // TODO: Look into the async option at some point, refer to docs
-    };
+    // Check if we are connected to the client
+    if (!is_client_connected(*client))
+    {
+        // Reconnect to the client
+        printf("Reconnecting to the client\n");
+        *client = create_client();
+    }
 
-    // Initialize the HTTP client handle
-    esp_http_client_handle_t client = esp_http_client_init(&config);
-    esp_http_client_set_method(client, HTTP_METHOD_POST);
-    esp_http_client_set_post_field(client, post_data, strlen(post_data));
-    esp_http_client_set_header(client, "Content-Type", "application/json");
+    esp_http_client_set_method(*client, HTTP_METHOD_POST);
+    esp_http_client_set_post_field(*client, post_data, strlen(post_data));
+    esp_http_client_set_header(*client, "Content-Type", "application/json");
 
     // Perform the HTTP POST request
-    esp_err_t err = esp_http_client_perform(client);
+    esp_err_t err = esp_http_client_perform(*client);
+    if (err != ESP_OK)
+    {
+        printf("HTTP POST request failed: %s\n", esp_err_to_name(err));
+        *client = NULL;
+    }
 
     // Cleanup resources
-    esp_http_client_cleanup(client);
+    // esp_http_client_cleanup(client);
     cJSON_free((void *)post_data);
     cJSON_Delete(json_root);
 }
@@ -683,6 +717,7 @@ float temp_calibrated;
 float press_calibrated;
 int prev_heart_rate;
 int hr = -1;
+esp_http_client_handle_t client = NULL;
 
 int app_main(void)
 {
@@ -957,7 +992,7 @@ int app_main(void)
 
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 1: %u bytes\n", free_heap);
-            send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id);
+            send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id, &client);
             //  vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 2: %u bytes\n", free_heap);
