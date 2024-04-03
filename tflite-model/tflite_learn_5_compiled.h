@@ -18,31 +18,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-// Generated on: 12.02.2024 00:08:05
+// Generated on: 03.04.2024 02:59:15
 
-#ifndef tflite_learn_46_GEN_H
-#define tflite_learn_46_GEN_H
+#ifndef tflite_learn_5_GEN_H
+#define tflite_learn_5_GEN_H
 
 #include "edge-impulse-sdk/tensorflow/lite/c/common.h"
 
 // Sets up the model with init and prepare steps.
-TfLiteStatus tflite_learn_46_init( void*(*alloc_fnc)(size_t,size_t) );
+TfLiteStatus tflite_learn_5_init( void*(*alloc_fnc)(size_t,size_t) );
 // Returns the input tensor with the given index.
-TfLiteStatus tflite_learn_46_input(int index, TfLiteTensor* tensor);
+TfLiteStatus tflite_learn_5_input(int index, TfLiteTensor* tensor);
 // Returns the output tensor with the given index.
-TfLiteStatus tflite_learn_46_output(int index, TfLiteTensor* tensor);
+TfLiteStatus tflite_learn_5_output(int index, TfLiteTensor* tensor);
 // Runs inference for the model.
-TfLiteStatus tflite_learn_46_invoke();
+TfLiteStatus tflite_learn_5_invoke();
 //Frees memory allocated
-TfLiteStatus tflite_learn_46_reset( void (*free)(void* ptr) );
+TfLiteStatus tflite_learn_5_reset( void (*free)(void* ptr) );
 
 
 // Returns the number of input tensors.
-inline size_t tflite_learn_46_inputs() {
+inline size_t tflite_learn_5_inputs() {
   return 1;
 }
 // Returns the number of output tensors.
-inline size_t tflite_learn_46_outputs() {
+inline size_t tflite_learn_5_outputs() {
   return 1;
 }
 

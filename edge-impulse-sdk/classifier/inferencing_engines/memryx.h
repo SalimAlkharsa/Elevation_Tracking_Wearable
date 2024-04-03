@@ -201,15 +201,19 @@ bool init_memryx(bool debug, const ei_impulse_t *impulse)
 EI_IMPULSE_ERROR run_nn_inference(
     const ei_impulse_t *impulse,
     ei_feature_t *fmatrix,
+    uint32_t learn_block_index,
     uint32_t* input_block_ids,
     uint32_t input_block_ids_size,
     ei_impulse_result_t *result,
     void *config_ptr,
     bool debug = false)
 {
+    ei_learning_block_config_tflite_graph_t *block_config = (ei_learning_block_config_tflite_graph_t*)config_ptr;
+
     memx_status status = MEMX_STATUS_OK;
     int32_t ifmap_height, ifmap_width, ifmap_channel_number, ifmap_format;
     int32_t ofmap_height, ofmap_width, ofmap_channel_number, ofmap_format;
+    int32_t z;
     uint64_t ctx_start_us = 0;
     uint64_t ctx_end_us = 0;
 
@@ -223,13 +227,13 @@ EI_IMPULSE_ERROR run_nn_inference(
 
     /* 4. get input shape - Not needed during runtime, available only for debugging */
     if(verbose_debug) {
-        status = memx_get_ifmap_size(model_id, flow_id, &ifmap_height, &ifmap_width, &ifmap_channel_number, &ifmap_format);
+        status = memx_get_ifmap_size(model_id, flow_id, &ifmap_height, &ifmap_width, &z, &ifmap_channel_number, &ifmap_format);
         ei_printf("status = %d, ifmap shape = (%d, %d, %d), format = %d\n",
                    status, ifmap_height, ifmap_width, ifmap_channel_number, ifmap_format);
     }
 
     // 5. get output shape
-    status = memx_get_ofmap_size(model_id, flow_id, &ofmap_height, &ofmap_width, &ofmap_channel_number, &ofmap_format);
+    status = memx_get_ofmap_size(model_id, flow_id, &ofmap_height, &ofmap_width, &z, &ofmap_channel_number, &ofmap_format);
     if(debug) {
         ei_printf("status = %d, ofmap shape = (%d, %d, %d), format = %d\n",
                   status, ofmap_height, ofmap_width, ofmap_channel_number, ofmap_format);
@@ -310,12 +314,13 @@ EI_IMPULSE_ERROR run_nn_inference(
     tflite::reference_ops::Softmax(dummy_params, softmax_shape, ofmap, softmax_shape, ofmap);
 
     // handle inference outputs
-    if (impulse->object_detection) {
-        switch (impulse->object_detection_last_layer) {
+    if (block_config->object_detection) {
+        switch (block_config->object_detection_last_layer) {
             case EI_CLASSIFIER_LAST_LAYER_FOMO: {
                 ei_printf("FOMO executed on Memryx\n");
                 fill_result_struct_f32_fomo(
                     impulse,
+                    block_config,
                     result,
                     ofmap,
                     impulse->fomo_output_size,
@@ -328,7 +333,7 @@ EI_IMPULSE_ERROR run_nn_inference(
             }
             default: {
                 ei_printf("ERR: Unsupported object detection last layer (%d)\n",
-                    impulse->object_detection_last_layer);
+                    block_config->object_detection_last_layer);
                 return EI_IMPULSE_UNSUPPORTED_INFERENCING_ENGINE;
             }
         }
@@ -346,11 +351,14 @@ EI_IMPULSE_ERROR run_nn_inference(
 EI_IMPULSE_ERROR run_nn_inference(
     const ei_impulse_t *impulse,
     ei_feature_t *fmatrix,
+    uint32_t learn_block_index,
     uint32_t* inputBlockIds,
     ei_impulse_result_t *result,
     void *config_ptr,
     bool debug = false)
 {
+    ei_learning_block_config_tflite_graph_t *block_config = (ei_learning_block_config_tflite_graph_t*)config_ptr;
+
     // init Python embedded interpreter (should be called once!)
     static py::scoped_interpreter guard{};
 
@@ -418,7 +426,7 @@ EI_IMPULSE_ERROR run_nn_inference(
 
     potentials = outputs.squeeze().cast<py::array_t<float>>();
 
-    if (impulse->object_detection == false) {
+    if (block_config->object_detection == false) {
         potentials_v = outputs.squeeze().cast<std::vector<float>>();
     }
     else {
@@ -437,12 +445,13 @@ EI_IMPULSE_ERROR run_nn_inference(
         ei_printf("Memryx raw output:\n%s\n", ret_str.c_str());
     }
 
-    if (impulse->object_detection) {
-        switch (impulse->object_detection_last_layer) {
+    if (block_config->object_detection) {
+        switch (block_config->object_detection_last_layer) {
             case EI_CLASSIFIER_LAST_LAYER_FOMO: {
                 ei_printf("FOMO executed on Memryx\n");
                 fill_result_struct_f32_fomo(
                     impulse,
+                    block_config,
                     result,
                     potentials_v.data(),
                     impulse->fomo_output_size,

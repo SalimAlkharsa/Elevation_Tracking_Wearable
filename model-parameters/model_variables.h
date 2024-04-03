@@ -25,74 +25,79 @@
 #include <stdint.h>
 #include "model_metadata.h"
 
-#include "tflite-model/tflite_learn_46_compiled.h"
+#include "tflite-model/tflite_learn_5_compiled.h"
 #include "edge-impulse-sdk/classifier/ei_model_types.h"
 #include "edge-impulse-sdk/classifier/inferencing_engines/engines.h"
 
-const char* ei_classifier_inferencing_categories[] = { "elevator_up", "going_down", "going_up", "walking" };
+const char* ei_classifier_inferencing_categories[] = { "down", "elevator_down", "elevator_up", "up", "walk" };
 
-uint8_t ei_dsp_config_84_axes[] = { 2, 3, 4, 1, 0 };
-const uint32_t ei_dsp_config_84_axes_size = 5;
-ei_dsp_config_flatten_t ei_dsp_config_84 = {
-    84, // uint32_t blockId
+uint8_t ei_dsp_config_4_axes[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+const uint32_t ei_dsp_config_4_axes_size = 9;
+ei_dsp_config_flatten_t ei_dsp_config_4 = {
+    4, // uint32_t blockId
     1, // int implementationVersion
-    5, // int length of axes
+    9, // int length of axes
     1.0f, // float scale-axes
     true, // boolean average
     true, // boolean minimum
     true, // boolean maximum
-    false, // boolean rms
+    true, // boolean rms
     true, // boolean stdev
-    false, // boolean skewness
-    true // boolean kurtosis
+    true, // boolean skewness
+    true, // boolean kurtosis
+    0 // int moving_avg_num_windows
 };
 
 const size_t ei_dsp_blocks_size = 1;
 ei_model_dsp_t ei_dsp_blocks[ei_dsp_blocks_size] = {
-    { // DSP block 84
-        84,
-        25,
-        &extract_flatten_features,
-        (void*)&ei_dsp_config_84,
-        ei_dsp_config_84_axes,
-        ei_dsp_config_84_axes_size
+    { // DSP block 4
+        4,
+        63, // output size
+        &extract_flatten_features, // DSP function pointer
+        (void*)&ei_dsp_config_4, // pointer to config struct
+        ei_dsp_config_4_axes, // array of offsets into the input stream, one for each axis
+        ei_dsp_config_4_axes_size, // number of axes
+        1, // version
+        flatten_class::create, // factory function
     }
 };
-const ei_config_tflite_eon_graph_t ei_config_tflite_graph_46 = {
+const ei_config_tflite_eon_graph_t ei_config_tflite_graph_5 = {
     .implementation_version = 1,
-    .model_init = &tflite_learn_46_init,
-    .model_invoke = &tflite_learn_46_invoke,
-    .model_reset = &tflite_learn_46_reset,
-    .model_input = &tflite_learn_46_input,
-    .model_output = &tflite_learn_46_output,
+    .model_init = &tflite_learn_5_init,
+    .model_invoke = &tflite_learn_5_invoke,
+    .model_reset = &tflite_learn_5_reset,
+    .model_input = &tflite_learn_5_input,
+    .model_output = &tflite_learn_5_output,
 };
 
-const ei_learning_block_config_tflite_graph_t ei_learning_block_config_46 = {
+const ei_learning_block_config_tflite_graph_t ei_learning_block_config_5 = {
     .implementation_version = 1,
-    .block_id = 46,
+    .classification_mode = EI_CLASSIFIER_CLASSIFICATION_MODE_CLASSIFICATION,
+    .block_id = 5,
     .object_detection = 0,
     .object_detection_last_layer = EI_CLASSIFIER_LAST_LAYER_UNKNOWN,
     .output_data_tensor = 0,
     .output_labels_tensor = 1,
     .output_score_tensor = 2,
-    .quantized = 1,
+    .threshold = 0,
+    .quantized = 0,
     .compiled = 1,
-    .graph_config = (void*)&ei_config_tflite_graph_46
+    .graph_config = (void*)&ei_config_tflite_graph_5
 };
 
 const size_t ei_learning_blocks_size = 1;
-const uint32_t ei_learning_block_46_inputs[1] = { 84 };
-const uint32_t ei_learning_block_46_inputs_size = 1;
+const uint32_t ei_learning_block_5_inputs[1] = { 4 };
+const uint32_t ei_learning_block_5_inputs_size = 1;
 const ei_learning_block_t ei_learning_blocks[ei_learning_blocks_size] = {
     {
-        46,
+        5,
         false,
         &run_nn_inference,
-        (void*)&ei_learning_block_config_46,
+        (void*)&ei_learning_block_config_5,
         EI_CLASSIFIER_IMAGE_SCALING_NONE,
-        ei_learning_block_46_inputs,
-        ei_learning_block_46_inputs_size,
-        4
+        ei_learning_block_5_inputs,
+        ei_learning_block_5_inputs_size,
+        5
     },
 };
 
@@ -104,50 +109,51 @@ const ei_model_performance_calibration_t ei_calibration = {
     (int32_t)(EI_CLASSIFIER_RAW_SAMPLE_COUNT / ((EI_CLASSIFIER_FREQUENCY > 0) ? EI_CLASSIFIER_FREQUENCY : 1)) * 500, /* Half of model window */
     0   /* Don't use flags */
 };
+const ei_object_detection_nms_config_t ei_object_detection_nms = {
+    0.0f, /* NMS confidence threshold */
+    0.2f  /* NMS IOU threshold */
+};
 
-const ei_impulse_t impulse_347379_4 = {
-    .project_id = 347379,
+const ei_impulse_t impulse_372000_0 = {
+    .project_id = 372000,
     .project_owner = "Salim",
-    .project_name = "Capstone_Trial",
-    .deploy_version = 4,
+    .project_name = "Thesis-2",
+    .deploy_version = 3,
 
-    .nn_input_frame_size = 25,
-    .raw_sample_count = 40,
-    .raw_samples_per_frame = 5,
-    .dsp_input_frame_size = 40 * 5,
+    .nn_input_frame_size = 63,
+    .raw_sample_count = 5,
+    .raw_samples_per_frame = 9,
+    .dsp_input_frame_size = 5 * 9,
     .input_width = 0,
     .input_height = 0,
     .input_frames = 0,
-    .interval_ms = 125,
-    .frequency = 8,
+    .interval_ms = 833,
+    .frequency = 1.2004801920768307,
     .dsp_blocks_size = ei_dsp_blocks_size,
     .dsp_blocks = ei_dsp_blocks,
     
-    .object_detection = 0,
     .object_detection_count = 0,
-     
-    .object_detection_threshold = 0,
-     
-    .object_detection_last_layer = EI_CLASSIFIER_LAST_LAYER_UNKNOWN,
     .fomo_output_size = 0,
     
-    .tflite_output_features_count = 4,
+    .tflite_output_features_count = 5,
     .learning_blocks_size = ei_learning_blocks_size,
     .learning_blocks = ei_learning_blocks,
 
     .inferencing_engine = EI_CLASSIFIER_TFLITE,
 
     .sensor = EI_CLASSIFIER_SENSOR_FUSION,
-    .fusion_string = "y-axis (deg/s) + z-axis (deg/s) + pressure (Pa) + z-axis (g) + y-axis (g)",
-    .slice_size = (40/4),
+    .fusion_string = "a_x + a_y + a_z + r_x + r_y + r_z + temperature + pressure + hr",
+    .slice_size = (5/4),
     .slices_per_model_window = 4,
 
     .has_anomaly = EI_ANOMALY_TYPE_UNKNOWN,
-    .label_count = 4,
+    .label_count = 5,
     .calibration = ei_calibration,
-    .categories = ei_classifier_inferencing_categories
+    .categories = ei_classifier_inferencing_categories,
+    .object_detection_nms = ei_object_detection_nms
 };
 
-const ei_impulse_t& ei_default_impulse = impulse_347379_4;
+ei_impulse_handle_t impulse_handle_372000_0 = ei_impulse_handle_t( &impulse_372000_0 );
+ei_impulse_handle_t& ei_default_impulse = impulse_handle_372000_0;
 
 #endif // _EI_CLASSIFIER_MODEL_METADATA_H_
