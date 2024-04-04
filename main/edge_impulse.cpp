@@ -5,12 +5,12 @@
 // C library
 extern "C"
 {
-    int check_feature_array_size(int);
+    int check_feature_array_size();
     void classifier_loop();
 }
 
 // Declare the 'features' array from main.c
-extern float features[200];
+extern float features[(9 * 5)]; // 9 features, 5 time steps
 
 // C function to get the data from the 'features' array
 int raw_feature_get_data(size_t offset, size_t length, float *out_ptr)
@@ -41,7 +41,7 @@ void print_inference_result(ei_impulse_result_t result)
 //////////////////////////////////////////////////////////////////
 
 // C++ function to check the size of the 'features' array above
-int check_feature_array_size(int i)
+int check_feature_array_size()
 {
     // Check the size of the 'features' array
     if (sizeof(features) / sizeof(float) != EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE)

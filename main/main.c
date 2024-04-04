@@ -77,15 +77,15 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "cpp_code.h"
 float features[];
 
-// This is the function that sends the sensor data over UART when in testing mode
-void process_sensor_data_into_model(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
-{
-    // Not sure what value to use for the buffer size but 50 is arbitrary and works for now
-    char data[100];
+// // This is the function that sends the sensor data over UART when in testing mode
+// void process_sensor_data_into_model(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
+// {
+//     // Not sure what value to use for the buffer size but 50 is arbitrary and works for now
+//     char data[100];
 
-    // Format the data as per the protocol
-    snprintf(data, sizeof(data), "%f, %f, %f, %f, %f, %f, %f, %f", x_acc, y_acc, z_acc, x_rot, y_rot, z_rot, temp, press);
-}
+//     // Format the data as per the protocol
+//     snprintf(data, sizeof(data), "%f, %f, %f, %f, %f, %f, %f, %f", x_acc, y_acc, z_acc, x_rot, y_rot, z_rot, temp, press);
+//}
 
 // Defines for I2C functionality
 // Defines for the SCL and SDA pins on the ESP-32 WROOM
@@ -722,7 +722,7 @@ esp_http_client_handle_t client = NULL;
 int app_main(void)
 {
     ////////////////////////// ML Stuff //////////////////////////
-    int result = check_feature_array_size(40 * 5); // Features in splice x splices
+    int result = check_feature_array_size();
     if (result == 0)
     {
         printf("Feature array size is correct\n");
@@ -746,7 +746,7 @@ int app_main(void)
 
     // Initialize the Wi-Fi connection
     // Time this function
-    wifi_init_sta();
+    // wifi_init_sta();
 
     // Get the MAC address
     uint8_t mac_addr[6];
@@ -782,10 +782,10 @@ int app_main(void)
     double sampling_rate, elapsed_time;
 
     // This is where the sensor data is stored
-    float values[5] = {};
+    float values[9] = {}; // 9 sensor values
     // define the big window of data where the slices will be stored
     // also define the slices that will be used to store the sensor data
-    Slice slices[5];
+    Slice slices[5]; // There are 5 time steps
     for (int i = 0; i < 5; i++)
     {
         slices[i] = initializeSlice();
@@ -922,19 +922,23 @@ int app_main(void)
 
         // Go through the process of adding the sensor data to the slices for the model
         // Define the collected data that will be added to the slices
-        values[0] = mpuSensor.a_y;
-        values[1] = mpuSensor.a_z;
-        values[2] = mpuSensor.r_y;
-        values[3] = mpuSensor.r_z;
-        values[4] = bmpSensor.pressure;
+        values[0] = mpuSensor.a_x;
+        values[1] = mpuSensor.a_y;
+        values[2] = mpuSensor.a_z;
+        values[3] = mpuSensor.r_x;
+        values[4] = mpuSensor.r_y;
+        values[5] = mpuSensor.r_z;
+        values[6] = bmpSensor.temperature;
+        values[7] = bmpSensor.pressure;
+        values[8] = hr;
         // Add the data to the slices
-        addSensorDataToSlices(slices, 5, values, 5);
+        addSensorDataToSlices(slices, 5, values, 9); // 5 slices, 9 values
         // print the slices for debugging purposes
         for (int i = 0; i < 5; i++)
         {
             printf("Slice %d: ", i); // Comment for time
-            printf("%p", slices[i]); // Get the addy of the slices
-            // printSlice(slices[i]);   // Comment for time
+            // printf("%p", slices[i]); // Get the addy of the slices
+            printSlice(slices[i]); // Comment for time
         }
         // If all the slices are full, then we can start processing the data into the model
         if (slices[4].length == MAX_CAPACITY)
@@ -946,19 +950,24 @@ int app_main(void)
             {
                 for (int j = 0; j < slices[i].length; j++)
                 {
-                    features[i * 40 + j] = slices[i].data[j];
+                    features[i * 9 + j] = slices[i].data[j];
                 }
             }
 
             // Pass the features array to the C++ code
-            if (check_feature_array_size(200) == 1)
+            if (check_feature_array_size() == 1)
             {
                 printf("Feature array size is incorrect\n");
             }
             else
             {
                 printf("Feature array size is correct\n");
-                classifier_loop();
+                printf("Features array: \n");
+                for (int i = 0; i < 45; i++)
+                {
+                    printf("%f, ", features[i]);
+                }
+                // classifier_loop();
             }
             //////
         }
@@ -992,8 +1001,8 @@ int app_main(void)
 
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 1: %u bytes\n", free_heap);
-            send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id, &client);
-            //  vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
+            // send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id, &client);
+            //   vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 2: %u bytes\n", free_heap);
             // Free the allocated memory once done using it
