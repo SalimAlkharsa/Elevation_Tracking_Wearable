@@ -1,6 +1,7 @@
 // C++ code
 #include "edge-impulse-sdk/classifier/ei_run_classifier.h"
 #include "cpp_code.h"
+#include "model.c"
 
 // C library
 extern "C"
@@ -67,13 +68,25 @@ void classifier_loop()
     features_signal.total_length = sizeof(features) / sizeof(features[0]);
     features_signal.get_data = &raw_feature_get_data;
 
-    // invoke the impulse
+    // Run the classifier (using XGB)
+    // the implementation of this solution is hacky
+    // I first run through the dummy edge impulse model to get the dsp file
+    // then I run the XGB classifier (score) with the dsp file
+
+    // Run the dummy edge impulse model
     EI_IMPULSE_ERROR res = run_classifier(&features_signal, &result, false /* debug */);
     if (res != EI_IMPULSE_OK)
     {
         ei_printf("ERR: Failed to run classifier (%d)\n", res);
         printf("ERR: Failed to run classifier (%d)\n", res);
     }
+
+    // Copy the DSP
+    double input[(9 * 7)]; // 9 sensors used, 7 flattened features
+    double output[5];      // 5 classes
+    // Copy the features into the input array
+
+    // // invoke the impulse
 
     print_inference_result(result);
 }
