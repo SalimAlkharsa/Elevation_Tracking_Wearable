@@ -91,6 +91,19 @@ void shiftResults(char *results[], int length)
     }
 }
 
+// This function will check if all elements are the same as the target
+int allSame(char *results[], int length, const char *target)
+{
+    for (int i = 0; i < length; i++)
+    {
+        if (strcmp(results[i], target) != 0)
+        {
+            return 0; // Not all elements are the same as the target
+        }
+    }
+    return 1; // All elements are the same as the target
+}
+
 // Defines for I2C functionality
 // Defines for the SCL and SDA pins on the ESP-32 WROOM
 #define I2C_MASTER_SCL_IO 22
@@ -710,27 +723,6 @@ TimestampInfo getTimestampInfo()
     return result;
 }
 
-// This function will check if all the values in the results array are the same as the target value and increment the associated counter if they are
-// void increment_counter_if_all_same(char *results[], int size, const char *target, int *counter)
-// {
-//     // Check if all elements are target
-//     int all_same = 1;              // Start by assuming all elements are target
-//     for (int i = 1; i < size; i++) // Start from index 1
-//     {
-//         if (strcmp(results[i], results[i - 1]) != 0) // Compare with previous element
-//         {
-//             all_same = 0; // If an element is not equal to the previous one, set the flag to 0
-//             break;
-//         }
-//     }
-
-//     // If all elements are target, increment the counter
-//     if (all_same)
-//     {
-//         (*counter)++;
-//     }
-// }
-
 // Declare the variables for the sensor data
 float a_x;
 float a_y;
@@ -953,12 +945,12 @@ int app_main(void)
         // Now read the heart rate data
         if (polar_heart_rate != prev_heart_rate)
         {
-            printf("Heart rate (new reading): %d\n", polar_heart_rate);
+            // printf("Heart rate (new reading): %d\n", polar_heart_rate);
             prev_heart_rate = polar_heart_rate;
         }
         else
         {
-            printf("Heart rate (repeat reading): %d\n", prev_heart_rate);
+            // printf("Heart rate (repeat reading): %d\n", prev_heart_rate);
         }
         hr = prev_heart_rate;
         //////////////////////////////////////////////////////////////////
@@ -978,17 +970,17 @@ int app_main(void)
         // Add the data to the slices
         addSensorDataToSlices(slices, 5, values, 8); // 5 slices, 8 values
         // print the slices for debugging purposes
-        for (int i = 0; i < 5; i++)
-        {
-            printf("Slice %d: ", i); // Comment for time
-            // printf("%p", slices[i]); // Get the addy of the slices
-            printSlice(slices[i]); // Comment for time
-        }
+        // for (int i = 0; i < 5; i++)
+        // {
+        //     printf("Slice %d: ", i); // Comment for time
+        //     printf("%p", slices[i]); // Get the addy of the slices
+        //     printSlice(slices[i]); // Comment for time
+        // }
         // If all the slices are full, then we can start processing the data into the model
         if (slices[4].length == MAX_CAPACITY)
         {
             // This means that the slices are full and we can start processing the data
-            printf("All slices are full, data will now be processed into the model! \n \n \n");
+            // printf("All slices are full, data will now be processed into the model! \n \n \n");
             // Load the features array to store the data from the all the slices
             for (int i = 0; i < 5; i++)
             {
@@ -1001,16 +993,16 @@ int app_main(void)
             // Pass the features array to the C++ code
             if (check_feature_array_size() == 1)
             {
-                printf("Feature array size is incorrect\n");
+                // printf("Feature array size is incorrect\n");
             }
             else
             {
-                printf("Feature array size is correct\n");
-                printf("Features array: \n");
-                for (int i = 0; i < (8 * 5); i++)
-                {
-                    printf("%f, ", features[i]);
-                }
+                // printf("Feature array size is correct\n");
+                // printf("Features array: \n");
+                // for (int i = 0; i < (8 * 5); i++)
+                // {
+                //     printf("%f, ", features[i]);
+                // }
                 result_label = classifier_loop();
                 printf("Result: %s\n", result_label);
 
@@ -1027,9 +1019,15 @@ int app_main(void)
                     printf("%s ", results[i]);
                 }
 
-                // Increment the counter if all results are the same
-                // increment_counter_if_all_same(results, 3, "up", &up_cnt);
-                // increment_counter_if_all_same(results, 3, "down", &down_cnt);
+                // Check if the user has ascended or descended a floor
+                if (allSame(results, 3, "up") == 1)
+                {
+                    up_cnt++;
+                }
+                else if (allSame(results, 3, "down") == 1)
+                {
+                    down_cnt++;
+                }
             }
             //////
         }
@@ -1064,7 +1062,7 @@ int app_main(void)
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 1: %u bytes\n", free_heap);
             // send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id, &client);
-            //   vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
+            //     vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 2: %u bytes\n", free_heap);
             // Free the allocated memory once done using it

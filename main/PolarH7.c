@@ -326,11 +326,11 @@ static int gattc_profile_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t
         esp_ble_gap_cb_param_t *scan_result = (esp_ble_gap_cb_param_t *)param;
         if (p_data->notify.is_notify)
         {
-            ESP_LOGI(GATTC_TAG, "ESP_GATTC_NOTIFY_EVT, receive notify value:");
+            // ESP_LOGI(GATTC_TAG, "ESP_GATTC_NOTIFY_EVT, receive notify value:");
         }
         else
         {
-            ESP_LOGI(GATTC_TAG, "ESP_GATTC_NOTIFY_EVT, receive indicate value:");
+            // ESP_LOGI(GATTC_TAG, "ESP_GATTC_NOTIFY_EVT, receive indicate value:");
         }
         esp_log_buffer_hex(GATTC_TAG, p_data->notify.value, p_data->notify.value_len);
 
@@ -348,7 +348,7 @@ static int gattc_profile_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t
             }
             else
             {
-                printf("Value of the second byte: %u\n", polar_heart_rate);
+                // printf("Value of the second byte: %u\n", polar_heart_rate);
                 prev_polar_heart_rate = polar_heart_rate;
             }
         }
@@ -383,7 +383,7 @@ static int gattc_profile_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t
         esp_bd_addr_t bda;
         memcpy(bda, p_data->srvc_chg.remote_bda, sizeof(esp_bd_addr_t));
         ESP_LOGI(GATTC_TAG, "ESP_GATTC_SRVC_CHG_EVT, bd_addr:");
-        esp_log_buffer_hex(GATTC_TAG, bda, sizeof(esp_bd_addr_t));
+        // esp_log_buffer_hex(GATTC_TAG, bda, sizeof(esp_bd_addr_t));
         break;
     }
     case ESP_GATTC_WRITE_CHAR_EVT:
@@ -422,7 +422,7 @@ static int esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *para
         // scan start complete event to indicate scan start successfully or failed
         if (param->scan_start_cmpl.status != ESP_BT_STATUS_SUCCESS)
         {
-            ESP_LOGE(GATTC_TAG, "scan start failed, error status = %x", param->scan_start_cmpl.status);
+            // ESP_LOGE(GATTC_TAG, "scan start failed, error status = %x", param->scan_start_cmpl.status);
             break;
         }
         ESP_LOGI(GATTC_TAG, "scan start success");
@@ -437,9 +437,9 @@ static int esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *para
             if ((scan_result->scan_rst.adv_data_len != 0) && (scan_result->scan_rst.scan_rsp_len != 0))
             {
                 esp_log_buffer_hex(GATTC_TAG, scan_result->scan_rst.bda, 6);
-                ESP_LOGI(GATTC_TAG, "searched Adv Data Len %d, Scan Response Len %d", scan_result->scan_rst.adv_data_len, scan_result->scan_rst.scan_rsp_len);
+                // ESP_LOGI(GATTC_TAG, "searched Adv Data Len %d, Scan Response Len %d", scan_result->scan_rst.adv_data_len, scan_result->scan_rst.scan_rsp_len);
                 adv_name = esp_ble_resolve_adv_data(scan_result->scan_rst.ble_adv, ESP_BLE_AD_TYPE_NAME_CMPL, &adv_name_len);
-                ESP_LOGI(GATTC_TAG, "searched Device Name Len %d", adv_name_len);
+                // ESP_LOGI(GATTC_TAG, "searched Device Name Len %d", adv_name_len);
                 esp_log_buffer_char(GATTC_TAG, adv_name, adv_name_len);
 
                 // Log the UUID for all devices
@@ -448,7 +448,7 @@ static int esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *para
                     .uuid = {.uuid16 = 0}, // Default UUID value
                 };
                 esp_ble_resolve_adv_data(scan_result->scan_rst.ble_adv, scan_result->scan_rst.adv_data_len, &service_uuid);
-                ESP_LOGI(GATTC_TAG, "\n");
+                // ESP_LOGI(GATTC_TAG, "\n");
             }
 
             if (adv_name != NULL && strncmp((char *)adv_name, remote_device_name, strlen(remote_device_name)) == 0)
@@ -480,11 +480,11 @@ static int esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *para
             {
                 if (strncmp((char *)adv_name, remote_device_name, strlen(remote_device_name)) == 0)
                 {
-                    ESP_LOGI(GATTC_TAG, "searched device %s\n", remote_device_name);
+                    // ESP_LOGI(GATTC_TAG, "searched device %s\n", remote_device_name);
                     if (polar_connect == false)
                     {
                         polar_connect = true;
-                        ESP_LOGI(GATTC_TAG, "connect to the remote device.");
+                        // ESP_LOGI(GATTC_TAG, "connect to the remote device.");
                         esp_ble_gap_stop_scanning();
                         esp_ble_gattc_open(gl_profile_tab[PROFILE_A_APP_ID].gattc_if, scan_result->scan_rst.bda, scan_result->scan_rst.ble_addr_type, true);
                     }
@@ -502,7 +502,7 @@ static int esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *para
     case ESP_GAP_BLE_SCAN_STOP_COMPLETE_EVT:
         if (param->scan_stop_cmpl.status != ESP_BT_STATUS_SUCCESS)
         {
-            ESP_LOGE(GATTC_TAG, "scan stop failed, error status = %x", param->scan_stop_cmpl.status);
+            // ESP_LOGE(GATTC_TAG, "scan stop failed, error status = %x", param->scan_stop_cmpl.status);
             break;
         }
         ESP_LOGI(GATTC_TAG, "stop scan successfully");
