@@ -9,7 +9,7 @@ extern "C"
 
     // Declare the C++ function
     int check_feature_array_size();
-    void classifier_loop();
+    const char *classifier_loop();
 
 #ifdef __cplusplus
 }

@@ -717,6 +717,7 @@ float temp_calibrated;
 float press_calibrated;
 int prev_heart_rate;
 int hr = -1;
+const char *result_label;
 esp_http_client_handle_t client = NULL;
 
 int app_main(void)
@@ -966,7 +967,8 @@ int app_main(void)
                 {
                     printf("%f, ", features[i]);
                 }
-                classifier_loop();
+                result_label = classifier_loop();
+                printf("Result: %s\n", result_label);
             }
             //////
         }

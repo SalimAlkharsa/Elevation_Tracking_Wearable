@@ -6,7 +6,7 @@
 extern "C"
 {
     int check_feature_array_size();
-    void classifier_loop();
+    const char *classifier_loop();
 }
 
 // Declare the 'features' array from main.c
@@ -20,20 +20,35 @@ int raw_feature_get_data(size_t offset, size_t length, float *out_ptr)
 }
 
 // C function to print the inference result
-void print_inference_result(ei_impulse_result_t result)
+const char *print_inference_result(ei_impulse_result_t result)
 {
-
     // Print how long it took to perform inference
     ei_printf("Timing: DSP %d ms, inference %d ms, anomaly %d ms\r\n",
               result.timing.dsp,
               result.timing.classification,
               result.timing.anomaly);
-    ei_printf("Predictions:\r\n");
+
+    // Initialize max value and label
+    float max_value = 0.0f;
+    const char *max_label = NULL;
+
+    // Print all results and find max value and its label
     for (uint16_t i = 0; i < EI_CLASSIFIER_LABEL_COUNT; i++)
     {
+        // Print current result
         ei_printf("  %s: ", ei_classifier_inferencing_categories[i]);
         ei_printf("%.5f\r\n", result.classification[i].value);
+
+        // Update max value and label if current value is greater
+        if (result.classification[i].value > max_value)
+        {
+            max_value = result.classification[i].value;
+            max_label = ei_classifier_inferencing_categories[i];
+        }
     }
+
+    // Return max label
+    return max_label;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -57,7 +72,7 @@ int check_feature_array_size()
 }
 
 // Function to run the classifier in the while loop
-void classifier_loop()
+const char *classifier_loop()
 {
     // This is potentially bad practice but I will define the result as a null pointer here
     ei_impulse_result_t result = {nullptr};
@@ -75,5 +90,6 @@ void classifier_loop()
         printf("ERR: Failed to run classifier (%d)\n", res);
     }
 
-    print_inference_result(result);
+    // Return the label of the maximum classification value
+    return print_inference_result(result);
 }
