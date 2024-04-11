@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#define MAX_CAPACITY 9 // 9 sensors with 5 samples each
-#define CHUNK_SIZE 9   // Chunk size refers to the number of sensor data samples (aka number of sensors)
+#define MAX_CAPACITY 8 // 8 sensors with 5 samples each
+#define CHUNK_SIZE 8   // Chunk size refers to the number of sensor data samples (aka number of sensors)
 
 typedef struct
 {

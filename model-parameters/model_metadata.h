@@ -57,13 +57,13 @@
 #define EI_CLASSIFIER_DATATYPE_UINT8             3
 #define EI_CLASSIFIER_DATATYPE_INT8              9
 
-#define EI_CLASSIFIER_PROJECT_ID                 372000
-#define EI_CLASSIFIER_PROJECT_OWNER              "Salim"
-#define EI_CLASSIFIER_PROJECT_NAME               "Thesis-2"
-#define EI_CLASSIFIER_PROJECT_DEPLOY_VERSION     3
-#define EI_CLASSIFIER_NN_INPUT_FRAME_SIZE        63
+#define EI_CLASSIFIER_PROJECT_ID                 375175
+#define EI_CLASSIFIER_PROJECT_OWNER              "Student at Texas A&M"
+#define EI_CLASSIFIER_PROJECT_NAME               "Student at Texas A&M-project-1"
+#define EI_CLASSIFIER_PROJECT_DEPLOY_VERSION     1
+#define EI_CLASSIFIER_NN_INPUT_FRAME_SIZE        32
 #define EI_CLASSIFIER_RAW_SAMPLE_COUNT           5
-#define EI_CLASSIFIER_RAW_SAMPLES_PER_FRAME      9
+#define EI_CLASSIFIER_RAW_SAMPLES_PER_FRAME      8
 #define EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE       (EI_CLASSIFIER_RAW_SAMPLE_COUNT * EI_CLASSIFIER_RAW_SAMPLES_PER_FRAME)
 #define EI_CLASSIFIER_INPUT_WIDTH                0
 #define EI_CLASSIFIER_INPUT_HEIGHT               0
@@ -109,7 +109,7 @@
 
 
 #define EI_CLASSIFIER_SENSOR                     EI_CLASSIFIER_SENSOR_FUSION
-#define EI_CLASSIFIER_FUSION_AXES_STRING         "a_x + a_y + a_z + r_x + r_y + r_z + temperature + pressure + hr"
+#define EI_CLASSIFIER_FUSION_AXES_STRING         "a_x + a_y + a_z + r_x + r_y + temperature + pressure + hr"
 #define EI_CLASSIFIER_CALIBRATION_ENABLED        0
 
 #ifndef EI_CLASSIFIER_SLICES_PER_MODEL_WINDOW
@@ -119,7 +119,7 @@
 
 #define EI_STUDIO_VERSION_MAJOR             1
 #define EI_STUDIO_VERSION_MINOR             49
-#define EI_STUDIO_VERSION_PATCH             0
+#define EI_STUDIO_VERSION_PATCH             2
 
 #if ((EI_CLASSIFIER_INFERENCING_ENGINE == EI_CLASSIFIER_TFLITE) ||      (EI_CLASSIFIER_INFERENCING_ENGINE == EI_CLASSIFIER_DRPAI)) &&      EI_CLASSIFIER_USE_FULL_TFLITE == 1
 

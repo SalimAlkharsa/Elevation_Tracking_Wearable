@@ -31,20 +31,20 @@
 
 const char* ei_classifier_inferencing_categories[] = { "down", "elevator_down", "elevator_up", "up", "walk" };
 
-uint8_t ei_dsp_config_4_axes[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-const uint32_t ei_dsp_config_4_axes_size = 9;
+uint8_t ei_dsp_config_4_axes[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+const uint32_t ei_dsp_config_4_axes_size = 8;
 ei_dsp_config_flatten_t ei_dsp_config_4 = {
     4, // uint32_t blockId
     1, // int implementationVersion
-    9, // int length of axes
+    8, // int length of axes
     1.0f, // float scale-axes
     true, // boolean average
     true, // boolean minimum
     true, // boolean maximum
-    true, // boolean rms
-    true, // boolean stdev
+    false, // boolean rms
+    false, // boolean stdev
     true, // boolean skewness
-    true, // boolean kurtosis
+    false, // boolean kurtosis
     0 // int moving_avg_num_windows
 };
 
@@ -52,7 +52,7 @@ const size_t ei_dsp_blocks_size = 1;
 ei_model_dsp_t ei_dsp_blocks[ei_dsp_blocks_size] = {
     { // DSP block 4
         4,
-        63, // output size
+        32, // output size
         &extract_flatten_features, // DSP function pointer
         (void*)&ei_dsp_config_4, // pointer to config struct
         ei_dsp_config_4_axes, // array of offsets into the input stream, one for each axis
@@ -114,16 +114,16 @@ const ei_object_detection_nms_config_t ei_object_detection_nms = {
     0.2f  /* NMS IOU threshold */
 };
 
-const ei_impulse_t impulse_372000_0 = {
-    .project_id = 372000,
-    .project_owner = "Salim",
-    .project_name = "Thesis-2",
-    .deploy_version = 3,
+const ei_impulse_t impulse_375175_0 = {
+    .project_id = 375175,
+    .project_owner = "Student at Texas A&M",
+    .project_name = "Student at Texas A&M-project-1",
+    .deploy_version = 1,
 
-    .nn_input_frame_size = 63,
+    .nn_input_frame_size = 32,
     .raw_sample_count = 5,
-    .raw_samples_per_frame = 9,
-    .dsp_input_frame_size = 5 * 9,
+    .raw_samples_per_frame = 8,
+    .dsp_input_frame_size = 5 * 8,
     .input_width = 0,
     .input_height = 0,
     .input_frames = 0,
@@ -142,7 +142,7 @@ const ei_impulse_t impulse_372000_0 = {
     .inferencing_engine = EI_CLASSIFIER_TFLITE,
 
     .sensor = EI_CLASSIFIER_SENSOR_FUSION,
-    .fusion_string = "a_x + a_y + a_z + r_x + r_y + r_z + temperature + pressure + hr",
+    .fusion_string = "a_x + a_y + a_z + r_x + r_y + temperature + pressure + hr",
     .slice_size = (5/4),
     .slices_per_model_window = 4,
 
@@ -153,7 +153,7 @@ const ei_impulse_t impulse_372000_0 = {
     .object_detection_nms = ei_object_detection_nms
 };
 
-ei_impulse_handle_t impulse_handle_372000_0 = ei_impulse_handle_t( &impulse_372000_0 );
-ei_impulse_handle_t& ei_default_impulse = impulse_handle_372000_0;
+ei_impulse_handle_t impulse_handle_375175_0 = ei_impulse_handle_t( &impulse_375175_0 );
+ei_impulse_handle_t& ei_default_impulse = impulse_handle_375175_0;
 
 #endif // _EI_CLASSIFIER_MODEL_METADATA_H_

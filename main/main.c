@@ -75,7 +75,7 @@ but note that the final data transmission will be to the postgreSQL database, wr
 
 // Imports related to the model
 #include "cpp_code.h"
-float features[];
+float features[(8 * 5)];
 
 // // This is the function that sends the sensor data over UART when in testing mode
 // void process_sensor_data_into_model(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
@@ -782,7 +782,7 @@ int app_main(void)
     double sampling_rate, elapsed_time;
 
     // This is where the sensor data is stored
-    float values[9] = {}; // 9 sensor values
+    float values[8] = {}; // 8 sensor values
     // define the big window of data where the slices will be stored
     // also define the slices that will be used to store the sensor data
     Slice slices[5]; // There are 5 time steps
@@ -927,12 +927,11 @@ int app_main(void)
         values[2] = mpuSensor.a_z;
         values[3] = mpuSensor.r_x;
         values[4] = mpuSensor.r_y;
-        values[5] = mpuSensor.r_z;
-        values[6] = bmpSensor.temperature;
-        values[7] = bmpSensor.pressure;
-        values[8] = hr;
+        values[5] = bmpSensor.temperature;
+        values[6] = bmpSensor.pressure;
+        values[7] = hr;
         // Add the data to the slices
-        addSensorDataToSlices(slices, 5, values, 9); // 5 slices, 9 values
+        addSensorDataToSlices(slices, 5, values, 8); // 5 slices, 8 values
         // print the slices for debugging purposes
         for (int i = 0; i < 5; i++)
         {
@@ -950,7 +949,7 @@ int app_main(void)
             {
                 for (int j = 0; j < slices[i].length; j++)
                 {
-                    features[i * 9 + j] = slices[i].data[j];
+                    features[i * 8 + j] = slices[i].data[j];
                 }
             }
 
@@ -963,11 +962,11 @@ int app_main(void)
             {
                 printf("Feature array size is correct\n");
                 printf("Features array: \n");
-                for (int i = 0; i < 45; i++)
+                for (int i = 0; i < (8 * 5); i++)
                 {
                     printf("%f, ", features[i]);
                 }
-                // classifier_loop();
+                classifier_loop();
             }
             //////
         }
