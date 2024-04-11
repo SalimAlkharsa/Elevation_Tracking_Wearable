@@ -77,15 +77,19 @@ but note that the final data transmission will be to the postgreSQL database, wr
 #include "cpp_code.h"
 float features[(8 * 5)];
 
-// // This is the function that sends the sensor data over UART when in testing mode
-// void process_sensor_data_into_model(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
-// {
-//     // Not sure what value to use for the buffer size but 50 is arbitrary and works for now
-//     char data[100];
+// Defines related to the model outputs
+#define MAX_RESULTS 3
+#define MAX_STRING_LENGTH 15
 
-//     // Format the data as per the protocol
-//     snprintf(data, sizeof(data), "%f, %f, %f, %f, %f, %f, %f, %f", x_acc, y_acc, z_acc, x_rot, y_rot, z_rot, temp, press);
-//}
+// Functions related to the model results
+// This function will shift  to the left
+void shiftResults(char *results[], int length)
+{
+    for (int i = 1; i < length; i++)
+    {
+        strcpy(results[i - 1], results[i]);
+    }
+}
 
 // Defines for I2C functionality
 // Defines for the SCL and SDA pins on the ESP-32 WROOM
@@ -706,6 +710,27 @@ TimestampInfo getTimestampInfo()
     return result;
 }
 
+// This function will check if all the values in the results array are the same as the target value and increment the associated counter if they are
+// void increment_counter_if_all_same(char *results[], int size, const char *target, int *counter)
+// {
+//     // Check if all elements are target
+//     int all_same = 1;              // Start by assuming all elements are target
+//     for (int i = 1; i < size; i++) // Start from index 1
+//     {
+//         if (strcmp(results[i], results[i - 1]) != 0) // Compare with previous element
+//         {
+//             all_same = 0; // If an element is not equal to the previous one, set the flag to 0
+//             break;
+//         }
+//     }
+
+//     // If all elements are target, increment the counter
+//     if (all_same)
+//     {
+//         (*counter)++;
+//     }
+// }
+
 // Declare the variables for the sensor data
 float a_x;
 float a_y;
@@ -795,6 +820,11 @@ int app_main(void)
     // Debug section
     uint32_t free_heap;
     size_t sizeOfSlice;
+
+    // Initialize the counters
+    int up_cnt = 0;
+    int down_cnt = 0;
+
     // End of debug section
     // Initialize NVS.
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
@@ -861,6 +891,20 @@ int app_main(void)
     {
         ESP_LOGE(GATTC_TAG, "set local  MTU failed, error code = %x", local_mtu_ret);
     }
+
+    // Initialize the results array
+    char *results[MAX_RESULTS];
+
+    // Allocate memory for each string
+    for (int i = 0; i < MAX_RESULTS; i++)
+    {
+        results[i] = (char *)malloc(MAX_STRING_LENGTH * sizeof(char));
+    }
+
+    // Fill the results array with some initial values
+    strcpy(results[0], "walk");
+    strcpy(results[1], "walk");
+    strcpy(results[2], "walk");
 
     // Continuously take sensor inputs until power is lost
     while (1)
@@ -969,6 +1013,23 @@ int app_main(void)
                 }
                 result_label = classifier_loop();
                 printf("Result: %s\n", result_label);
+
+                /// Shift the results array to make space for a new element
+                shiftResults(results, MAX_RESULTS);
+
+                // Insert a new element at the end
+                strcpy(results[MAX_RESULTS - 1], result_label);
+
+                // Print the updated contents of the results array
+                printf("\nUpdated results:\n");
+                for (int i = 0; i < MAX_RESULTS; i++)
+                {
+                    printf("%s ", results[i]);
+                }
+
+                // Increment the counter if all results are the same
+                // increment_counter_if_all_same(results, 3, "up", &up_cnt);
+                // increment_counter_if_all_same(results, 3, "down", &down_cnt);
             }
             //////
         }
@@ -1019,6 +1080,10 @@ int app_main(void)
         // free_heap = esp_get_free_heap_size();
         printf("\n Free Heap at final point: %u bytes\n", free_heap);
         printf("Sampling rate: %f Hz\n", sampling_rate);
+
+        // View the results
+        printf("Floors Ascended: %d\n", up_cnt);
+        printf("Floors Descended: %d\n", down_cnt);
     }
 
     // Delete i2c driver installs
