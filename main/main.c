@@ -78,7 +78,7 @@ but note that the final data transmission will be to the postgreSQL database, wr
 float features[(3 * 5)];
 
 // Defines related to the model outputs
-#define MAX_RESULTS 3
+#define MAX_RESULTS 10
 #define MAX_STRING_LENGTH 15
 
 // Functions related to the model results
@@ -92,16 +92,27 @@ void shiftResults(char *results[], int length)
 }
 
 // This function will check if all elements are the same as the target
-int allSame(char *results[], int length, const char *target)
+int threshold(char *results[], int length, const char *target)
 {
+    int matchCount = 0;
+
     for (int i = 0; i < length; i++)
     {
-        if (strcmp(results[i], target) != 0)
+        if (strcmp(results[i], target) == 0)
         {
-            return 0; // Not all elements are the same as the target
+            matchCount++; // Count how many elements match the target
         }
     }
-    return 1; // All elements are the same as the target
+
+    // Check if the number of matching elements is at least 80% of the total length
+    if (matchCount >= length * 0.8)
+    {
+        return 1; // 80% or more elements are the same as the target
+    }
+    else
+    {
+        return 0; // Less than 80% elements are the same as the target
+    }
 }
 
 // Defines for I2C functionality
@@ -899,6 +910,13 @@ int app_main(void)
     strcpy(results[0], "walk");
     strcpy(results[1], "walk");
     strcpy(results[2], "walk");
+    strcpy(results[3], "walk");
+    strcpy(results[4], "walk");
+    strcpy(results[5], "walk");
+    strcpy(results[6], "walk");
+    strcpy(results[7], "walk");
+    strcpy(results[8], "walk");
+    strcpy(results[9], "walk");
 
     // Continuously take sensor inputs until power is lost
     while (1)
@@ -1021,13 +1039,17 @@ int app_main(void)
                 }
 
                 // Check if the user has ascended or descended a floor
-                if (allSame(results, 3, "up") == 1)
+                if (threshold(results, 10, "up") == 1)
                 {
                     up_cnt++;
+                    // Add a cool down period to prevent multiple counts
+                    vTaskDelay(pdMS_TO_TICKS(5000));
                 }
-                else if (allSame(results, 3, "down") == 1)
+                else if (threshold(results, 10, "down") == 1)
                 {
                     down_cnt++;
+                    // Add a cool down period to prevent multiple counts
+                    vTaskDelay(pdMS_TO_TICKS(5000));
                 }
             }
             //////
