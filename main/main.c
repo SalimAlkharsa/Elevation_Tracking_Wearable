@@ -75,7 +75,7 @@ but note that the final data transmission will be to the postgreSQL database, wr
 
 // Imports related to the model
 #include "cpp_code.h"
-float features[(8 * 5)];
+float features[(3 * 5)];
 
 // Defines related to the model outputs
 #define MAX_RESULTS 3
@@ -735,6 +735,8 @@ float press_calibrated;
 int prev_heart_rate;
 int hr = -1;
 const char *result_label;
+float prev_pressure = 95000;
+float delta_p;
 esp_http_client_handle_t client = NULL;
 
 int app_main(void)
@@ -800,7 +802,7 @@ int app_main(void)
     double sampling_rate, elapsed_time;
 
     // This is where the sensor data is stored
-    float values[8] = {}; // 8 sensor values
+    float values[3] = {}; // 3 sensor values
     // define the big window of data where the slices will be stored
     // also define the slices that will be used to store the sensor data
     Slice slices[5]; // There are 5 time steps
@@ -961,14 +963,13 @@ int app_main(void)
         // Define the collected data that will be added to the slices
         values[0] = mpuSensor.a_x;
         values[1] = mpuSensor.a_y;
-        values[2] = mpuSensor.a_z;
-        values[3] = mpuSensor.r_x;
-        values[4] = mpuSensor.r_y;
-        values[5] = bmpSensor.temperature;
-        values[6] = bmpSensor.pressure;
-        values[7] = hr;
+        // Calculate the delta operations
+        delta_p = bmpSensor.pressure - prev_pressure;
+        prev_pressure = bmpSensor.pressure;
+        // Add the delta values
+        values[2] = delta_p;
         // Add the data to the slices
-        addSensorDataToSlices(slices, 5, values, 8); // 5 slices, 8 values
+        addSensorDataToSlices(slices, 5, values, 3); // 5 slices, 3 values
         // print the slices for debugging purposes
         // for (int i = 0; i < 5; i++)
         // {
@@ -986,12 +987,12 @@ int app_main(void)
             {
                 for (int j = 0; j < slices[i].length; j++)
                 {
-                    features[i * 8 + j] = slices[i].data[j];
+                    features[i * 3 + j] = slices[i].data[j];
                 }
             }
 
             // Pass the features array to the C++ code
-            if (check_feature_array_size() == 1)
+            if (check_feature_array_size() == 3)
             {
                 // printf("Feature array size is incorrect\n");
             }
@@ -1062,7 +1063,7 @@ int app_main(void)
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 1: %u bytes\n", free_heap);
             // send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id, &client);
-            //     vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
+            vTaskDelay(pdMS_TO_TICKS(800)); // Use it to simulate the delay of the wifi
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 2: %u bytes\n", free_heap);
             // Free the allocated memory once done using it

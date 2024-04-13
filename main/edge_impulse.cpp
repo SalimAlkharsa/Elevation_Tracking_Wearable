@@ -10,7 +10,7 @@ extern "C"
 }
 
 // Declare the 'features' array from main.c
-extern float features[(8 * 5)]; // 8 sensors, 5 time steps
+extern float features[(3 * 5)]; // 3 sensors, 5 time steps
 
 // C function to get the data from the 'features' array
 int raw_feature_get_data(size_t offset, size_t length, float *out_ptr)
