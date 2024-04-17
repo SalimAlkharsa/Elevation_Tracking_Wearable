@@ -21,11 +21,14 @@ class DailyPage extends StatefulWidget {
 class _DailyPageState extends State<DailyPage> {
 
   List<IndividualPoint> dailyData = []; // The list of points used to populate the line chart
+  List<IndividualPoint> compareData = []; // The list of points used for compare mode
   DateTime dateSelected = DateTime.now();// Initialized to current date
   DateFormat dateFormat = DateFormat.MMMEd(); // Date formatter for the UI
   String currentDate = ""; // String form of the date for display
   bool isInitialized = false; // Tracks whether data has been initialized
   String mode = ""; // A string to contain the type of data being compared
+  String friend = ""; // A string to contain the friend being compared to
+  List<DropdownMenuItem<String>> friendDropdown = []; // List of friends to appear in the compare dropdown
   String username = db.user;
 
   // This function initializes the data members to their required values
@@ -38,6 +41,7 @@ class _DailyPageState extends State<DailyPage> {
 
         // The page starts in floors climbed mode
         mode = "Floors Climbed";
+        friend = "Compare to...";
 
         // This zeroes out the date gathered and formats it correctly, so that
         // data is tracked for the entire day, and not from the middle of the day to the end
@@ -82,12 +86,15 @@ class _DailyPageState extends State<DailyPage> {
 
   Future<void> updateData() async {
 
+    updateFriendList();
+
     // Math cannot be done within strings so the edge of the date range must be initialized here
     DateTime nextDate = dateSelected.add(const Duration(days: 1));
 
     // Creating a new list and using setState at the end of the function makes updating
     // the data look more aesthetically pleasing, as both values are updated at once
     List<IndividualPoint> newDailyData = [];
+    List<IndividualPoint> newCompareData = [];
 
     if (mode == "Floors Climbed") {
 
@@ -124,7 +131,38 @@ class _DailyPageState extends State<DailyPage> {
 
       }
 
+      if (friend != "Compare to...") {
+        // The database is queried for climb data which happened on the given date
+        List<List<dynamic>> results = await db.connection.query(
+            "SELECT timestamp, label FROM data WHERE username='$friend' AND timestamp>'$dateSelected' AND timestamp<'$nextDate' AND label!='walk' ORDER BY timestamp");
+
+        tot_amt = 0;
+
+        for (int i = 0; i < results.length; i++) {
+
+          curr_timestamp = results[i][0]; // Get the timestamp of the entry in the database
+          label = results[i][1]; // Get the label of the the entry in the database
+
+          // Calculate the hour_val using constants derived from how many minutes and seconds are in an hour
+          hour_val = curr_timestamp.hour + (curr_timestamp.minute / 60) + (curr_timestamp.second / (60 * 60));
+
+          // Update the total floors climbed according to the magnitude and the direction
+          if (label == "up") {
+            tot_amt += 1;
+          } else if (label == "down") {
+            tot_amt -= 1;
+          }
+
+          // Add the point to the chart
+          newCompareData.add(IndividualPoint(x: hour_val, y: tot_amt.toDouble()));
+
+        }
+      }
+
     } else if (mode == "Heart Rate") {
+
+      print("Friend is...");
+      print(friend);
 
       double hr = 0.0; // Stores current heart rate
 
@@ -151,11 +189,62 @@ class _DailyPageState extends State<DailyPage> {
 
       }
 
+      if (friend != "Compare to...") {
+        print("Compare mode activate!");
+        // The database is queried for heart rate sensor data which happened on the given date
+        List<List<dynamic>> results = await db.connection.query(
+            "SELECT timestamp, hr FROM data WHERE username='$friend' AND timestamp>'$dateSelected' AND timestamp<'$nextDate' ORDER BY timestamp");
+
+        hr = 0;
+
+        for (int i = 0; i < results.length; i++) {
+
+          curr_timestamp = results[i][0]; // Get the timestamp for the entry
+          hr = double.parse(results[i][1].toString()); // Get the heart rate reading
+
+          // Calculate the hour_val using constants derived from how many minutes and seconds are in an hour
+          hour_val = curr_timestamp.hour + (curr_timestamp.minute / 60) + (curr_timestamp.second / (60 * 60));
+
+          // Add the point to the chart
+          newCompareData.add(IndividualPoint(x: hour_val, y: hr));
+
+        }
+      }
+
     }
 
     // We update the data in the line chart
     setState(() {
       dailyData = newDailyData;
+      compareData = newCompareData;
+    });
+  }
+
+  void updateFriendList() async {
+    List<DropdownMenuItem<String>> newFriendDropdown = [];
+
+    List<List<dynamic>> results = await db.connection.query("SELECT friends FROM friends WHERE username='$username'");
+
+    newFriendDropdown.add(
+      const DropdownMenuItem(
+          value: "Compare to...",
+          child: Text("Compare to..."),
+      )
+    );
+
+    if (results.isNotEmpty) {
+      for (int i = 0; i < results[0][0].length; i++) {
+        newFriendDropdown.add(
+          DropdownMenuItem(
+              value: results[0][0][i],
+              child: Text(results[0][0][i])),
+        );
+      }
+    }
+
+    // We update the data in the friend list
+    setState(() {
+      friendDropdown = newFriendDropdown;
     });
   }
 
@@ -175,12 +264,31 @@ class _DailyPageState extends State<DailyPage> {
 
     } else {
 
-      // If the data list has data, show the chart
-      return SizedBox(
-        height: 200,
-        width: MediaQuery.of(context).size.width * 0.9, // MediaQuery is used for sizing relative to the page
-        child: DailyLineChart(data: dailyData, min: findMin(), max: findMax()),
-      );
+      if (friend == "Compare to...") {
+        // If the data list has data, show the chart
+        return SizedBox(
+          height: 200,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.9,
+          // MediaQuery is used for sizing relative to the page
+          child: DailyLineChart(
+              data: dailyData, min: findMin(), max: findMax()),
+        );
+      } else {
+        // If the compare list has data, show the chart with compare mode activated
+        return SizedBox(
+          height: 200,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.9,
+          // MediaQuery is used for sizing relative to the page
+          child: DailyLineChart(
+              data: dailyData, min: findMin(), max: findMax(), dataCompare: compareData),
+        );
+      }
     }
   }
 
@@ -192,6 +300,14 @@ class _DailyPageState extends State<DailyPage> {
     for (int i = 1; i < dailyData.length; i++) {
       if (dailyData[i].y < min) {
         min = dailyData[i].y;
+      }
+    }
+
+    if (friend != "Compare to...") {
+      for (int i = 0; i < compareData.length; i++) {
+        if (compareData[i].y < min) {
+          min = compareData[i].y;
+        }
       }
     }
 
@@ -207,6 +323,14 @@ class _DailyPageState extends State<DailyPage> {
     for (int i = 1; i < dailyData.length; i++) {
       if (dailyData[i].y > max) {
         max = dailyData[i].y;
+      }
+    }
+
+    if (friend != "Compare to...") {
+      for (int i = 0; i < compareData.length; i++) {
+        if (compareData[i].y > max) {
+          max = compareData[i].y;
+        }
       }
     }
 
@@ -226,6 +350,23 @@ class _DailyPageState extends State<DailyPage> {
       });
       updateData();
     }
+  }
+
+  // This function calls setState to update and rebuild the page whenever
+  // the dropdown menu choosing the friend to compare to is changed
+  void updateFriend(String? selectedValue) {
+
+    // If the user somehow inputs a value which isn't a string, the type
+    // won't be updated to prevent errors in updateData
+    if (selectedValue is String) {
+      setState(() {
+        friend = selectedValue;
+      });
+      updateData();
+    }
+
+    print("Friend is now...");
+    print(friend);
   }
 
   @override
@@ -250,6 +391,12 @@ class _DailyPageState extends State<DailyPage> {
             // without being able to freely enter anything into the box
             // This helps a lot with error catching, as the user is restricted
             // from putting in unexpected values
+            DropdownButton(
+              items: friendDropdown,
+              value: friend,
+              onChanged: updateFriend,
+              focusColor: style.backgroundColor,
+            ),
             DropdownButton(
               items: const [
                 DropdownMenuItem(

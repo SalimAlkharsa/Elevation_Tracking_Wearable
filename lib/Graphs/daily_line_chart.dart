@@ -27,8 +27,35 @@ class DailyLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    // This list will store the lines for the chart if the user uses the compare function
+    List<LineChartBarData> lineList = [];
+
     // DailyLineData is initialized using the passed in values for efficient mapping
     DailyLineData dailyLineData = DailyLineData(data: data);
+    LineChartBarData dailyLine = LineChartBarData(
+      // We use the map function to map the list of IndividualPoint data types
+      // to a list of FlSpot data types, which are fl_chart's way of drawing
+      // points on a line chart
+      spots: dailyLineData.data.map((data) => FlSpot(data.x, data.y)).toList(),
+      isCurved: false, // Personal design choice, thought it looked more accurate to what we are representing
+      dotData: FlDotData(show: false), // Don't show individual points when they are on the magnitude of hundreds
+      color: style.mainColor,
+    );
+    lineList.add(dailyLine);
+
+    if (dataCompare.isNotEmpty) {
+      DailyLineData compareLineData = DailyLineData(data: dataCompare);
+      LineChartBarData compareLine = LineChartBarData(
+        // We use the map function to map the list of IndividualPoint data types
+        // to a list of FlSpot data types, which are fl_chart's way of drawing
+        // points on a line chart
+        spots: compareLineData.data.map((data) => FlSpot(data.x, data.y)).toList(),
+        isCurved: false, // Personal design choice, thought it looked more accurate to what we are representing
+        dotData: FlDotData(show: false), // Don't show individual points when they are on the magnitude of hundreds
+        color: style.compareColor,
+      );
+      lineList.add(compareLine);
+    }
 
     // fl_chart's LineChart widget
     return LineChart(
@@ -56,17 +83,7 @@ class DailyLineChart extends StatelessWidget {
         ),
 
         // This controls the actual data points that are drawn on the graph
-        lineBarsData: [
-          LineChartBarData(
-            // We use the map function to map the list of IndividualPoint data types
-            // to a list of FlSpot data types, which are fl_chart's way of drawing
-            // points on a line chart
-            spots: dailyLineData.data.map((data) => FlSpot(data.x, data.y)).toList(),
-            isCurved: false, // Personal design choice, thought it looked more accurate to what we are representing
-            dotData: FlDotData(show: false), // Don't show individual points when they are on the magnitude of hundreds
-            color: style.mainColor,
-          )
-        ]
+        lineBarsData: lineList
       ),
     );
   }
