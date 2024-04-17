@@ -77,10 +77,10 @@ class _MainPageState extends State<MainPage> {
                       )
                   ),
                   // TODO: REMOVE TEST
-                  // TextButton(
-                  //   onPressed: testFunc,
-                  //   child: const Text("TEST"),
-                  // )
+                  TextButton(
+                    onPressed: testFunc,
+                    child: const Text("TEST"),
+                  )
                 ],
               ),
             ),
@@ -176,33 +176,39 @@ class _MainPageState extends State<MainPage> {
   }
 
   void testFunc () {
-    // populateSensors();
-    // populateClimbs();
+    populateData();
   }
 
-  void populateClimbs () async {
+  void populateData () async {
     var rng = Random();
     DateTime timestamp = DateTime.now();
-    int user_id = 0;
-    int amt = 0;
-    String direction = "";
+    String username = "humphrey";
+    int hr = 0;
+    String label = "";
+    int chance = 0;
     for (int d = 0; d < 14; d++) {
       print("Day $d");
       for (int h = 0; h < 24; h++) {
         print("Hour $h");
         for (int m = 0; m < 60; m++) {
-          user_id = rng.nextInt(7);
           timestamp = timestamp.subtract(const Duration(minutes: 1));
-          amt = rng.nextInt(5);
-          if (rng.nextInt(5) == 0) {
-            direction = "down";
+          hr = randHR(hr);
+          chance = rng.nextInt(20);
+          if (chance == 0 || chance == 1 || chance == 6) {
+            label = "down";
+          } else if (chance == 2 || chance == 3 || chance == 7) {
+            label = "up";
+          } else if (chance == 4) {
+            label = "elevator_up";
+          } else if (chance == 5) {
+            label = "elevator_down";
           } else {
-            direction = "up";
+            label = "walk";
           }
 
 
           await db.connection.query(
-              "INSERT INTO climbs (timestamp, user_id, amt, direction) VALUES ('$timestamp', $user_id, $amt, '$direction')");
+              "INSERT INTO data (timestamp, username, hr, label) VALUES ('$timestamp', '$username', $hr, '$label')");
         }
       }
     }
@@ -210,60 +216,34 @@ class _MainPageState extends State<MainPage> {
     print("Done!");
   }
 
-  void populateSensors () async {
-    var rng = Random();
-    DateTime timestamp = DateTime.now();
-    int user_id = 0;
-    double a_x = 0.0;
-    double a_y = 0.0;
-    double a_z = 0.0;
-    double r_x = 0.0;
-    double r_y = 0.0;
-    double r_z = 0.0;
-    double temperature = 0.0;
-    double pressure = 0.0;
-    double hr = 0.0;
+  // double testDouble (double curr) {
+  //
+  //   var rng = Random();
+  //   int direction = 1;
+  //
+  //   if (curr >= 20.0) {
+  //     direction = -1;
+  //   } else if (curr <= -20.0) {
+  //     direction = 1;
+  //   } else {
+  //     if (rng.nextInt(2) == 0) {
+  //       direction = 1;
+  //     } else {
+  //       direction = -1;
+  //     }
+  //   }
+  //
+  //   return curr + (rng.nextDouble() * 2 * direction);
+  // }
 
-    timestamp = timestamp.subtract(const Duration(days: 7));
-
-    for (int d = 0; d < 7; d++) {
-      print("Day $d");
-      for (int u = 0; u < 5; u++) {
-        user_id = rng.nextInt(7);
-
-        for (int i = 0; i < 100; i++) {
-          timestamp = timestamp.add(const Duration(seconds: 30));
-          a_x = testDouble(a_x);
-          a_y = testDouble(a_y);
-          a_z = testDouble(a_z);
-          r_x = testDouble(r_x);
-          r_y = testDouble(r_y);
-          r_z = testDouble(r_z);
-          temperature = 40 + (rng.nextDouble() * 2);
-          pressure = 30 + (rng.nextDouble() * 6);
-          hr = testHR(hr);
-
-
-          await db.connection.query(
-              "INSERT INTO sensors (timestamp, user_id, a_x, a_y, a_z, r_x, r_y, r_z, temperature, pressure, hr) VALUES ('$timestamp', $user_id, $a_x, $a_y, $a_z, $r_x, $r_y, $r_z, $temperature, $pressure, $hr)");
-        }
-      }
-
-      timestamp = timestamp.add(const Duration(days: 1));
-      timestamp = timestamp.subtract(const Duration(minutes: 250));
-    }
-
-    print("Done!");
-  }
-
-  double testDouble (double curr) {
+  int randHR (int curr) {
 
     var rng = Random();
     int direction = 1;
 
-    if (curr >= 20.0) {
+    if (curr >= 105) {
       direction = -1;
-    } else if (curr <= -20.0) {
+    } else if (curr <= 55) {
       direction = 1;
     } else {
       if (rng.nextInt(2) == 0) {
@@ -273,26 +253,6 @@ class _MainPageState extends State<MainPage> {
       }
     }
 
-    return curr + (rng.nextDouble() * 2 * direction);
-  }
-
-  double testHR (double curr) {
-
-    var rng = Random();
-    int direction = 1;
-
-    if (curr >= 105.0) {
-      direction = -1;
-    } else if (curr <= 55.0) {
-      direction = 1;
-    } else {
-      if (rng.nextInt(2) == 0) {
-        direction = 1;
-      } else {
-        direction = -1;
-      }
-    }
-
-    return curr + (rng.nextDouble() * 2 * direction);
+    return curr + (rng.nextInt(3) * 2 * direction);
   }
 }

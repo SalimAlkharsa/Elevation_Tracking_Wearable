@@ -91,8 +91,7 @@ class _DailyPageState extends State<DailyPage> {
 
     if (mode == "Floors Climbed") {
 
-      String curr_direction = ""; // Stores the direction of the given climb
-      int curr_amt = 0; // Stores the magnitude of the given climb
+      String label = ""; // Stores the direction of the given climb
       int tot_amt = 0; // Sum of floors climbed over the course of the day
 
       // The current timestamp must be tracked in order to calculate the x value for each point
@@ -103,22 +102,21 @@ class _DailyPageState extends State<DailyPage> {
 
       // The database is queried for climb data which happened on the given date
       List<List<dynamic>> results = await db.connection.query(
-          "SELECT amt, direction, timestamp FROM climbs WHERE username='$username' AND timestamp>'$dateSelected' AND timestamp<'$nextDate' ORDER BY timestamp");
+          "SELECT timestamp, label FROM data WHERE username='$username' AND timestamp>'$dateSelected' AND timestamp<'$nextDate' AND label!='walk' ORDER BY timestamp");
 
       for (int i = 0; i < results.length; i++) {
 
-        curr_amt = results[i][0]; // Get the magnitude of the climb for the entry in the database
-        curr_direction = results[i][1]; // Get the direction of the climb for the entry in the database
-        curr_timestamp = results[i][2]; // Get the timestamp of the climb
+        curr_timestamp = results[i][0]; // Get the timestamp of the entry in the database
+        label = results[i][1]; // Get the label of the the entry in the database
 
         // Calculate the hour_val using constants derived from how many minutes and seconds are in an hour
         hour_val = curr_timestamp.hour + (curr_timestamp.minute / 60) + (curr_timestamp.second / (60 * 60));
 
         // Update the total floors climbed according to the magnitude and the direction
-        if (curr_direction == "up") {
-          tot_amt += curr_amt;
-        } else {
-          tot_amt -= curr_amt;
+        if (label == "up") {
+          tot_amt += 1;
+        } else if (label == "down") {
+          tot_amt -= 1;
         }
 
         // Add the point to the chart
@@ -138,12 +136,12 @@ class _DailyPageState extends State<DailyPage> {
 
       // The database is queried for heart rate sensor data which happened on the given date
       List<List<dynamic>> results = await db.connection.query(
-          "SELECT hr, timestamp FROM sensors WHERE username='$username' AND timestamp>'$dateSelected' AND timestamp<'$nextDate' ORDER BY timestamp");
+          "SELECT timestamp, hr FROM data WHERE username='$username' AND timestamp>'$dateSelected' AND timestamp<'$nextDate' ORDER BY timestamp");
 
       for (int i = 0; i < results.length; i++) {
 
-        hr = results[i][0]; // Get the heart rate reading
-        curr_timestamp = results[i][1]; // Get the timestamp for the entry
+        curr_timestamp = results[i][0]; // Get the timestamp for the entry
+        hr = double.parse(results[i][1].toString()); // Get the heart rate reading
 
         // Calculate the hour_val using constants derived from how many minutes and seconds are in an hour
         hour_val = curr_timestamp.hour + (curr_timestamp.minute / 60) + (curr_timestamp.second / (60 * 60));

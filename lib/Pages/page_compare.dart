@@ -85,7 +85,7 @@ class _ComparePageState extends State<ComparePage> {
       double total_hr = 0.0; // Sum of heart rates used for the average
 
       // The database is queried for all heart rate data which happened on the left date
-      List<List<dynamic>> results = await db.connection.query("SELECT hr FROM sensors WHERE username='$username' AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
+      List<List<dynamic>> results = await db.connection.query("SELECT hr FROM data WHERE username='$username' AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
 
       // We calculate the average heart rate which occurred on the left date
       // and add it to the new compare list
@@ -98,7 +98,7 @@ class _ComparePageState extends State<ComparePage> {
       total_hr = 0;
 
       // The database is queried for all heart rate data which happened on the right date
-      results = await db.connection.query("SELECT hr FROM sensors WHERE username='$username' AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
+      results = await db.connection.query("SELECT hr FROM data WHERE username='$username' AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
 
       // We calculate the average heart rate which occurred on the left date
       // and add it to the new compare list
@@ -110,22 +110,20 @@ class _ComparePageState extends State<ComparePage> {
     } else if (type == "Floors Climbed") {
 
       double floors_climbed = 0.0; // Sum of floors climbed on the given date
-      int curr_amt = 0; // Stores the magnitude of the given climb
-      String curr_direction = ""; // Stores the direction of the given climb
+      String label = ""; // Stores the direction of the given climb
 
       // The database is queried for all climb data which happened on the left date
-      List<List<dynamic>> results = await db.connection.query("SELECT amt, direction FROM climbs WHERE username='$username' AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft'");
+      List<List<dynamic>> results = await db.connection.query("SELECT label FROM data WHERE username='$username' AND timestamp>'$dateLeft' AND timestamp<'$nextDateLeft' AND label!='walk'");
 
       for (int i = 0; i < results.length; i++) {
 
-        curr_amt = results[i][0]; // Get the magnitude of the climb for the entry in the database
-        curr_direction = results[i][1]; // Get the direction of the climb for the entry in the database
+        label = results[i][0]; // Get the direction of the climb for the entry in the database
 
         // Update the total floors climbed according to the magnitude and the direction
-        if (curr_direction == "up") {
-          floors_climbed += curr_amt;
-        } else {
-          floors_climbed -= curr_amt;
+        if (label == "up") {
+          floors_climbed += 1;
+        } else if (label == "down") {
+          floors_climbed -= 1;
         }
       }
 
@@ -136,17 +134,16 @@ class _ComparePageState extends State<ComparePage> {
       floors_climbed = 0;
 
       // The database is queried for all climb data which happened on the right date
-      results = await db.connection.query("SELECT amt, direction FROM climbs WHERE username='$username' AND timestamp>'$dateRight' AND timestamp<'$nextDateRight'");
+      results = await db.connection.query("SELECT label FROM data WHERE username='$username' AND timestamp>'$dateRight' AND timestamp<'$nextDateRight' AND label!='walk'");
 
       for (int i = 0; i < results.length; i++) {
-        curr_amt = results[i][0]; // Get the magnitude of the climb for the entry in the database
-        curr_direction = results[i][1]; // Get the direction of the climb for the entry in the database
+        label = results[i][0]; // Get the direction of the climb for the entry in the database
 
         // Update the total floors climbed according to the magnitude and the direction
-        if (curr_direction == "up") {
-          floors_climbed += curr_amt;
-        } else {
-          floors_climbed -= curr_amt;
+        if (label == "up") {
+          floors_climbed += 1;
+        } else if (label == "down") {
+          floors_climbed -= 1;
         }
       }
 

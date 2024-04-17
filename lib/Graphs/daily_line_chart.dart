@@ -10,14 +10,17 @@ import 'package:application/style.dart' as style;
 
 // This class defines a line chart which plots data for an entire day
 class DailyLineChart extends StatelessWidget {
+
   const DailyLineChart({
     super.key,
     required this.data,
     required this.min,
     required this.max,
+    this.dataCompare = const [],
   });
 
   final List<IndividualPoint> data; // IndividualPoint data passed in to create the line chart
+  final List<IndividualPoint> dataCompare; // IndividualPoint data passed in to create the line chart
   final double min; // The minimum value for the chart to draw
   final double max; // The maximum value for the chart to draw
 

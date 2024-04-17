@@ -96,7 +96,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
 
       for (int d = 0; d < 7; d++) {
         List<List<dynamic>> results = await db.connection.query(
-            "SELECT hr FROM sensors WHERE username='$username' AND timestamp>'$dateStart' AND timestamp<'$dateNext' ORDER BY timestamp");
+            "SELECT hr FROM data WHERE username='$username' AND timestamp>'$dateStart' AND timestamp<'$dateNext' ORDER BY timestamp");
         for (int i = 0; i < results.length; i++) {
           total_hr += results[i][0];
         }
@@ -113,21 +113,19 @@ class _WeeklyPageState extends State<WeeklyPage> {
         dateNext = dateNext.add(const Duration(days: 1));
       }
     } else {
-      double floors_climbed = 0.0;
-      int curr_amt = 0;
-      String curr_direction = "";
+      double floors_climbed = 0;
+      String label = "";
 
       for (int d = 0; d < 7; d++) {
         List<List<dynamic>> results = await db.connection.query(
-            "SELECT amt, direction FROM climbs WHERE username='$username' AND timestamp>'$dateStart' AND timestamp<'$dateNext' ORDER BY timestamp");
+            "SELECT label FROM data WHERE username='$username' AND timestamp>'$dateStart' AND timestamp<'$dateNext' AND label!='walk' ORDER BY timestamp");
 
         for (int i = 0; i < results.length; i++) {
-          curr_amt = results[i][0];
-          curr_direction = results[i][1];
-          if (curr_direction == "up") {
-            floors_climbed += curr_amt;
-          } else {
-            floors_climbed -= curr_amt;
+          label = results[i][0];
+          if (label == "up") {
+            floors_climbed += 1;
+          } else if (label == "down") {
+            floors_climbed -= 1;
           }
         }
 
