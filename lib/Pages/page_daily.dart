@@ -380,7 +380,7 @@ class _DailyPageState extends State<DailyPage> {
     return Scaffold(
       backgroundColor: style.backgroundColor,
       appBar: AppBar(
-        title: const Text("Daily Line Chart"), // Title for the page
+        title: Text("Daily Line Chart", style: style.buttonTextStyle), // Title for the page
         backgroundColor: style.mainColor,
       ),
       body: Center(
