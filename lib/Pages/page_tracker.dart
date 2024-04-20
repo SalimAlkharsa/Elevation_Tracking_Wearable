@@ -15,14 +15,13 @@ class TrackerPage extends StatefulWidget {
 
 class _TrackerPageState extends State<TrackerPage> {
 
-  // TODO: Get real data from database
   List<IndividualBar> trackerData = [];
 
   List<String> nameList = [];
   List<String> validNameList = [];
   List<Widget> textList = [];
 
-  DateTime dateCursor = DateTime.now();
+  DateTime dateInit = DateTime.now();
 
   double min = 0;
   double max = 0;
@@ -48,7 +47,7 @@ class _TrackerPageState extends State<TrackerPage> {
   }
 
   setUpTimedFetch() {
-    polling = Timer.periodic(const Duration(seconds: 5), (timer) {
+    polling = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         updateData();
       });
@@ -160,13 +159,16 @@ class _TrackerPageState extends State<TrackerPage> {
 
   void initializeData () async {
 
-    List<List<dynamic>> results = await db.connection.query("SELECT username FROM users ORDER BY username");
+    List<List<dynamic>> results = await db.connection.query(
+        "SELECT friends FROM friends WHERE username='$username'");
 
     setState(() {
-      dateCursor = dateCursor.subtract(const Duration(hours: 5));
+      dateInit = DateTime.now();
 
-      for (int i = 0; i < results.length; i++) {
-        validNameList.add(results[i][0]);
+      if (results.isNotEmpty) {
+        for (int i = 0; i < results[0][0].length; i++) {
+          validNameList.add(results[0][0][i]);
+        }
       }
 
       initialized = true;
@@ -176,17 +178,10 @@ class _TrackerPageState extends State<TrackerPage> {
   void updateData () async {
 
     String curr_user = "";
-    String curr_direction = "";
-    int curr_amt = 0;
+    String label = "";
     int tot_amt = 0;
     double newMax = 0.0;
     double newMin = 0.0;
-
-    setState(() {
-      dateCursor = dateCursor.subtract(const Duration(minutes: 1));
-    });
-
-    print("$dateCursor");
 
     setState(() {
       textList.clear();
@@ -198,21 +193,20 @@ class _TrackerPageState extends State<TrackerPage> {
     });
 
     List<IndividualBar> newTrackerData = [];
-    print("Date cursor: $dateCursor");
+    print("Date init: $dateInit");
 
     for (int i = 0; i < nameList.length; i++) {
 
       curr_user = nameList[i];
       List<List<dynamic>> results = await db.connection.query(
-          "SELECT amt, direction FROM climbs INNER JOIN users ON climbs.username = users.username WHERE username='$curr_user' AND timestamp>'$dateCursor'");
+          "SELECT label FROM data WHERE username='$curr_user' AND timestamp>'$dateInit' AND label!='walk'");
 
       for (int i = 0; i < results.length; i++) {
-        curr_amt = results[i][0];
-        curr_direction = results[i][1];
-        if (curr_direction == "up") {
-          tot_amt += curr_amt;
-        } else {
-          tot_amt -= curr_amt;
+        label = results[i][0];
+        if ((label == "up") || (label == "elevator_up")) {
+          tot_amt += 1;
+        } else if ((label == "down") || (label == "elevator_down")) {
+          tot_amt -= 1;
         }
       }
 
@@ -272,7 +266,7 @@ class _TrackerPageState extends State<TrackerPage> {
     context: context,
     builder: (context) => AlertDialog(
       backgroundColor: style.backgroundColor,
-      title: Text("Error: User is not in the database", style: style.textStyle),
+      title: Text("Error: User is not in the database or is not a friend", style: style.textStyle),
       actions: [
         TextButton(
           onPressed: close,
