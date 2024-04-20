@@ -22,6 +22,7 @@ class _TrackerPageState extends State<TrackerPage> {
   List<Widget> textList = [];
 
   DateTime dateInit = DateTime.now();
+  DateTime dateCursor = DateTime.now().subtract(Duration(seconds: 30));
 
   double min = 0;
   double max = 0;
@@ -164,6 +165,7 @@ class _TrackerPageState extends State<TrackerPage> {
 
     setState(() {
       dateInit = DateTime.now();
+      dateCursor = DateTime.now().subtract(const Duration(seconds: 30));
 
       if (results.isNotEmpty) {
         for (int i = 0; i < results[0][0].length; i++) {
@@ -190,6 +192,7 @@ class _TrackerPageState extends State<TrackerPage> {
         textList.add(Text(nameList[i]));
       }
 
+      dateCursor = DateTime.now().subtract(const Duration(seconds: 30));
     });
 
     List<IndividualBar> newTrackerData = [];
@@ -221,6 +224,20 @@ class _TrackerPageState extends State<TrackerPage> {
       newTrackerData.add(IndividualBar(x: i, y: tot_amt.toDouble()));
 
       tot_amt = 0;
+
+      results = await db.connection.query("SELECT hr FROM data WHERE username='$curr_user' AND timestamp>'$dateCursor'");
+
+      for (int i = 0; i < results.length; i++) {
+        if (results[i][0] > 180) {
+          polling.cancel();
+          alertHighHR(curr_user);
+        } else if (results[i][0] < 60) {
+          polling.cancel();
+          alertLowHR(curr_user);
+        }
+      }
+
+      print("Date cursor: $dateCursor");
     }
 
     setState(() {
@@ -262,6 +279,40 @@ class _TrackerPageState extends State<TrackerPage> {
     controller.clear();
   }
 
+  void alertHighHR(String user) => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: style.backgroundColor,
+      title: Text("ALERT: $user has a heart rate exceeding 180bpm", style: style.textStyle),
+      actions: [
+        TextButton(
+          onPressed: closeAlert,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("OK"),
+        )
+      ],
+    ),
+  );
+
+  void alertLowHR(String user) => showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: style.backgroundColor,
+      title: Text("ALERT: $user has a heart rate below 60bpm", style: style.textStyle),
+      actions: [
+        TextButton(
+          onPressed: closeAlert,
+          style: TextButton.styleFrom(
+            foregroundColor: style.mainColor,
+          ),
+          child: const Text("OK"),
+        )
+      ],
+    ),
+  );
+
   void errorNameDialog() => showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -298,6 +349,12 @@ class _TrackerPageState extends State<TrackerPage> {
 
   void close() {
     Navigator.of(context).pop(context);
+  }
+
+  void closeAlert() {
+    Navigator.of(context).pop(context);
+
+    setUpTimedFetch();
   }
 
   bool checkName(String name) {
