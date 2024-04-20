@@ -77,10 +77,10 @@ class _MainPageState extends State<MainPage> {
                       )
                   ),
                   // TODO: REMOVE TEST
-                  TextButton(
-                    onPressed: testFunc,
-                    child: const Text("TEST"),
-                  )
+                  // TextButton(
+                  //   onPressed: testFunc,
+                  //   child: const Text("TEST"),
+                  // )
                 ],
               ),
             ),
