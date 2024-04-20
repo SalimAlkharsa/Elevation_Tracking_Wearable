@@ -196,7 +196,6 @@ class _TrackerPageState extends State<TrackerPage> {
     });
 
     List<IndividualBar> newTrackerData = [];
-    print("Date init: $dateInit");
 
     for (int i = 0; i < nameList.length; i++) {
 
@@ -204,8 +203,8 @@ class _TrackerPageState extends State<TrackerPage> {
       List<List<dynamic>> results = await db.connection.query(
           "SELECT label FROM data WHERE username='$curr_user' AND timestamp>'$dateInit' AND label!='walk'");
 
-      for (int i = 0; i < results.length; i++) {
-        label = results[i][0];
+      for (int j = 0; j < results.length; j++) {
+        label = results[j][0];
         if ((label == "up") || (label == "elevator_up")) {
           tot_amt += 1;
         } else if ((label == "down") || (label == "elevator_down")) {
@@ -223,21 +222,21 @@ class _TrackerPageState extends State<TrackerPage> {
 
       newTrackerData.add(IndividualBar(x: i, y: tot_amt.toDouble()));
 
-      tot_amt = 0;
-
       results = await db.connection.query("SELECT hr FROM data WHERE username='$curr_user' AND timestamp>'$dateCursor'");
 
-      for (int i = 0; i < results.length; i++) {
-        if (results[i][0] > 180) {
+      for (int j = 0; j < results.length; j++) {
+        if (results[j][0] > 180) {
           polling.cancel();
-          alertHighHR(curr_user);
-        } else if (results[i][0] < 60) {
+          String closest_user = findClosestUser(i, tot_amt.toDouble());
+          alertHighHR(curr_user, closest_user);
+        } else if (results[j][0] < 60) {
           polling.cancel();
-          alertLowHR(curr_user);
+          String closest_user = findClosestUser(i, tot_amt.toDouble());
+          alertLowHR(curr_user, closest_user);
         }
       }
 
-      print("Date cursor: $dateCursor");
+      tot_amt = 0;
     }
 
     setState(() {
@@ -245,6 +244,30 @@ class _TrackerPageState extends State<TrackerPage> {
       min = newMin;
       max = newMax;
     });
+  }
+
+  String findClosestUser(int index, double amt) {
+
+    double diff = 0.0;
+    double min_diff = 200;
+    String closest_user = "";
+
+    for (int i = 0; i < trackerData.length; i++) {
+      if (i != index) {
+        diff = (trackerData[i].y - amt).abs();
+
+        if (diff < min_diff) {
+          min_diff = diff;
+          closest_user = nameList[i];
+        }
+      }
+    }
+
+    if (closest_user == "") {
+      return "no one";
+    } else {
+      return closest_user;
+    }
   }
 
   Future<String?> openTextEntryDialog() => showDialog<String>(
@@ -279,11 +302,11 @@ class _TrackerPageState extends State<TrackerPage> {
     controller.clear();
   }
 
-  void alertHighHR(String user) => showDialog(
+  void alertHighHR(String user, String closest_user) => showDialog(
     context: context,
     builder: (context) => AlertDialog(
       backgroundColor: style.backgroundColor,
-      title: Text("ALERT: $user has a heart rate exceeding 180bpm", style: style.textStyle),
+      title: Text("ALERT: $user has a heart rate exceeding 180bpm and they are closest to $closest_user", style: style.textStyle),
       actions: [
         TextButton(
           onPressed: closeAlert,
@@ -296,11 +319,11 @@ class _TrackerPageState extends State<TrackerPage> {
     ),
   );
 
-  void alertLowHR(String user) => showDialog(
+  void alertLowHR(String user, String closest_user) => showDialog(
     context: context,
     builder: (context) => AlertDialog(
       backgroundColor: style.backgroundColor,
-      title: Text("ALERT: $user has a heart rate below 60bpm", style: style.textStyle),
+      title: Text("ALERT: $user has a heart rate below 60bpm and they are closest to $closest_user", style: style.textStyle),
       actions: [
         TextButton(
           onPressed: closeAlert,
