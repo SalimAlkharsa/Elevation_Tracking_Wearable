@@ -14,8 +14,8 @@ class WeeklyPage extends StatefulWidget {
 
 class _WeeklyPageState extends State<WeeklyPage> {
 
-  // TODO: Get real data from database
   List<double> weeklyData = [];
+  List<double> compareData = [];
 
   DateTime dateSelected = DateTime.now(); // Current date and time
   DateTime dateNextSaturday = DateTime.now(); // Next saturday from selected date
@@ -27,6 +27,8 @@ class _WeeklyPageState extends State<WeeklyPage> {
   String type = "";
   double min = 0;
   double max = 0;
+  String friend = ""; // A string to contain the friend being compared to
+  List<DropdownMenuItem<String>> friendDropdown = []; // List of friends to appear in the compare dropdown
   String username = db.user;
 
   void initializeDate() {
@@ -47,6 +49,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
         thisSunday = dateFormat.format(dateNextSaturday.subtract(const Duration(days: 6)));
 
         type = "Average Heart Rate";
+        friend = "Compare to...";
         updateData();
 
         isInitialized = true;
@@ -86,10 +89,14 @@ class _WeeklyPageState extends State<WeeklyPage> {
   }
 
   Future<void> updateData() async {
+
+    updateFriendList();
+
     DateTime dateStart = dateNextSaturday.subtract(const Duration(days: 6));
     DateTime dateNext = dateStart.add(const Duration(days: 1));
 
     List<double> newWeekly = [];
+    List<double> newCompare = [];
 
     if (type == "Average Heart Rate") {
       double total_hr = 0.0;
@@ -112,6 +119,33 @@ class _WeeklyPageState extends State<WeeklyPage> {
         dateStart = dateNext;
         dateNext = dateNext.add(const Duration(days: 1));
       }
+
+      if (friend != "Compare to...") {
+        total_hr = 0.0;
+
+        dateStart = dateNextSaturday.subtract(const Duration(days: 6));
+        dateNext = dateStart.add(const Duration(days: 1));
+
+        for (int d = 0; d < 7; d++) {
+          List<List<dynamic>> results = await db.connection.query(
+              "SELECT hr FROM data WHERE username='$friend' AND timestamp>'$dateStart' AND timestamp<'$dateNext' ORDER BY timestamp");
+          for (int i = 0; i < results.length; i++) {
+            total_hr += results[i][0];
+          }
+
+
+          if (results.isNotEmpty) {
+            newCompare.add(total_hr / results.length);
+          } else {
+            newCompare.add(0);
+          }
+
+          total_hr = 0;
+          dateStart = dateNext;
+          dateNext = dateNext.add(const Duration(days: 1));
+        }
+      }
+
     } else {
       double floors_climbed = 0;
       String label = "";
@@ -137,24 +171,74 @@ class _WeeklyPageState extends State<WeeklyPage> {
         dateNext = dateNext.add(const Duration(days: 1));
 
       }
+
+      if (friend != "Compare to...") {
+        floors_climbed = 0;
+        label = "";
+
+        dateStart = dateNextSaturday.subtract(const Duration(days: 6));
+        dateNext = dateStart.add(const Duration(days: 1));
+
+        for (int d = 0; d < 7; d++) {
+          List<List<dynamic>> results = await db.connection.query(
+              "SELECT label FROM data WHERE username='$friend' AND timestamp>'$dateStart' AND timestamp<'$dateNext' AND label!='walk' ORDER BY timestamp");
+
+          for (int i = 0; i < results.length; i++) {
+            label = results[i][0];
+            if (label == "up") {
+              floors_climbed += 1;
+            } else if (label == "down") {
+              floors_climbed -= 1;
+            }
+          }
+
+          newCompare.add(floors_climbed);
+
+          floors_climbed = 0;
+
+          dateStart = dateNext;
+          dateNext = dateNext.add(const Duration(days: 1));
+
+        }
+      }
     }
 
     setState(() {
       weeklyData = newWeekly;
+      compareData = newCompare;
     });
   }
 
-  Widget buildChart() {
-    if (weeklyData.isEmpty) {
-      return Center(child: Text("Loading chart...", style: style.textStyle,),);
-    } else {
-      return WeeklyBarChart(data: weeklyData, min: findMin(), max: findMax() + 5);
+  void updateFriendList() async {
+    List<DropdownMenuItem<String>> newFriendDropdown = [];
+
+    List<List<dynamic>> results = await db.connection.query(
+        "SELECT friends FROM friends WHERE username='$username'");
+    newFriendDropdown.add(
+        const DropdownMenuItem(
+          value: "Compare to...",
+          child: Text("Compare to..."),
+        )
+    );
+
+    if (results.isNotEmpty) {
+      for (int i = 0; i < results[0][0].length; i++) {
+        newFriendDropdown.add(
+          DropdownMenuItem(
+              value: results[0][0][i],
+              child: Text(results[0][0][i])),
+        );
+      }
     }
+
+    // We update the data in the friend list
+    setState(() {
+      friendDropdown = newFriendDropdown;
+    });
   }
 
   // This function finds the minimum of the data in the chart
   double findMin() {
-
     double min = weeklyData[0];
 
     for (int i = 1; i < weeklyData.length; i++) {
@@ -162,6 +246,16 @@ class _WeeklyPageState extends State<WeeklyPage> {
         min = weeklyData[i];
       } else if (weeklyData[i] < min) {
         min = weeklyData[i];
+      }
+    }
+
+    if (friend != "Compare to...") {
+      for (int i = 0; i < compareData.length; i++) {
+        if (min == 0) {
+          min = compareData[i];
+        } else if (compareData[i] < min) {
+          min = compareData[i];
+        }
       }
     }
 
@@ -174,7 +268,7 @@ class _WeeklyPageState extends State<WeeklyPage> {
     } else if (type == "Floors Climbed") {
       if (min > 25) {
         min -= 25;
-      } else if (min < 0 ) {
+      } else if (min < 0) {
         min -= 10;
       } else {
         min = 0;
@@ -182,12 +276,10 @@ class _WeeklyPageState extends State<WeeklyPage> {
     }
 
     return min;
-
   }
 
   // This function finds the maximum of the data in the chart
   double findMax() {
-
     double max = weeklyData[0];
 
     for (int i = 1; i < weeklyData.length; i++) {
@@ -196,8 +288,43 @@ class _WeeklyPageState extends State<WeeklyPage> {
       }
     }
 
-    return max;
+    if (friend != "Compare to...") {
+      for (int i = 0; i < compareData.length; i++) {
+        if (compareData[i] > max) {
+          max = compareData[i];
+        }
+      }
+    }
 
+    return max;
+  }
+
+  Widget buildChart() {
+    if (weeklyData.isEmpty) {
+      return Center(
+        child: Text("Loading chart...", style: style.textStyle,),);
+    } else {
+      if (friend == "Compare to...") {
+        return WeeklyBarChart(
+            data: weeklyData, min: findMin(), max: findMax() + 5);
+      } else {
+        return WeeklyBarChart(
+            data: weeklyData, min: findMin(), max: findMax() + 5, dataCompare: compareData);
+      }
+    }
+  }
+
+  // This function calls setState to update and rebuild the page whenever
+  // the dropdown menu choosing the friend to compare to is changed
+  void updateFriend(String? selectedValue) {
+    // If the user somehow inputs a value which isn't a string, the type
+    // won't be updated to prevent errors in updateData
+    if (selectedValue is String) {
+      setState(() {
+        friend = selectedValue;
+      });
+      updateData();
+    }
   }
 
   @override
@@ -222,6 +349,12 @@ class _WeeklyPageState extends State<WeeklyPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             DropdownButton(
+              items: friendDropdown,
+              value: friend,
+              onChanged: updateFriend,
+              focusColor: style.backgroundColor,
+            ),
+            DropdownButton(
               items: const [
                 DropdownMenuItem(
                     value: "Average Heart Rate",
@@ -244,13 +377,15 @@ class _WeeklyPageState extends State<WeeklyPage> {
                 children: [
                   IconButton(
                     onPressed: lastWeek,
-                    icon: Icon(Icons.keyboard_arrow_left, color: style.iconColor),
+                    icon: Icon(
+                        Icons.keyboard_arrow_left, color: style.iconColor),
                     splashRadius: 15.0,
                   ),
                   Text("$thisSunday - $nextSaturday", style: style.textStyle),
                   IconButton(
                     onPressed: nextWeek,
-                    icon: Icon(Icons.keyboard_arrow_right, color: style.iconColor),
+                    icon: Icon(
+                        Icons.keyboard_arrow_right, color: style.iconColor),
                     splashRadius: 15.0,
                   ),
                 ]
@@ -302,11 +437,12 @@ class _WeeklyPageState extends State<WeeklyPage> {
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/metrics');
               },
-              child: Icon(Icons.bar_chart, size: 50, color: style.selectedColor),
+              child: Icon(
+                  Icons.bar_chart, size: 50, color: style.selectedColor),
             ),
           ],
         ),
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

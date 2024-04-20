@@ -365,8 +365,6 @@ class _DailyPageState extends State<DailyPage> {
       updateData();
     }
 
-    print("Friend is now...");
-    print(friend);
   }
 
   @override

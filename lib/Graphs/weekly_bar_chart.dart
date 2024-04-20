@@ -14,14 +14,18 @@ class WeeklyBarChart extends StatelessWidget {
     required this.data,
     required this.min,
     required this.max,
+    this.dataCompare = const [],
   });
 
   final List data; // Data passed in to create the bar chart
   final double min; // The minimum value for the chart to draw
   final double max; // The maximum value for the chart to draw
+  final List dataCompare; // Data passed in to create the bar chart
 
   @override
   Widget build(BuildContext context) {
+
+    List<BarChartGroupData> barList = [];
 
     // WeeklyBarData is initialized using the passed in values for efficient mapping
     WeeklyBarData weeklyBarData = WeeklyBarData(
@@ -34,6 +38,105 @@ class WeeklyBarChart extends StatelessWidget {
         sat: data[6]
     );
     weeklyBarData.initializeData();
+
+    if (dataCompare.isNotEmpty) {
+      WeeklyBarData compareBarData = WeeklyBarData(
+          sun: dataCompare[0],
+          mon: dataCompare[1],
+          tue: dataCompare[2],
+          wed: dataCompare[3],
+          thu: dataCompare[4],
+          fri: dataCompare[5],
+          sat: dataCompare[6]
+      );
+      compareBarData.initializeData();
+
+      for (int i = 0; i < 7; i++) {
+        barList.add(
+          BarChartGroupData(
+            x: weeklyBarData.data[i].x,
+            barRods: [
+              BarChartRodData(
+                  toY: weeklyBarData.data[i].y,
+                  color: style.mainColor,
+
+                  // MediaQuery is used to get the size of the page currently being used
+                  // This allows us to size our bars relative to the size of the page
+                  // The constant is derived from the fact that there are 7 bars
+                  width: MediaQuery.of(context).size.width * (0.135 / 2),
+
+                  // With their default radius, the bars look too rounded
+                  // We specify a small radius to give them their signature rectangular shape
+                  borderRadius: BorderRadius.circular(1),
+
+                  // This controls the size and color of the background bars
+                  // which are drawn behind the bars which have actual data
+                  backDrawRodData: BackgroundBarChartRodData(
+                    show: true,
+                    fromY: min,
+                    toY: max,
+                    color: style.backgroundAccent,
+                  )
+              ),
+              BarChartRodData(
+                  toY: compareBarData.data[i].y,
+                  color: style.compareColor,
+
+                  // MediaQuery is used to get the size of the page currently being used
+                  // This allows us to size our bars relative to the size of the page
+                  // The constant is derived from the fact that there are 7 bars
+                  width: MediaQuery.of(context).size.width * (0.135 / 2),
+
+                  // With their default radius, the bars look too rounded
+                  // We specify a small radius to give them their signature rectangular shape
+                  borderRadius: BorderRadius.circular(1),
+
+                  // This controls the size and color of the background bars
+                  // which are drawn behind the bars which have actual data
+                  backDrawRodData: BackgroundBarChartRodData(
+                    show: true,
+                    fromY: min,
+                    toY: max,
+                    color: style.backgroundAccent,
+                  )
+              )
+            ],
+          )
+        );
+      }
+    } else {
+      for (int i = 0; i < 7; i++) {
+        barList.add(
+            BarChartGroupData(
+              x: weeklyBarData.data[i].x,
+              barRods: [
+                BarChartRodData(
+                    toY: weeklyBarData.data[i].y,
+                    color: style.mainColor,
+
+                    // MediaQuery is used to get the size of the page currently being used
+                    // This allows us to size our bars relative to the size of the page
+                    // The constant is derived from the fact that there are 7 bars
+                    width: MediaQuery.of(context).size.width * 0.135,
+
+                    // With their default radius, the bars look too rounded
+                    // We specify a small radius to give them their signature rectangular shape
+                    borderRadius: BorderRadius.circular(1),
+
+                    // This controls the size and color of the background bars
+                    // which are drawn behind the bars which have actual data
+                    backDrawRodData: BackgroundBarChartRodData(
+                      show: true,
+                      fromY: min,
+                      toY: max,
+                      color: style.backgroundAccent,
+                    )
+                )
+              ],
+            )
+        );
+      }
+    }
 
     // fl_chart's BarChart widget
     return BarChart(
@@ -67,34 +170,7 @@ class WeeklyBarChart extends StatelessWidget {
         // We use the map function to map the list of IndividualBar data types
         // to a list of BarChartGroupData containing BarChartRodData, which are
         // fl_chart's way of representing x and y values for bars on the graph
-        barGroups: weeklyBarData.data.map((data) => BarChartGroupData(
-            x: data.x,
-            barRods: [
-              BarChartRodData(
-                toY: data.y,
-                color: style.mainColor,
-
-                // MediaQuery is used to get the size of the page currently being used
-                // This allows us to size our bars relative to the size of the page
-                // The constant is derived from the fact that there are 7 bars
-                width: MediaQuery.of(context).size.width * 0.135,
-
-                // With their default radius, the bars look too rounded
-                // We specify a small radius to give them their signature rectangular shape
-                borderRadius: BorderRadius.circular(1),
-
-                // This controls the size and color of the background bars
-                // which are drawn behind the bars which have actual data
-                backDrawRodData: BackgroundBarChartRodData(
-                  show: true,
-                  fromY: min,
-                  toY: max,
-                  color: style.backgroundAccent,
-                )
-              )
-            ],
-          )
-        ).toList(),
+        barGroups: barList,
       ),
     );
   }
