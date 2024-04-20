@@ -16,12 +16,18 @@ class _MainPageState extends State<MainPage> {
   int floorGoal = 0;
   double floorFraction = 0.0;
   String username = db.user;
+  int floorTotal = 0;
+  double averageHR = 0.0;
+
+  DateTime today = DateTime.now();
 
   @override
   void initState() {
     super.initState();
 
     initializeGoals();
+
+    getRealTimeData();
   }
 
   Widget buildBody() {
@@ -67,7 +73,7 @@ class _MainPageState extends State<MainPage> {
                                             bottom: BorderSide(color: style.iconColor),
                                           ),
                                         ),
-                                        child: Text("8 climbed today", style: style.textStyle),
+                                        child: Text("$floorTotal climbed today", style: style.textStyle),
                                       ),
                                       Text("$floorGoal daily goal", style: style.textStyle),
                                     ]
@@ -88,7 +94,7 @@ class _MainPageState extends State<MainPage> {
               padding: const EdgeInsets.all(5.0),
               child: Transform.scale(
                 scale: 1.7,
-                child: Text("Average heart rate: 88", style: style.textStyle),
+                child: Text("Average heart rate: $averageHR", style: style.textStyle),
               ),
             ),
             Padding (
@@ -169,6 +175,45 @@ class _MainPageState extends State<MainPage> {
       } else {
         floorFraction = 0.0;
       }
+
+    });
+
+    // db.connection.close();
+  }
+
+  Future<void> getRealTimeData() async {
+    // await db.connection.open();
+
+    setState(() {
+
+      today = today.subtract(Duration(hours: today.hour, minutes: today.minute, seconds: today.second, milliseconds: today.millisecond));
+
+    });
+
+    List<List<dynamic>> results = await db.connection.query("SELECT label, hr FROM data WHERE username='$username' AND timestamp>'$today'");
+
+    int newFloors = 0;
+    double totalHR = 0.0;
+    double newHR = 0.0;
+
+    for (int i = 0; i < results.length; i++) {
+      if (results[i][0] == "up") {
+        newFloors += 1;
+      }
+
+      totalHR += results[i][1];
+    }
+
+    if (results.isNotEmpty) {
+      newHR = (totalHR / results.length);
+    } else {
+      newHR = 0.0;
+    }
+
+    setState(() {
+
+      floorTotal = newFloors;
+      averageHR = newHR;
 
     });
 
