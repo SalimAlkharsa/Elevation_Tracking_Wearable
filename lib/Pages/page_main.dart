@@ -171,7 +171,7 @@ class _MainPageState extends State<MainPage> {
       floorGoal = results[0][0];
 
       if (floorGoal != 0) {
-        floorFraction = 8 / floorGoal;
+        floorFraction = floorTotal / floorGoal;
       } else {
         floorFraction = 0.0;
       }
