@@ -25,9 +25,9 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
 
-    initializeGoals();
-
     getRealTimeData();
+
+    initializeGoals();
   }
 
   Widget buildBody() {
