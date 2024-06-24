@@ -1,6 +1,6 @@
 /*
-The code below is written by Anna Theodore for Capstone Team 75's Wearable Device project.
-November 17th, 2023
+The code below is written by Salim Al Kharsa and Anna Theodore for Capstone Team 75's Wearable Device project. For more information on the division of labor, see README.
+June 24th, 2024
 
 The following functionality is present in this code.
 
@@ -10,7 +10,9 @@ https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Register-Map1.pdf
 2. Integration of the BMP280 sensor. More information on this part can be found here.
 https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf
 
-3. This example uses an ESP-32 WROOM, which receives data from the two sensors above.
+2. Integration of the Polar H7 sensor. 
+
+3. This example uses an ESP-32 WROOM, which receives data from the three sensors above.
 https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf
 
 4. A Wi-Fi connection is established for the HTTP Post to work effectively in following steps.
@@ -32,9 +34,12 @@ but note that the final data transmission will be to the postgreSQL database, wr
   2. sample_project
   3. http_server_simple
   4. i2c_simple
+  5. gatt_client
+  6. station
 
   Additional modifications and customizations have been made for specific purposes in this code.
 */
+
 #include <stdio.h>
 #include <inttypes.h>
 #include "driver/i2c.h"
@@ -67,11 +72,10 @@ but note that the final data transmission will be to the postgreSQL database, wr
 // Imports where the sensors are defined
 #include "MPU6050Sensor.h"
 #include "BMP280Sensor.h"
+#include "PolarH7.c"
 
 // Imports that control model windows
 #include "slice.c"
-
-#include "PolarH7.c"
 
 // Imports related to the model
 #include "cpp_code.h"
@@ -82,7 +86,7 @@ float features[(3 * 5)];
 #define MAX_STRING_LENGTH 15
 
 // Functions related to the model results
-// This function will shift  to the left
+// This function will shift to the left
 void shiftResults(char *results[], int length)
 {
     for (int i = 1; i < length; i++)
@@ -123,8 +127,6 @@ int threshold(char *results[], int length, const char *target)
 // Frequency desired for sampling
 // I2C communication timeout
 #define I2C_MASTER_FREQ_HZ 25
-
-
 #define I2C_MASTER_TIMEOUT_MS 1000
 
 // Defaults for the I2C, disable buffers for this example
