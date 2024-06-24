@@ -75,16 +75,44 @@ but note that the final data transmission will be to the postgreSQL database, wr
 
 // Imports related to the model
 #include "cpp_code.h"
-float features[];
+float features[(3 * 5)];
 
-// This is the function that sends the sensor data over UART when in testing mode
-void process_sensor_data_into_model(float x_acc, float y_acc, float z_acc, float x_rot, float y_rot, float z_rot, float temp, float press)
+// Defines related to the model outputs
+#define MAX_RESULTS 10
+#define MAX_STRING_LENGTH 15
+
+// Functions related to the model results
+// This function will shift  to the left
+void shiftResults(char *results[], int length)
 {
-    // Not sure what value to use for the buffer size but 50 is arbitrary and works for now
-    char data[100];
+    for (int i = 1; i < length; i++)
+    {
+        strcpy(results[i - 1], results[i]);
+    }
+}
 
-    // Format the data as per the protocol
-    snprintf(data, sizeof(data), "%f, %f, %f, %f, %f, %f, %f, %f", x_acc, y_acc, z_acc, x_rot, y_rot, z_rot, temp, press);
+// This function will check if all elements are the same as the target
+int threshold(char *results[], int length, const char *target)
+{
+    int matchCount = 0;
+
+    for (int i = 0; i < length; i++)
+    {
+        if (strcmp(results[i], target) == 0)
+        {
+            matchCount++; // Count how many elements match the target
+        }
+    }
+
+    // Check if the number of matching elements is at least 80% of the total length
+    if (matchCount >= length * 0.8)
+    {
+        return 1; // 80% or more elements are the same as the target
+    }
+    else
+    {
+        return 0; // Less than 80% elements are the same as the target
+    }
 }
 
 // Defines for I2C functionality
@@ -717,12 +745,15 @@ float temp_calibrated;
 float press_calibrated;
 int prev_heart_rate;
 int hr = -1;
+const char *result_label;
+float prev_pressure = 95000;
+float delta_p;
 esp_http_client_handle_t client = NULL;
 
 int app_main(void)
 {
     ////////////////////////// ML Stuff //////////////////////////
-    int result = check_feature_array_size(40 * 5); // Features in splice x splices
+    int result = check_feature_array_size();
     if (result == 0)
     {
         printf("Feature array size is correct\n");
@@ -746,7 +777,7 @@ int app_main(void)
 
     // Initialize the Wi-Fi connection
     // Time this function
-    wifi_init_sta();
+    // wifi_init_sta();
 
     // Get the MAC address
     uint8_t mac_addr[6];
@@ -782,10 +813,10 @@ int app_main(void)
     double sampling_rate, elapsed_time;
 
     // This is where the sensor data is stored
-    float values[5] = {};
+    float values[3] = {}; // 3 sensor values
     // define the big window of data where the slices will be stored
     // also define the slices that will be used to store the sensor data
-    Slice slices[5];
+    Slice slices[5]; // There are 5 time steps
     for (int i = 0; i < 5; i++)
     {
         slices[i] = initializeSlice();
@@ -794,6 +825,11 @@ int app_main(void)
     // Debug section
     uint32_t free_heap;
     size_t sizeOfSlice;
+
+    // Initialize the counters
+    int up_cnt = 0;
+    int down_cnt = 0;
+
     // End of debug section
     // Initialize NVS.
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
@@ -861,6 +897,27 @@ int app_main(void)
         ESP_LOGE(GATTC_TAG, "set local  MTU failed, error code = %x", local_mtu_ret);
     }
 
+    // Initialize the results array
+    char *results[MAX_RESULTS];
+
+    // Allocate memory for each string
+    for (int i = 0; i < MAX_RESULTS; i++)
+    {
+        results[i] = (char *)malloc(MAX_STRING_LENGTH * sizeof(char));
+    }
+
+    // Fill the results array with some initial values
+    strcpy(results[0], "walk");
+    strcpy(results[1], "walk");
+    strcpy(results[2], "walk");
+    strcpy(results[3], "walk");
+    strcpy(results[4], "walk");
+    strcpy(results[5], "walk");
+    strcpy(results[6], "walk");
+    strcpy(results[7], "walk");
+    strcpy(results[8], "walk");
+    strcpy(results[9], "walk");
+
     // Continuously take sensor inputs until power is lost
     while (1)
     {
@@ -908,12 +965,12 @@ int app_main(void)
         // Now read the heart rate data
         if (polar_heart_rate != prev_heart_rate)
         {
-            printf("Heart rate (new reading): %d\n", polar_heart_rate);
+            // printf("Heart rate (new reading): %d\n", polar_heart_rate);
             prev_heart_rate = polar_heart_rate;
         }
         else
         {
-            printf("Heart rate (repeat reading): %d\n", prev_heart_rate);
+            // printf("Heart rate (repeat reading): %d\n", prev_heart_rate);
         }
         hr = prev_heart_rate;
         //////////////////////////////////////////////////////////////////
@@ -922,43 +979,78 @@ int app_main(void)
 
         // Go through the process of adding the sensor data to the slices for the model
         // Define the collected data that will be added to the slices
-        values[0] = mpuSensor.a_y;
-        values[1] = mpuSensor.a_z;
-        values[2] = mpuSensor.r_y;
-        values[3] = mpuSensor.r_z;
-        values[4] = bmpSensor.pressure;
+        values[0] = mpuSensor.a_x;
+        values[1] = mpuSensor.a_y;
+        // Calculate the delta operations
+        delta_p = bmpSensor.pressure - prev_pressure;
+        prev_pressure = bmpSensor.pressure;
+        // Add the delta values
+        values[2] = delta_p;
         // Add the data to the slices
-        addSensorDataToSlices(slices, 5, values, 5);
+        addSensorDataToSlices(slices, 5, values, 3); // 5 slices, 3 values
         // print the slices for debugging purposes
-        for (int i = 0; i < 5; i++)
-        {
-            printf("Slice %d: ", i); // Comment for time
-            printf("%p", slices[i]); // Get the addy of the slices
-            // printSlice(slices[i]);   // Comment for time
-        }
+        // for (int i = 0; i < 5; i++)
+        // {
+        //     printf("Slice %d: ", i); // Comment for time
+        //     printf("%p", slices[i]); // Get the addy of the slices
+        //     printSlice(slices[i]); // Comment for time
+        // }
         // If all the slices are full, then we can start processing the data into the model
         if (slices[4].length == MAX_CAPACITY)
         {
             // This means that the slices are full and we can start processing the data
-            printf("All slices are full, data will now be processed into the model! \n \n \n");
+            // printf("All slices are full, data will now be processed into the model! \n \n \n");
             // Load the features array to store the data from the all the slices
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < slices[i].length; j++)
                 {
-                    features[i * 40 + j] = slices[i].data[j];
+                    features[i * 3 + j] = slices[i].data[j];
                 }
             }
 
             // Pass the features array to the C++ code
-            if (check_feature_array_size(200) == 1)
+            if (check_feature_array_size() == 3)
             {
-                printf("Feature array size is incorrect\n");
+                // printf("Feature array size is incorrect\n");
             }
             else
             {
-                printf("Feature array size is correct\n");
-                classifier_loop();
+                // printf("Feature array size is correct\n");
+                // printf("Features array: \n");
+                // for (int i = 0; i < (8 * 5); i++)
+                // {
+                //     printf("%f, ", features[i]);
+                // }
+                result_label = classifier_loop();
+                printf("Result: %s\n", result_label);
+
+                /// Shift the results array to make space for a new element
+                shiftResults(results, MAX_RESULTS);
+
+                // Insert a new element at the end
+                strcpy(results[MAX_RESULTS - 1], result_label);
+
+                // Print the updated contents of the results array
+                printf("\nUpdated results:\n");
+                for (int i = 0; i < MAX_RESULTS; i++)
+                {
+                    printf("%s ", results[i]);
+                }
+
+                // Check if the user has ascended or descended a floor
+                if (threshold(results, 10, "up") == 1)
+                {
+                    up_cnt++;
+                    // Add a cool down period to prevent multiple counts
+                    vTaskDelay(pdMS_TO_TICKS(5000));
+                }
+                else if (threshold(results, 10, "down") == 1)
+                {
+                    down_cnt++;
+                    // Add a cool down period to prevent multiple counts
+                    vTaskDelay(pdMS_TO_TICKS(5000));
+                }
             }
             //////
         }
@@ -992,8 +1084,8 @@ int app_main(void)
 
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 1: %u bytes\n", free_heap);
-            send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id, &client);
-            //  vTaskDelay(pdMS_TO_TICKS(60 * 1000 * 3)); // 3 minutes
+            // send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id, &client);
+            vTaskDelay(pdMS_TO_TICKS(800)); // Use it to simulate the delay of the wifi
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 2: %u bytes\n", free_heap);
             // Free the allocated memory once done using it
@@ -1009,6 +1101,10 @@ int app_main(void)
         // free_heap = esp_get_free_heap_size();
         printf("\n Free Heap at final point: %u bytes\n", free_heap);
         printf("Sampling rate: %f Hz\n", sampling_rate);
+
+        // View the results
+        printf("Floors Ascended: %d\n", up_cnt);
+        printf("Floors Descended: %d\n", down_cnt);
     }
 
     // Delete i2c driver installs

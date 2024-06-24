@@ -51,7 +51,7 @@
 #include "tensorflow-lite/tensorflow/lite/kernels/register.h"
 #include "tensorflow-lite/tensorflow/lite/model.h"
 #include "tensorflow-lite/tensorflow/lite/optional_debug_tools.h"
-#include "edge-impulse-sdk/tensorflow/lite/kernels/tree_ensemble_classifier.h"
+#include "edge-impulse-sdk/tensorflow/lite/kernels/custom/tree_ensemble_classifier.h"
 #include "edge-impulse-sdk/classifier/ei_model_types.h"
 #include "edge-impulse-sdk/porting/ei_classifier_porting.h"
 #include "edge-impulse-sdk/classifier/ei_fill_result_struct.h"
@@ -264,6 +264,7 @@ void debug_print(const std::vector<T> vec, const int val_per_row = 3)
 EI_IMPULSE_ERROR run_nn_inference(
     const ei_impulse_t *impulse,
     ei_feature_t *fmatrix,
+    uint32_t learn_block_index,
     uint32_t* input_block_ids,
     uint32_t input_block_ids_size,
     ei_impulse_result_t *result,
@@ -352,7 +353,7 @@ EI_IMPULSE_ERROR run_nn_inference(
     std::vector<float> potentials_v;// = potentials.cast<std::vector<float>>();
 
     // TODO: output conversion depending on output shape?
-    if (impulse->object_detection == false) {
+    if (block_config->object_detection == false) {
         potentials_v = potentials.squeeze().cast<std::vector<float>>();
     }
     else {
@@ -367,8 +368,10 @@ EI_IMPULSE_ERROR run_nn_inference(
         }
     }
 
-    // apply softmax, becuase Akida is not supporting this operation
-    tflite::reference_ops::Softmax(dummy_params, softmax_shape, potentials_v.data(), softmax_shape, potentials_v.data());
+    if(block_config->object_detection_last_layer != EI_CLASSIFIER_LAST_LAYER_YOLOV2) {
+        // apply softmax, becuase Akida is not supporting this operation
+        tflite::reference_ops::Softmax(dummy_params, softmax_shape, potentials_v.data(), softmax_shape, potentials_v.data());
+    }
 
     if(debug == true) {
         ei_printf("After softmax:\n");
@@ -395,30 +398,40 @@ EI_IMPULSE_ERROR run_nn_inference(
     engine_info << "Power consumption: " << std::fixed << std::setprecision(2) << active_power << " mW\n";
     engine_info << "Inferences per second: " << (1000000 / result->timing.classification_us);
 
-    if (impulse->object_detection) {
-        switch (impulse->object_detection_last_layer) {
+    if (block_config->object_detection) {
+        switch (block_config->object_detection_last_layer) {
             case EI_CLASSIFIER_LAST_LAYER_FOMO: {
                 fill_res = fill_result_struct_f32_fomo(
                     impulse,
+                    block_config,
                     result,
                     potentials_v.data(),
                     impulse->fomo_output_size,
                     impulse->fomo_output_size);
                 break;
             }
+            case EI_CLASSIFIER_LAST_LAYER_YOLOV2: {
+                fill_res = fill_result_struct_f32_yolov2(
+                    impulse,
+                    block_config,
+                    result,
+                    potentials_v.data(),
+                    impulse->tflite_output_features_count);
+                break;
+            }
             case EI_CLASSIFIER_LAST_LAYER_SSD: {
                 ei_printf("ERR: MobileNet SSD models are not implemented for Akida (%d)\n",
-                    impulse->object_detection_last_layer);
+                    block_config->object_detection_last_layer);
                 return EI_IMPULSE_UNSUPPORTED_INFERENCING_ENGINE;
             }
             case EI_CLASSIFIER_LAST_LAYER_YOLOV5: {
                 ei_printf("ERR: YOLO v5 models are not implemented for Akida (%d)\n",
-                    impulse->object_detection_last_layer);
+                    block_config->object_detection_last_layer);
                 return EI_IMPULSE_UNSUPPORTED_INFERENCING_ENGINE;
             }
             default: {
                 ei_printf("ERR: Unsupported object detection last layer (%d)\n",
-                    impulse->object_detection_last_layer);
+                    block_config->object_detection_last_layer);
                 return EI_IMPULSE_UNSUPPORTED_INFERENCING_ENGINE;
             }
         }
@@ -539,12 +552,16 @@ __attribute__((unused)) int extract_tflite_features(signal_t *signal, matrix_t *
 
     ei_learning_block_config_tflite_graph_t ei_learning_block_config = {
         .implementation_version = 1,
+        .classification_mode = EI_CLASSIFIER_CLASSIFICATION_MODE_DSP,
         .block_id = dsp_config->block_id,
         .object_detection = false,
         .object_detection_last_layer = EI_CLASSIFIER_LAST_LAYER_UNKNOWN,
         .output_data_tensor = 0,
         .output_labels_tensor = 255,
         .output_score_tensor = 255,
+        .threshold = 0,
+        .quantized = 0,
+        .compiled = 1,
         .graph_config = &ei_config_tflite_graph_0
     };
 
