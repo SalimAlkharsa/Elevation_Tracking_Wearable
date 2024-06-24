@@ -4,10 +4,9 @@
 Elevation Tracking for Wearable Devices Using Machine Learning aims to address inaccuracies in fitness tracking of automatic versus manual activity and emergency responder scenarios using a machine learning wearable device and Android application for insights.
 
 ### Objectives
-1. **Design and Development**: Create [solution/product].  
+1. **Design and Development**: Create four self-sufficient subsystems.  
 2. **Testing and Validation**: Ensure effectiveness and reliability.  
 3. **Implementation and Deployment**: Deploy to real-world use.  
-4. **Evaluation and Feedback**: Gather feedback and improve.
 
 ### Accomplishments
 #### Research and Analysis
@@ -24,10 +23,6 @@ Elevation Tracking for Wearable Devices Using Machine Learning aims to address i
 #### Implementation and Deployment
 - Deployed solution/product smoothly.  
 - Provided user training and support.
-
-#### Evaluation and Feedback
-- Collected and analyzed user feedback.  
-- Evaluated success based on KPIs and user satisfaction.
 
 ### Key Outcomes
 - **Impact**: [Describe impact, e.g., improved efficiency, reduced costs].  
