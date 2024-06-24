@@ -113,7 +113,6 @@ void BMP280Sensor_init(BMP280Sensor *sensor)
 
     // Pulled these opmode select sets from the BMP280 datasheet
     i2c_master_write_byte(cmd, 0b11101011, 1);
-    // i2c_master_write_byte(cmd, 0b01010111, 1);
     bmp280_checkI2COperation(i2c_master_stop(cmd));
     bmp280_checkI2COperation(i2c_master_cmd_begin(I2C_NUM_0, cmd, 100 / portTICK_PERIOD_MS));
 
