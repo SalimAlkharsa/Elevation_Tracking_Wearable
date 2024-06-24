@@ -1,9 +1,8 @@
-Capstone Project: [Project Title]
+## Capstone Project: Elevation Tracking for Wearable Devices Using Machine Learning
 Overview
-[Project Title] aims to address [specific problem or challenge] by developing [brief description of the solution or product].
+Elevation Tracking for Wearable Devices Using Machine Learning aims to address inaccuracies in fitness tracking of automatic versus manual activity and emergency responder scenarios using a machine learning wearable device and Android application for insights.
 
 Objectives
-Research and Analysis: Review literature and market.
 Design and Development: Create [solution/product].
 Testing and Validation: Ensure effectiveness and reliability.
 Implementation and Deployment: Deploy to real-world use.
@@ -32,16 +31,17 @@ Conclusion
 [Project Title] successfully addressed [problem/challenge] with a [solution/product] that meets user needs. We achieved our objectives and delivered a impactful solution in [field/industry]. Thanks to all who contributed.
 
 Team Members
-[Name 1] - [Role/Contribution]
-[Name 2] - [Role/Contribution]
-[Name 3] - [Role/Contribution]
-[Name 4] - [Role/Contribution]
+Emiliano Sanchez - Hardware and Power Lead
+Anna Theodore - Microcontroller and Database Lead
+Salim Al Kharsa - Machine Learning Lead
+Seth Keylon - Application Lead
+
 Contact Information
 For questions or further information, please contact:
 
-[Your Name]
-Email: [Your Email]
-LinkedIn: [Your LinkedIn Profile]
+Anna Theodore
+Email: annattheodore@gmail.com 
+LinkedIn: (https://www.linkedin.com/in/anna-theodore-2024/)
 
 ## Test Documentation
 
