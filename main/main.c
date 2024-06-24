@@ -124,7 +124,7 @@ int threshold(char *results[], int length, const char *target)
 // I2C communication timeout
 #define I2C_MASTER_FREQ_HZ 25
 
-// AT: ayo what is this
+
 #define I2C_MASTER_TIMEOUT_MS 1000
 
 // Defaults for the I2C, disable buffers for this example
@@ -149,36 +149,14 @@ https://wemr-cp.net.tamu.edu/guest/mac_list.php
 // This WiFi network is open, but the includes below may be used if a different network is needed.
 #define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_OPEN
 
-// #define EXAMPLE_ESP_WIFI_SSID "wifisfuneral"
-// #define EXAMPLE_ESP_WIFI_PASS "13bricks"
-
-// #define EXAMPLE_ESP_MAXIMUM_RETRY 5
-
-// TODO: Is this code removable?
-// Extra defines not needed for this example because it is an open network
-// If a different network is used, these if statements will need to be implemented
-/*
-#elif CONFIG_ESP_WIFI_AUTH_WEP
-#define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WEP
-#elif CONFIG_ESP_WIFI_AUTH_WPA_PSK
-#define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA_PSK
-#elif CONFIG_ESP_WIFI_AUTH_WPA2_PSK
-#define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA2_PSK
-#elif CONFIG_ESP_WIFI_AUTH_WPA_WPA2_PSK
-#define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA_WPA2_PSK
-#elif CONFIG_ESP_WIFI_AUTH_WPA3_PSK
-#define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA3_PSK
-#elif CONFIG_ESP_WIFI_AUTH_WPA2_WPA3_PSK
-#define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA2_WPA3_PSK
-#elif CONFIG_ESP_WIFI_AUTH_WAPI_PSK
-#define ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WAPI_PSK
-#endif
-*/
+// For private networks
+// #define EXAMPLE_ESP_WIFI_SSID <username>
+// #define EXAMPLE_ESP_WIFI_PASS <password>
 
 // Define for timestamp data
 #define PRINT_INTERVAL_MILLISECONDS 40
 
-// URL Settings
+// URL for the server that we will send requests to
 #define SERVER_URL "http://i-want-to-pass-capstone-96abfc16411c.herokuapp.com/post_endpoint"
 
 /* The event group allows multiple bits for each event, but we only care about two events:
@@ -297,7 +275,6 @@ void initialize_sntp(void)
 /*
    Obtains the current Central Standard Time (CST).
 */
-// AT: timer + time = what?
 void obtain_time(void)
 {
     // Initialize SNTP for time synchronization
@@ -381,7 +358,7 @@ void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t event_id
     {
         if (s_retry_num < 10) // TO DO SEE HOW THIS RESPONDS
         {
-            // Do an exponential backoff
+            // Do a modified exponential backoff
             printf("Back off time: %d\n", (10000 * s_retry_num));
             vTaskDelay(pdMS_TO_TICKS(10000 * s_retry_num));
             s_retry_num++;
@@ -612,7 +589,7 @@ void send_post_request(char *my_timestamp, float a_x, float a_y, float a_z,
 
     // Print the JSON object
     char *post_data = cJSON_Print(json_root);
-    printf("%s\n", post_data); // Comment for time
+    // printf("%s\n", post_data); // Comment for time
 
     // Check if we are connected to the client
     if (!is_client_connected(*client))
@@ -635,7 +612,6 @@ void send_post_request(char *my_timestamp, float a_x, float a_y, float a_z,
     }
 
     // Cleanup resources
-    // esp_http_client_cleanup(client);
     cJSON_free((void *)post_data);
     cJSON_Delete(json_root);
 }
@@ -776,8 +752,7 @@ int app_main(void)
     ESP_ERROR_CHECK(ret);
 
     // Initialize the Wi-Fi connection
-    // Time this function
-    // wifi_init_sta();
+    wifi_init_sta(); 
 
     // Get the MAC address
     uint8_t mac_addr[6];
@@ -787,16 +762,10 @@ int app_main(void)
     char mac_str[18]; // 12 characters for MAC address and 5 for colons
     sprintf(mac_str, "%02X:%02X:%02X:%02X:%02X:%02X", mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
 
-    // Print the MAC address as a string
-    // printf("MAC Address as String: %s\n", mac_str);
-
     // Intialize the I2C port
     ESP_ERROR_CHECK(i2c_master_init());
-
     initialize_timer();
-    // AT: need to figure out if this delay is still necessary
-    // vTaskDelay(pdMS_TO_TICKS(7500));
-
+  
     // Declare the sensor object
     MPU6050Sensor mpuSensor;
     BMP280Sensor bmpSensor;
@@ -907,6 +876,7 @@ int app_main(void)
     }
 
     // Fill the results array with some initial values
+    // "Why use a simple for loop, when you can copy paste" Kevin Malone if he was a software engineer
     strcpy(results[0], "walk");
     strcpy(results[1], "walk");
     strcpy(results[2], "walk");
@@ -921,7 +891,7 @@ int app_main(void)
     // Continuously take sensor inputs until power is lost
     while (1)
     {
-        tickBeforePrint = xTaskGetTickCount(); ///////////////////
+        tickBeforePrint = xTaskGetTickCount(); 
         free_heap = esp_get_free_heap_size();
         printf("\n Free Heap at point 0: %u bytes\n", free_heap);
         // Read the data from the MPU6050Sensor
@@ -933,15 +903,12 @@ int app_main(void)
             vTaskDelay(pdMS_TO_TICKS(5000));
             MPU6050Sensor_init(&mpuSensor);
             mpuSensorConnected = true;
-            // TO DO: Determine if this is the correct way to handle the sensor not being connected
             continue;
         }
         else
         {
             // printf("MPU6050 is connected.\n"); // Comment for time
         }
-        // Print the data from the MPU6050Sensor for debugging purposes
-        // MPU6050Sensor_printData(&mpuSensor); // Comment for time
         // Read the data from the BMP280Sensor
         bmpSensorConnected = BMP280Sensor_readData(&bmpSensor);
 
@@ -952,25 +919,20 @@ int app_main(void)
             vTaskDelay(pdMS_TO_TICKS(1000));
             BMP280Sensor_init(&bmpSensor);
             bmpSensorConnected = true;
-            // TO DO: Determine if this is the correct way to handle the sensor not being connected
             continue;
         }
         else
         {
             // printf("BMP280 is connected.\n"); // Comment for time
         }
-        // Print the data from the BMP280Sensor for debugging purposes
-        // BMP280Sensor_printData(&bmpSensor); // Comment for time
-
         // Now read the heart rate data
         if (polar_heart_rate != prev_heart_rate)
         {
-            // printf("Heart rate (new reading): %d\n", polar_heart_rate);
             prev_heart_rate = polar_heart_rate;
         }
         else
         {
-            // printf("Heart rate (repeat reading): %d\n", prev_heart_rate);
+            // printf("Heart rate (repeat reading): %d\n", prev_heart_rate); // Comment for time
         }
         hr = prev_heart_rate;
         //////////////////////////////////////////////////////////////////
@@ -988,13 +950,6 @@ int app_main(void)
         values[2] = delta_p;
         // Add the data to the slices
         addSensorDataToSlices(slices, 5, values, 3); // 5 slices, 3 values
-        // print the slices for debugging purposes
-        // for (int i = 0; i < 5; i++)
-        // {
-        //     printf("Slice %d: ", i); // Comment for time
-        //     printf("%p", slices[i]); // Get the addy of the slices
-        //     printSlice(slices[i]); // Comment for time
-        // }
         // If all the slices are full, then we can start processing the data into the model
         if (slices[4].length == MAX_CAPACITY)
         {
@@ -1016,12 +971,6 @@ int app_main(void)
             }
             else
             {
-                // printf("Feature array size is correct\n");
-                // printf("Features array: \n");
-                // for (int i = 0; i < (8 * 5); i++)
-                // {
-                //     printf("%f, ", features[i]);
-                // }
                 result_label = classifier_loop();
                 printf("Result: %s\n", result_label);
 
@@ -1052,7 +1001,6 @@ int app_main(void)
                     vTaskDelay(pdMS_TO_TICKS(5000));
                 }
             }
-            //////
         }
         // Allocate timestamp
         char *my_timestamp = report_time_elapsed();
@@ -1084,8 +1032,7 @@ int app_main(void)
 
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 1: %u bytes\n", free_heap);
-            // send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id, &client);
-            vTaskDelay(pdMS_TO_TICKS(800)); // Use it to simulate the delay of the wifi
+            send_post_request(my_timestamp, a_x, a_y, a_z, r_x, r_y, r_z, temp_calibrated, press_calibrated, hr, user_id, &client);
             free_heap = esp_get_free_heap_size();
             printf("\n Free Heap at point 2: %u bytes\n", free_heap);
             // Free the allocated memory once done using it
