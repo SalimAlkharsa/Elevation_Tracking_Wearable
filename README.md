@@ -1,47 +1,59 @@
 ## Capstone Project: Elevation Tracking for Wearable Devices Using Machine Learning
-Overview
+
+### Overview
 Elevation Tracking for Wearable Devices Using Machine Learning aims to address inaccuracies in fitness tracking of automatic versus manual activity and emergency responder scenarios using a machine learning wearable device and Android application for insights.
 
-Objectives
-Design and Development: Create [solution/product].
-Testing and Validation: Ensure effectiveness and reliability.
-Implementation and Deployment: Deploy to real-world use.
-Evaluation and Feedback: Gather feedback and improve.
-Accomplishments
-Research and Analysis
-Comprehensive literature review and market analysis.
-Requirements gathering from stakeholders.
-Design and Development
-Designed and developed [solution/product] using [technologies/tools used].
-Testing and Validation
-Conducted extensive testing, including UAT.
-Validated against requirements.
-Implementation and Deployment
-Deployed solution/product smoothly.
-Provided user training and support.
-Evaluation and Feedback
-Collected and analyzed user feedback.
-Evaluated success based on KPIs and user satisfaction.
-Key Outcomes
-Impact: [Describe impact, e.g., improved efficiency, reduced costs].
-User Satisfaction: [Percentage] positive feedback.
-Scalability: Solution/product designed for future expansion.
-Innovation: Introduced features such as [list innovative features].
-Conclusion
-[Project Title] successfully addressed [problem/challenge] with a [solution/product] that meets user needs. We achieved our objectives and delivered a impactful solution in [field/industry]. Thanks to all who contributed.
+### Objectives
+1. **Design and Development**: Create [solution/product].  
+2. **Testing and Validation**: Ensure effectiveness and reliability.  
+3. **Implementation and Deployment**: Deploy to real-world use.  
+4. **Evaluation and Feedback**: Gather feedback and improve.
 
-Team Members
-Emiliano Sanchez - Hardware and Power Lead
-Anna Theodore - Microcontroller and Database Lead
-Salim Al Kharsa - Machine Learning Lead
-Seth Keylon - Application Lead
+### Accomplishments
+#### Research and Analysis
+- Comprehensive literature review and market analysis.  
+- Requirements gathering from stakeholders.
 
-Contact Information
+#### Design and Development
+- Designed and developed [solution/product] using [technologies/tools used].
+
+#### Testing and Validation
+- Conducted extensive testing, including UAT.  
+- Validated against requirements.
+
+#### Implementation and Deployment
+- Deployed solution/product smoothly.  
+- Provided user training and support.
+
+#### Evaluation and Feedback
+- Collected and analyzed user feedback.  
+- Evaluated success based on KPIs and user satisfaction.
+
+### Key Outcomes
+- **Impact**: [Describe impact, e.g., improved efficiency, reduced costs].  
+- **User Satisfaction**: [Percentage] positive feedback.  
+- **Scalability**: Solution/product designed for future expansion.  
+- **Innovation**: Introduced features such as [list innovative features].
+
+### Conclusion
+[Project Title] successfully addressed [problem/challenge] with a [solution/product] that meets user needs. We achieved our objectives and delivered an impactful solution in [field/industry]. Thanks to all who contributed.
+
+### Team Members
+- Emiliano Sanchez - Hardware and Power Lead  
+- Anna Theodore - Microcontroller and Database Lead  
+- Salim Al Kharsa - Machine Learning Lead  
+- Seth Keylon - Application Lead
+
+### Contact Information
 For questions or further information, please contact:
 
-Anna Theodore
-Email: annattheodore@gmail.com 
-LinkedIn: (https://www.linkedin.com/in/anna-theodore-2024/)
+- **Anna Theodore**  
+  - Email: annattheodore@gmail.com  
+  - LinkedIn: [Anna Theodore](https://www.linkedin.com/in/anna-theodore-2024/)
+
+---
+
+Thank you for reading about our capstone project. We are excited to share our work with the community.
 
 ## Test Documentation
 
