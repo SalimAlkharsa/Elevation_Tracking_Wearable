@@ -63,7 +63,7 @@ void MPU6050Sensor_init(MPU6050Sensor *sensor)
     // Check if sensor initialization is successful and if the correct sensor is detected
     if (MPU6050Sensor_checkI2COperation(err) && mpu6050_who_am_i_value == MPU6050_SENSOR_ADDR)
     {
-        // ESP_LOGI(TAG, "MPU6050 sensor detected."); // TODO: UNCOMMENT THIS LINE
+        // ESP_LOGI(TAG, "MPU6050 sensor detected."); // TODO: UNCOMMENT THIS LINE IF DEBUGGING
     }
     else
     {
