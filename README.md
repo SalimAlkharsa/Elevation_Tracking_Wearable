@@ -24,14 +24,19 @@ This Github contains the code necessary to satisfy the Microcontroller and Datab
 ### System Accomplishments
 - The ESP-32 Communications successfully utilize the following: I2C, Wi-Fi, Bluetooth, and HTTP operations
 - The Machine Learning model runs in real-time on the ESP-32, it can distinguish between stair ascent/descent and elevator ascent/descent
-- The Machine Learning model runs continuously on the ESP-32 
 
 We are gonna need seth to help at some point
 
 ### Team Members and Code Contributions
 **Emiliano Sanchez - Hardware and Power Lead**  
-**Anna Theodore - Microcontroller and Database Lead**  
+**Anna Theodore - Microcontroller and Database Lead**
+Anna contributed ESP-32 Communications code using C, ensuring consistent and synchronized data outputs as well as 
+Anna implemented error catching for the disconnection of wired sensors and Bluetooth disconnection
+Anna wrote pSQL query code for database posting using Python’s Flask library
 **Salim Al Kharsa - Machine Learning Lead**  
+Salim contributed the ESP-32 Machine Learning integration code, including a C wrapper for the model deployed in C++
+Salim included data validation attributes within the machine learning integration, implementing a buffered sliding window to prevent inaccurate successive recordings. 
+Salim handled the Wi-Fi reconnection protocol implementing a linear back-off algorithm to minimize local resource consumption
 **Seth Keylon - Android Application Lead**
 
 ### Contact Information
@@ -40,10 +45,13 @@ For questions or further information, please contact:
 - **Anna Theodore**  
   - Email: annattheodore@gmail.com  
   - LinkedIn: [Anna Theodore](https://www.linkedin.com/in/anna-theodore-2024/)
+- **Anna Theodore**  
+  - Email: annattheodore@gmail.com  
+  - LinkedIn: [Anna Theodore](https://www.linkedin.com/in/anna-theodore-2024/)
 
 ---
 
-Thank you for reading about our capstone project. We are excited to share our work with the community.
+Thank you for reading about our capstone project. We are excited to share our work with the community!
 
 
 Should we remove below →
@@ -64,8 +72,6 @@ Should we remove below →
 | 12          | Models Make Continuous Predictions      | The model continuously outputs something                                 | Run the program and see the print statement                                              | The model should predict something                                                       | Y                | The prediction does not have to be accurate                                                     |
 | 13          | Frequency Is Over 2 Hz                  | Make sure the frequency is more than 2 Hz                                | Run the program and see the print statement                                              | More than 2Hz                                                                            | Y                | The closer to 8Hz, the better                                                                   |
 | 14          | No memory leaks                         | Make sure the heap is at the same size when the loop starts and finishes | Run the program and see the print statement                                              | More than 2Hz                                                                            | Y                |
-
-## Standard ESP Documentation
 
 | Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-S2 | ESP32-S3 |
 | ----------------- | ----- | -------- | -------- | -------- | -------- |
