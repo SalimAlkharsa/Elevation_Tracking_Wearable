@@ -2,11 +2,11 @@
 
 ### Problem Definition
 
-	Location tracking is vital in modern society and is used for everything from finding lost keys to successfully navigating urban landscapes. When using the Global Positioning System (GPS), location is accurate in the x and y directions. Where GPS falls short is in the z-direction. It is vital to address these inaccuracies in z-axis measurements for elevation statistics, such as floors climbed, in both emergency response as well as commercial use cases. 
+Location tracking is vital in modern society and is used for everything from finding lost keys to successfully navigating urban landscapes. When using the Global Positioning System (GPS), location is accurate in the x and y directions. Where GPS falls short is in the z-direction. It is vital to address these inaccuracies in z-axis measurements for elevation statistics, such as floors climbed, in both emergency response as well as commercial use cases. 
 
-    Current wearable devices rely on pressure to determine elevation. Still, this variable alone fails to account for cases where the temperature is not constant, such as in an emergency scenario in a burning building, where accurate location tracking within a building can be the difference between life and death.
+Current wearable devices rely on pressure to determine elevation. Still, this variable alone fails to account for cases where the temperature is not constant, such as in an emergency scenario in a burning building, where accurate location tracking within a building can be the difference between life and death.
 
-    By using advancements in machine learning, accurate elevation tracking can be achieved with a multivariate model for both commercial and emergency response scenarios. This model should be able to correct for over-reliance on pressure as a metric for elevation tracking. This device will use pressure, temperature, rotation, and acceleration sensors to improve current elevation classification techniques.
+By using advancements in machine learning, accurate elevation tracking can be achieved with a multivariate model for both commercial and emergency response scenarios. This model should be able to correct for over-reliance on pressure as a metric for elevation tracking. This device will use pressure, temperature, rotation, and acceleration sensors to improve current elevation classification techniques.
 
 ### Methodology
 
@@ -20,7 +20,8 @@ https://imgur.com/a/PEcQ2bB
 
 ### Rename This Maybe: Design Accomplishments
 
-**First Time Setup:
+**First Time Setup:**
+
 
 
 
