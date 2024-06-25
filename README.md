@@ -15,7 +15,8 @@ This project implements a wearable device to accurately classify z-axis location
 The first subsystem, the Hardware and Power Supply Subsystem, aims to integrate all sensors and the microcontroller within the hardware encasing. This subsystem also ensures that the proper power is supplied to all components of the system. The next subsystem, the Microcontroller and Database Subsystem, is responsible for data collection and data transmission using the microcontroller. All sensor data is collected and sent to the database so that this information can be accessed by the Machine Learning and Android Application Subsystems. The Machine Learning Subsystem uses the sensor data to train the machine learning model and classify elevation change locally. Lastly, the Android Application Subsystem hosts the data insights for user interaction and data visualization.
 
 
-https://i.imgur.com/I2093Ua.png![image](https://github.com/tamu-edu-students/ECEN_403_Team_75/assets/61260042/fddb2938-7cea-460e-8639-7f5f7374bb37)
+![Overall Subsystem Design](https://i.imgur.com/I2093Ua.png)
+
 
  
 
