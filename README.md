@@ -30,7 +30,7 @@ We are gonna need seth to help at some point
 
 ### Team Members and Code Contributions
 - Emiliano Sanchez - Hardware and Power Lead  
-- Anna Theodore - Microcontroller and Database Lead  
+***Anna Theodore - Microcontroller and Database Lead***  
 - Salim Al Kharsa - Machine Learning Lead  
 - Seth Keylon - Android Application Lead
 
