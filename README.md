@@ -28,19 +28,19 @@ This Github contains the code necessary to satisfy the Microcontroller and Datab
 We are gonna need seth to help at some point
 
 ### Team Members and Code Contributions
-**Emiliano Sanchez - Hardware and Power Lead**
+-**Emiliano Sanchez - Hardware and Power Lead**
   
-**Anna Theodore - Microcontroller and Database Lead**
+-**Anna Theodore - Microcontroller and Database Lead**
 Anna contributed ESP-32 Communications code using C, ensuring consistent and synchronized data outputs as well as 
 Anna implemented error catching for the disconnection of wired sensors and Bluetooth disconnection
 Anna wrote pSQL query code for database posting using Python’s Flask library
 
-**Salim Al Kharsa - Machine Learning Lead**  
+-**Salim Al Kharsa - Machine Learning Lead**  
 Salim contributed the ESP-32 Machine Learning integration code, including a C wrapper for the model deployed in C++
 Salim included data validation attributes within the machine learning integration, implementing a buffered sliding window to prevent inaccurate successive recordings. 
 Salim handled the Wi-Fi reconnection protocol implementing a linear back-off algorithm to minimize local resource consumption
 
-**Seth Keylon - Android Application Lead**
+-**Seth Keylon - Android Application Lead**
 
 ### Contact Information
 For questions or further information, please contact:
@@ -50,7 +50,7 @@ For questions or further information, please contact:
   - LinkedIn: [Anna Theodore](https://www.linkedin.com/in/anna-theodore-2024/)
 - **Salim Al Kharsa (Sam Karsa)**  
   - Email: Salimalkharsa@gmail.com
-  - LinkedIn: [Sam Karsa](https://www.linkedin.com/in/anna-theodore-2024/)
+  - LinkedIn: [Sam Karsa](https://www.linkedin.com/in/sam-k-53527420b/)
 
 ---
 
