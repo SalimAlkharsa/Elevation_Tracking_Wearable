@@ -25,22 +25,23 @@ This Github contains the code necessary to satisfy the Microcontroller and Datab
 - The ESP-32 Communications successfully utilize the following: I2C, Wi-Fi, Bluetooth, and HTTP operations
 - The Machine Learning model runs in real-time on the ESP-32, it can distinguish between stair ascent/descent and elevator ascent/descent
 
-We are gonna need seth to help at some point
-
 ### Team Members and Code Contributions
--**Emiliano Sanchez - Hardware and Power Lead**
-  
--**Anna Theodore - Microcontroller and Database Lead**
-Anna contributed ESP-32 Communications code using C, ensuring consistent and synchronized data outputs as well as 
-Anna implemented error catching for the disconnection of wired sensors and Bluetooth disconnection
-Anna wrote pSQL query code for database posting using Python’s Flask library
 
--**Salim Al Kharsa - Machine Learning Lead**  
-Salim contributed the ESP-32 Machine Learning integration code, including a C wrapper for the model deployed in C++
-Salim included data validation attributes within the machine learning integration, implementing a buffered sliding window to prevent inaccurate successive recordings. 
-Salim handled the Wi-Fi reconnection protocol implementing a linear back-off algorithm to minimize local resource consumption
+- **Emiliano Sanchez - Hardware and Power Lead**
 
--**Seth Keylon - Android Application Lead**
+- **Anna Theodore - Microcontroller and Database Lead**
+  - Contributed ESP-32 Communications code using C, ensuring consistent and synchronized data outputs.
+  - Implemented error catching for the disconnection of wired sensors and Bluetooth disconnection.
+  - Wrote pSQL query code for database posting using Python’s Flask library.
+
+- **Salim Al Kharsa - Machine Learning Lead**
+  - Contributed the ESP-32 Machine Learning integration code, including a C wrapper for the model deployed in C++.
+  - Included data validation attributes within the machine learning integration, implementing a buffered sliding window to prevent inaccurate successive recordings.
+  - Handled the Wi-Fi reconnection protocol, implementing a linear back-off algorithm to minimize local resource consumption.
+
+- **Seth Keylon - Android Application Lead**
+
+
 
 ### Contact Information
 For questions or further information, please contact:
