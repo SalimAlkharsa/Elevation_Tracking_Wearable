@@ -1,33 +1,28 @@
 ## Capstone Project: Elevation Tracking for Wearable Devices Using Machine Learning
 
-### Overview
-Elevation Tracking for Wearable Devices Using Machine Learning aims to address inaccuracies in fitness tracking of automatic versus manual activity and emergency responder scenarios using a machine learning wearable device and Android application for insights.
+### Problem Definition
 
-### Objectives
-1. **Design and Development**: Create four self-sufficient subsystems.  
-2. **Testing and Validation**: Ensure effectiveness and reliability.  
-3. **Implementation and Deployment**: Deploy to real-world use.  
+	Location tracking is vital in modern society and is used for everything from finding lost keys to successfully navigating urban landscapes. When using the Global Positioning System (GPS), location is accurate in the x and y directions. Where GPS falls short is in the z-direction. It is vital to address these inaccuracies in z-axis measurements for elevation statistics, such as floors climbed, in both emergency response as well as commercial use cases. 
 
-### Accomplishments
-#### Design and Development
-- Designed and developed [solution/product] using [technologies/tools used].
+    Current wearable devices rely on pressure to determine elevation. Still, this variable alone fails to account for cases where the temperature is not constant, such as in an emergency scenario in a burning building, where accurate location tracking within a building can be the difference between life and death.
 
-#### Testing and Validation
-- Conducted extensive testing, including UAT.  
-- Validated against requirements.
+    By using advancements in machine learning, accurate elevation tracking can be achieved with a multivariate model for both commercial and emergency response scenarios. This model should be able to correct for over-reliance on pressure as a metric for elevation tracking. This device will use pressure, temperature, rotation, and acceleration sensors to improve current elevation classification techniques.
 
-#### Implementation and Deployment
-- Deployed solution/product smoothly.  
-- Provided user training and support.
+### Methodology
 
-### Key Outcomes
-- **Impact**: [Describe impact, e.g., improved efficiency, reduced costs].  
-- **User Satisfaction**: [Percentage] positive feedback.  
-- **Scalability**: Solution/product designed for future expansion.  
-- **Innovation**: Introduced features such as [list innovative features].
+This project implements a wearable device to accurately classify z-axis location. To accomplish this task, there are four subsystems, as detailed in Figure 1. This device runs a local machine-learning model to make predictions in real time. The device will be secured on the bicep and accompanied by a chest strap heart rate sensor. 
 
-### Conclusion
-[Project Title] successfully addressed [problem/challenge] with a [solution/product] that meets user needs. We achieved our objectives and delivered an impactful solution in [field/industry]. Thanks to all who contributed.
+The first subsystem, the Hardware and Power Supply Subsystem, aims to integrate all sensors and the microcontroller within the hardware encasing. This subsystem also ensures that the proper power is supplied to all components of the system. The next subsystem, the Microcontroller and Database Subsystem, is responsible for data collection and data transmission using the microcontroller. All sensor data is collected and sent to the database so that this information can be accessed by the Machine Learning and Android Application Subsystems. The Machine Learning Subsystem uses the sensor data to train the machine learning model and classify elevation change locally. Lastly, the Android Application Subsystem hosts the data insights for user interaction and data visualization.
+
+
+https://imgur.com/a/PEcQ2bB
+
+
+### Rename This Maybe: Design Accomplishments
+
+**First Time Setup:
+
+
 
 ### Team Members
 - Emiliano Sanchez - Hardware and Power Lead  
@@ -46,6 +41,8 @@ For questions or further information, please contact:
 
 Thank you for reading about our capstone project. We are excited to share our work with the community.
 
+
+Should we remove below →
 ## Test Documentation
 
 | Test Number | Test Name                               | Test Description                                                         | Test Method                                                                              | Expected Behavior                                                                        | Passed (y/n/tbd) | Notes                                                                                           |
