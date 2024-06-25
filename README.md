@@ -14,26 +14,25 @@ This project implements a wearable device to accurately classify z-axis location
 
 The first subsystem, the Hardware and Power Supply Subsystem, aims to integrate all sensors and the microcontroller within the hardware encasing. This subsystem also ensures that the proper power is supplied to all components of the system. The next subsystem, the Microcontroller and Database Subsystem, is responsible for data collection and data transmission using the microcontroller. All sensor data is collected and sent to the database so that this information can be accessed by the Machine Learning and Android Application Subsystems. The Machine Learning Subsystem uses the sensor data to train the machine learning model and classify elevation change locally. Lastly, the Android Application Subsystem hosts the data insights for user interaction and data visualization.
 
+### Purpose
+
+This Github contains the code necessary to satisfy the Microcontroller and Database, Machine Learning, and Android Application subsystems.
+
 
 ![Overall Subsystem Design](https://i.imgur.com/I2093Ua.png)
 
+### System Accomplishments
+- The ESP-32 Communications successfully utilize the following: I2C, Wi-Fi, Bluetooth, and HTTP operations
+- The Machine Learning model runs in real-time on the ESP-32, it can distinguish between stair ascent/descent and elevator ascent/descent
+- The Machine Learning
 
- 
+We are gonna need seth to help at some point
 
-### Rename This Maybe: Design Accomplishments
-
-**First Time Setup:**
-
-The first natural step is allowing the user to set up their wearable and to then be able to continuously reuse it.
-
-
-
-
-### Team Members
+### Team Members and Code Contributions
 - Emiliano Sanchez - Hardware and Power Lead  
 - Anna Theodore - Microcontroller and Database Lead  
 - Salim Al Kharsa - Machine Learning Lead  
-- Seth Keylon - Application Lead
+- Seth Keylon - Android Application Lead
 
 ### Contact Information
 For questions or further information, please contact:
