@@ -24,15 +24,15 @@ This Github contains the code necessary to satisfy the Microcontroller and Datab
 ### System Accomplishments
 - The ESP-32 Communications successfully utilize the following: I2C, Wi-Fi, Bluetooth, and HTTP operations
 - The Machine Learning model runs in real-time on the ESP-32, it can distinguish between stair ascent/descent and elevator ascent/descent
-- The Machine Learning
+- The Machine Learning model runs continuously on the ESP-32 
 
 We are gonna need seth to help at some point
 
 ### Team Members and Code Contributions
-- Emiliano Sanchez - Hardware and Power Lead  
-***Anna Theodore - Microcontroller and Database Lead***  
-- Salim Al Kharsa - Machine Learning Lead  
-- Seth Keylon - Android Application Lead
+**Emiliano Sanchez - Hardware and Power Lead**  
+**Anna Theodore - Microcontroller and Database Lead**  
+**Salim Al Kharsa - Machine Learning Lead**  
+**Seth Keylon - Android Application Lead**
 
 ### Contact Information
 For questions or further information, please contact:
