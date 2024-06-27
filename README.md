@@ -40,8 +40,8 @@ This Github contains the code necessary to satisfy the Microcontroller and Datab
   - Handled the Wi-Fi reconnection protocol, implementing a linear back-off algorithm to minimize local resource consumption.
 
 - **Seth Keylon - Android Application Lead**
-
-
+  - Created the entire codebase for the frontend Android application contained in the `new_app` branch using Flutter and Dart.
+  - Contributed to the structure of the database schema in order to ensure all data collected and posted by the wearable device could be visualized in a useful manner. 
 
 ### Contact Information
 For questions or further information, please contact:
