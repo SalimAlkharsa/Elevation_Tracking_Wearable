@@ -10,7 +10,7 @@ By using advancements in machine learning, accurate elevation tracking can be ac
 
 ### Methodology
 
-This project implements a wearable device to accurately classify z-axis location. To accomplish this task, there are four subsystems, as detailed in Figure 1. This device runs a local machine-learning model to make predictions in real time. The device will be secured on the bicep and accompanied by a chest strap heart rate sensor. 
+This project implements a wearable device to accurately classify z-axis location. To accomplish this task, there are four subsystems, as detailed in the figure below. This device runs a local machine-learning model to make predictions in real time. The device will be secured on the bicep and accompanied by a chest strap heart rate sensor. 
 
 The first subsystem, the Hardware and Power Supply Subsystem, aims to integrate all sensors and the microcontroller within the hardware encasing. This subsystem also ensures that the proper power is supplied to all components of the system. The next subsystem, the Microcontroller and Database Subsystem, is responsible for data collection and data transmission using the microcontroller. All sensor data is collected and sent to the database so that this information can be accessed by the Machine Learning and Android Application Subsystems. The Machine Learning Subsystem uses the sensor data to train the machine learning model and classify elevation change locally. Lastly, the Android Application Subsystem hosts the data insights for user interaction and data visualization.
 
