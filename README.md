@@ -58,7 +58,6 @@ For questions or further information, please contact:
 Thank you for reading about our capstone project. We are excited to share our work with the community!
 
 
-Should we remove below →
 ## Test Documentation
 
 | Test Number | Test Name                               | Test Description                                                         | Test Method                                                                              | Expected Behavior                                                                        | Passed (y/n/tbd) | Notes                                                                                           |
